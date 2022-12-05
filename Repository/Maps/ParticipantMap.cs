@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Repository.Maps
 {
-    internal class ParticipantMap : IEntityTypeConfiguration<Participant>
+    public class ParticipantMap : IEntityTypeConfiguration<Participant>
     {
         public void Configure(EntityTypeBuilder<Participant> builder)
         {

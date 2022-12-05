@@ -5,7 +5,7 @@ using Repository.Repositories.Abstract;
 
 namespace Repository.Repositories
 {
-    internal class GenreRepository : BaseRepository<Genre>, IGenreRepository
+    public class GenreRepository : BaseRepository<Genre>, IGenreRepository
     {
         public GenreRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext) { }
 

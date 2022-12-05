@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Repository.Maps
 {
-    internal class DirectionMap : IEntityTypeConfiguration<Direction>
+    public class DirectionMap : IEntityTypeConfiguration<Direction>
     {
         public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Direction> builder)
         {

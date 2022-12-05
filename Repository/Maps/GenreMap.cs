@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Repository.Maps
 {
-    internal class GenreMap : IEntityTypeConfiguration<Genre>
+    public class GenreMap : IEntityTypeConfiguration<Genre>
     {
         public void Configure(EntityTypeBuilder<Genre> builder)
         {

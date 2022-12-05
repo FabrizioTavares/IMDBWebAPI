@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Repository.Maps
 {
-    internal class MovieMap : IEntityTypeConfiguration<Movie>
+    public class MovieMap : IEntityTypeConfiguration<Movie>
     {
         public void Configure(EntityTypeBuilder<Movie> builder)
         {

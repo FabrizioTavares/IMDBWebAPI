@@ -5,7 +5,7 @@ using Repository.Repositories.Abstract;
 
 namespace Repository.Repositories
 {
-    internal class VoteRepository : BaseRepository<Vote>, IVoteRepository
+    public class VoteRepository : BaseRepository<Vote>, IVoteRepository
     {
         public VoteRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext) { }
 

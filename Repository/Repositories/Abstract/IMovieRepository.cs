@@ -2,7 +2,7 @@
 
 namespace Repository.Repositories.Abstract
 {
-    internal interface IMovieRepository : IBaseRepository<Movie>
+    public interface IMovieRepository : IBaseRepository<Movie>
     {
         Task<Movie?> GetMovieByTitle(string title, CancellationToken cancellationToken);
 

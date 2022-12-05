@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Repository.Maps
 {
-    internal class AdminMap : IEntityTypeConfiguration<Admin>
+    public class AdminMap : IEntityTypeConfiguration<Admin>
     {
         public void Configure(EntityTypeBuilder<Admin> builder)
         {

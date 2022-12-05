@@ -5,7 +5,7 @@ using Repository.Repositories.Abstract;
 
 namespace Repository.Repositories
 {
-    internal class AdminRepository : BaseRepository<Admin>, IAdminRepository
+    public class AdminRepository : BaseRepository<Admin>, IAdminRepository
     {
         public AdminRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext) { }
 

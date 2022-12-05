@@ -5,10 +5,15 @@ using Repository.Repositories.Abstract;
 
 namespace Repository.Repositories
 {
-    internal class PerformanceRepository : BaseRepository<Performance>, IPerformanceRepository
+    public class PerformanceRepository : BaseRepository<Performance>, IPerformanceRepository
     {
         public PerformanceRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         {
+        }
+
+        public override async Task<Performance?> GetComposite(int movieId, int participantId, CancellationToken cancellationToken)
+        {
+            return await base.GetComposite(movieId, participantId, cancellationToken);
         }
 
         public async Task<Performance?> GetPerformanceByCharacterName(string name, CancellationToken cancellationToken)

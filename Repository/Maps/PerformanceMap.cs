@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Repository.Maps
 {
-    internal class PerformanceMap : IEntityTypeConfiguration<Performance>
+    public class PerformanceMap : IEntityTypeConfiguration<Performance>
     {
         public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Performance> builder)
         {

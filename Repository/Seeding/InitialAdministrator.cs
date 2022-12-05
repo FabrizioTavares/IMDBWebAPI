@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Repository.Seeding
 {
-    internal class InitialAdministrator
+    public class InitialAdministrator
     {
         private readonly ModelBuilder _builder;
         private readonly ICryptographer _cryptographer;

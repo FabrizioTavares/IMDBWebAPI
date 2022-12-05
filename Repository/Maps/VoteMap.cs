@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Repository.Maps
 {
-    internal class VoteMap : IEntityTypeConfiguration<Vote>
+    public class VoteMap : IEntityTypeConfiguration<Vote>
     {
         public void Configure(EntityTypeBuilder<Vote> builder)
         {

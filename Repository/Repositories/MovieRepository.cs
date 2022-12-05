@@ -5,7 +5,7 @@ using Repository.Repositories.Abstract;
 
 namespace Repository.Repositories
 {
-    internal class MovieRepository : BaseRepository<Movie>, IMovieRepository
+    public class MovieRepository : BaseRepository<Movie>, IMovieRepository
     {
         public MovieRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         {

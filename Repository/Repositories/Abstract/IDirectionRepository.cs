@@ -2,7 +2,7 @@
 
 namespace Repository.Repositories.Abstract
 {
-    internal interface IDirectionRepository : IBaseRepository<Direction>
+    public interface IDirectionRepository : IBaseRepository<Direction>
     {
     }
 }
