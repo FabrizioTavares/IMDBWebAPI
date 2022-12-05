@@ -1,0 +1,10 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Services",
+    "\\Services\\CustomServices",
+    "\\Services\\CustomServices\\Abstraction"
+  ],
+  "SelectedNode": "\\Services\\CustomServices\\Abstraction\\IParticipantService.cs",
+  "PreviewInSolutionExplorer": false
+}
