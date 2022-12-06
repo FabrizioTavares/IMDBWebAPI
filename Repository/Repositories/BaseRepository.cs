@@ -25,7 +25,7 @@ namespace Repository.Repositories
         {
             return await _entities.FindAsync(new object?[] { firstId, secondId }, cancellationToken);
         }
-        public virtual ICollection<T> GetAll()
+        public virtual IEnumerable<T> GetAll()
         {
             return _entities.ToList();
         }
