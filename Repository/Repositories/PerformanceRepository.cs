@@ -5,7 +5,7 @@ using Repository.Repositories.Abstract;
 
 namespace Repository.Repositories
 {
-    public class PerformanceRepository : BaseRepository<Performance>, IPerformanceRepository
+    public class PerformanceRepository : BaseCompositeRepository<Performance>, IPerformanceRepository
     {
         public PerformanceRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         {

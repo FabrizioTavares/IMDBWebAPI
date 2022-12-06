@@ -21,10 +21,6 @@ namespace Repository.Repositories
             return await _entities.FindAsync(new object?[] { id }, cancellationToken: cancellationToken);
         }
 
-        public virtual async Task<T?> GetComposite(int firstId, int secondId, CancellationToken cancellationToken)
-        {
-            return await _entities.FindAsync(new object?[] { firstId, secondId }, cancellationToken);
-        }
         public virtual IEnumerable<T> GetAll()
         {
             return _entities.ToList();

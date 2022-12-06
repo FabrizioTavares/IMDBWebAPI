@@ -4,7 +4,7 @@ using Repository.Repositories.Abstract;
 
 namespace Repository.Repositories
 {
-    public class DirectionRepository : BaseRepository<Direction>, IDirectionRepository
+    public class DirectionRepository : BaseCompositeRepository<Direction>, IDirectionRepository
     {
         public DirectionRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext) { }
 
