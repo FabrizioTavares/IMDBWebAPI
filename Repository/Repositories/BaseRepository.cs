@@ -33,7 +33,7 @@ namespace Repository.Repositories
         public virtual async Task Insert(T entity, CancellationToken cancellationToken)
         {
             await _entities.AddAsync(entity, cancellationToken);
-            await _applicationDbContext.SaveChangesAsync(cancellationToken);
+            await SaveChanges(cancellationToken);
         }
 
         public virtual async Task Update(T entity, CancellationToken cancellationToken)
