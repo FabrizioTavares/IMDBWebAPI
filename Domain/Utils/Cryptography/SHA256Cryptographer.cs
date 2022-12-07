@@ -13,18 +13,18 @@ namespace Domain.Utils.Cryptography
             _hashAlgorithm = SHA256.Create();
         }
 
-        public string Hash(string password)
+        public byte[] Hash(string rawText, byte[] salt)
         {
-            byte[] bytes = Encoding.UTF8.GetBytes(password);
-            byte[] hash = _hashAlgorithm.ComputeHash(bytes);
-            return Convert.ToHexString(hash);
+            var rawBytes = Encoding.UTF8.GetBytes(rawText);
+            var combinedBytes = rawBytes.Concat(salt).ToArray();
+            var hash = _hashAlgorithm.ComputeHash(combinedBytes);
+            return hash;
         }
-
-
-        public bool Verify(string password, string hash)
+        
+        public bool Verify(string rawText, byte[] hashedText, byte[] salt)
         {
-            string newHash = Hash(password);
-            return newHash.Equals(hash);
+            var hash = Hash(rawText, salt);
+            return hashedText.SequenceEqual(hash);
         }
     }
 }

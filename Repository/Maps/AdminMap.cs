@@ -17,7 +17,11 @@ namespace Repository.Maps
             builder
                 .Property(a => a.Password)
                 .IsRequired()
-                .HasMaxLength(100);
+                .HasMaxLength(32);
+            builder
+                .Property(a => a.Salt)
+                .IsRequired()
+                .HasMaxLength(8);
             builder
                 .Property(a => a.IsActive)
                 .IsRequired();

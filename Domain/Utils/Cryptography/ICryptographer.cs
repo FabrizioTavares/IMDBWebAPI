@@ -2,7 +2,7 @@
 {
     public interface ICryptographer
     {
-        string Hash(string password);
-        bool Verify(string password, string hash);
+        byte[] Hash(string rawText, byte[] salt);
+        bool Verify(string rawText, byte[] hashedText, byte[] salt);
     }
 }
