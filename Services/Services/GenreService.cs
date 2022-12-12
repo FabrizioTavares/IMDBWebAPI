@@ -33,7 +33,7 @@ namespace Service.Services
             return _mapper.Map<IEnumerable<ReadGenreDTO>>(_genreRepository.GetGenresByTitle(title));
         }
 
-        public IEnumerable<ReadGenreDTO?> GetAll()
+        public IEnumerable<ReadGenreDTO> GetAll()
         {
             return _mapper.Map<IEnumerable<ReadGenreDTO>>(_genreRepository.GetAll());
         }
@@ -43,7 +43,7 @@ namespace Service.Services
             var existingGenre = _genreRepository.GetGenresByTitle(genre.Title);
             if (existingGenre.Any())
             {
-                throw new Exception("Genre already exists");
+                throw new ApplicationException(("Genre already exists"));
             }
             else
             {
@@ -54,21 +54,14 @@ namespace Service.Services
         public async Task Remove(int id, CancellationToken cancellationToken)
         {
             var genre = await _genreRepository.Get(id, cancellationToken);
-            if (genre == null)
-            {
-                throw new Exception("Genre not found");
-            }
             await _genreRepository.Remove(genre, cancellationToken);
         }
 
-        public Task Update(int id, UpdateGenreDTO updatedGenre, CancellationToken cancellationToken)
+        public async Task Update(int id, UpdateGenreDTO updatedGenre, CancellationToken cancellationToken)
         {
-            var genreToBeUpdated = _genreRepository.Get(id, cancellationToken).Result;
-            if (genreToBeUpdated == null)
-            {
-                throw new Exception("Genre not found");
-            }
-            return _genreRepository.Update(_mapper.Map(updatedGenre, genreToBeUpdated), cancellationToken);
+            var genreToBeUpdated = await _genreRepository.Get(id, cancellationToken);
+            var map = _mapper.Map(updatedGenre, genreToBeUpdated);
+            await _genreRepository.Update(map, cancellationToken);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Application.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateGenre([FromBody] CreateGenreDTO genre, CancellationToken cancellationToken)
         {
-            ValidationResult result = new CreateGenreDTOValidator().Validate(genre);
+            var result = new CreateGenreDTOValidator().Validate(genre);
             if (result.IsValid)
             {
                 await _genreService.Insert(genre, cancellationToken);
@@ -56,7 +56,7 @@ namespace Application.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateGenre([FromRoute] int id, [FromBody] UpdateGenreDTO updatedGenre, CancellationToken cancellationToken)
         {
-            ValidationResult result = new UpdateGenreDTOValidator().Validate(updatedGenre);
+            var result = new UpdateGenreDTOValidator().Validate(updatedGenre);
             if (result.IsValid)
             {
                 await _genreService.Update(id, updatedGenre, cancellationToken);
@@ -68,16 +68,9 @@ namespace Application.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteGenre([FromRoute] int id, CancellationToken cancellationToken)
         {
-            await _genreService.Remove(id, cancellationToken);
-            return Ok();
+            await _genreService.Remove(id, cancellationToken);           
+            return NoContent();
         }
-
-        //[HttpGet]
-        //public IActionResult GetGenreByTitle([FromQuery] string title, CancellationToken cancellationToken)
-        //{
-        //    var genre = _genreService.Get(title, cancellationToken);
-        //    return Ok(genre);
-        //}
 
     }
 }
