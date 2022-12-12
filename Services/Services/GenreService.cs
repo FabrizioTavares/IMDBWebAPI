@@ -54,14 +54,28 @@ namespace Service.Services
         public async Task Remove(int id, CancellationToken cancellationToken)
         {
             var genre = await _genreRepository.Get(id, cancellationToken);
-            await _genreRepository.Remove(genre, cancellationToken);
+            if (genre == null)
+            {
+                throw new ApplicationException("Genre not found");
+            }
+            else
+            {
+                await _genreRepository.Remove(genre, cancellationToken);
+            }
         }
 
         public async Task Update(int id, UpdateGenreDTO updatedGenre, CancellationToken cancellationToken)
         {
             var genreToBeUpdated = await _genreRepository.Get(id, cancellationToken);
-            var map = _mapper.Map(updatedGenre, genreToBeUpdated);
-            await _genreRepository.Update(map, cancellationToken);
+            if (genreToBeUpdated == null)
+            {
+                throw new ApplicationException("Genre not found");
+            }
+            else
+            {
+                var map = _mapper.Map(updatedGenre, genreToBeUpdated);
+                await _genreRepository.Update(map, cancellationToken);
+            }
         }
     }
 }

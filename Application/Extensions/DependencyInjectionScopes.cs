@@ -6,6 +6,8 @@ using Service.Services;
 using Service.Validation.Genre;
 using Domain.DTOs.GenreDTOs;
 using Domain.AutomapperProfiles;
+using Domain.DTOs.ParticipantDTOs;
+using Service.Validation.Participant;
 
 namespace Application.Extensions
 {
@@ -17,8 +19,14 @@ namespace Application.Extensions
             services.AddScoped<IGenreRepository, GenreRepository>();
             services.AddScoped<IValidator<CreateGenreDTO>, CreateGenreDTOValidator>();
             services.AddScoped<IValidator<UpdateGenreDTO>, UpdateGenreDTOValidator>();
-            services.AddAutoMapper(typeof(GenreProfile));
 
+            services.AddScoped<IParticipantService, ParticipantService>();
+            services.AddScoped<IParticipantRepository, ParticipantRepository>();
+            services.AddScoped<IValidator<CreateParticipantDTO>, CreateParticipantDTOValidator>();
+            services.AddScoped<IValidator<UpdateParticipantDTO>, UpdateParticipantDTOValidator>();
+
+
+            services.AddAutoMapper(typeof(GenreProfile), typeof(ParticipantProfile));
             return services;
         }
 

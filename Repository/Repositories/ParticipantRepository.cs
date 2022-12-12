@@ -11,9 +11,9 @@ namespace Repository.Repositories
         {
         }
 
-        public virtual async Task<Participant?> GetParticipantByName(string name, CancellationToken cancellationToken)
+        public virtual IEnumerable<Participant> GetParticipantsByName(string name)
         {
-            return await _entities.FirstOrDefaultAsync(p => p.Name == name, cancellationToken);
+            return _entities.Where(p => p.Name.Contains(name));
         }
 
     }

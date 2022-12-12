@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Domain.DTOs.GenreDTOs;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Service.Validation.Genre
 {
-    public class UpdateGenreDTOValidator : AbstractValidator<Domain.DTOs.GenreDTOs.UpdateGenreDTO>
+    public class UpdateGenreDTOValidator : AbstractValidator<UpdateGenreDTO>
     {
         public UpdateGenreDTOValidator()
         {
