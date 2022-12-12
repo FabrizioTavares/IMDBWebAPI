@@ -75,6 +75,19 @@
           }
         }
       },
+      "FluentValidation/11.4.0": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/FluentValidation.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/FluentValidation.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Humanizer.Core/2.14.1": {
         "type": "package",
         "compile": {
@@ -1300,17 +1313,18 @@
           "bin/placeholder/Repository.dll": {}
         }
       },
-      "Services/1.0.0": {
+      "Service/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
+          "FluentValidation": "11.4.0",
           "Repository": "1.0.0"
         },
         "compile": {
-          "bin/placeholder/Services.dll": {}
+          "bin/placeholder/Service.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Services.dll": {}
+          "bin/placeholder/Service.dll": {}
         }
       }
     }
@@ -1381,6 +1395,29 @@
         "azureicon.png",
         "lib/netstandard2.0/Azure.Identity.dll",
         "lib/netstandard2.0/Azure.Identity.xml"
+      ]
+    },
+    "FluentValidation/11.4.0": {
+      "sha512": "WZJyrNf4suiaI6avVG32W9kmBLC3+V5rDTcLeRJjeU4tDmTyDIOz1459DzCKppXs34YpZg9rCUzDY3M4XxG7Ug==",
+      "type": "package",
+      "path": "fluentvalidation/11.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "fluent-validation-icon.png",
+        "fluentvalidation.11.4.0.nupkg.sha512",
+        "fluentvalidation.nuspec",
+        "lib/net5.0/FluentValidation.dll",
+        "lib/net5.0/FluentValidation.xml",
+        "lib/net6.0/FluentValidation.dll",
+        "lib/net6.0/FluentValidation.xml",
+        "lib/net7.0/FluentValidation.dll",
+        "lib/net7.0/FluentValidation.xml",
+        "lib/netstandard2.0/FluentValidation.dll",
+        "lib/netstandard2.0/FluentValidation.xml",
+        "lib/netstandard2.1/FluentValidation.dll",
+        "lib/netstandard2.1/FluentValidation.xml"
       ]
     },
     "Humanizer.Core/2.14.1": {
@@ -3823,10 +3860,10 @@
       "path": "../Repository/Repository.csproj",
       "msbuildProject": "../Repository/Repository.csproj"
     },
-    "Services/1.0.0": {
+    "Service/1.0.0": {
       "type": "project",
-      "path": "../Services/Services.csproj",
-      "msbuildProject": "../Services/Services.csproj"
+      "path": "../Services/Service.csproj",
+      "msbuildProject": "../Services/Service.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -3834,7 +3871,7 @@
       "Microsoft.EntityFrameworkCore.Design >= 7.0.0",
       "Microsoft.EntityFrameworkCore.SqlServer >= 7.0.0",
       "Microsoft.EntityFrameworkCore.Tools >= 7.0.0",
-      "Services >= 1.0.0",
+      "Service >= 1.0.0",
       "Swashbuckle.AspNetCore >= 6.2.3"
     ]
   },
@@ -3865,8 +3902,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\fabrizio.tavares\\source\\repos\\IMDBWebAPI\\Services\\Services.csproj": {
-              "projectPath": "C:\\Users\\fabrizio.tavares\\source\\repos\\IMDBWebAPI\\Services\\Services.csproj"
+            "C:\\Users\\fabrizio.tavares\\source\\repos\\IMDBWebAPI\\Services\\Service.csproj": {
+              "projectPath": "C:\\Users\\fabrizio.tavares\\source\\repos\\IMDBWebAPI\\Services\\Service.csproj"
             }
           }
         }

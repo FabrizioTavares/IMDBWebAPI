@@ -1,13 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "h8DcSiBgwLAO5ZhjzFIsenZjqxtMvVOVmgGl+dWW1/oyDq6nLCqf/+/ucCKfo7RjZEaa7nSNnx/mm8pKJ4+tKg==",
+  "dgSpecHash": "P31cxl/WgDwN7JxvdttavkG/07NQdmGCVerktRIzTsba1m0RENHx/7MhWnOBObIk8U3ret6+bhr7saYQ4VFC+g==",
   "success": true,
-  "projectFilePath": "C:\\Users\\fabrizio.tavares\\source\\repos\\IMDBWebAPI\\Services\\Services.csproj",
+  "projectFilePath": "C:\\Users\\fabrizio.tavares\\source\\repos\\IMDBWebAPI\\Services\\Service.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\fabrizio.tavares\\.nuget\\packages\\automapper\\12.0.0\\automapper.12.0.0.nupkg.sha512",
     "C:\\Users\\fabrizio.tavares\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.0\\automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",
     "C:\\Users\\fabrizio.tavares\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\fabrizio.tavares\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
+    "C:\\Users\\fabrizio.tavares\\.nuget\\packages\\fluentvalidation\\11.4.0\\fluentvalidation.11.4.0.nupkg.sha512",
     "C:\\Users\\fabrizio.tavares\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\fabrizio.tavares\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "C:\\Users\\fabrizio.tavares\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",

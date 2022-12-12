@@ -9,9 +9,9 @@ namespace Repository.Repositories
     {
         public GenreRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext) { }
 
-        public async Task<Genre?> GetGenreByTitle(string title, CancellationToken cancellationToken)
+        public IEnumerable<Genre> GetGenresByTitle(string title)
         {
-            return await _entities.FirstOrDefaultAsync(g => g.Title == title, cancellationToken);
+            return _entities.Where(g => g.Title.Contains(title));
         }
     }
 }

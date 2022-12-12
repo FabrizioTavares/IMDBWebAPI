@@ -7,11 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{1EC5B64D-A901-4D98-93A5-4CC05CC8A5A9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{9A871811-020D-4B41-900E-DDCF361F2619}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Services\Service.csproj", "{9A871811-020D-4B41-900E-DDCF361F2619}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{77031EDB-2EC9-4E89-AFB9-BAF750F64BA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{3CEEDA23-3D2E-4442-AECD-E57E35F26F86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{3CEEDA23-3D2E-4442-AECD-E57E35F26F86}"
 	ProjectSection(ProjectDependencies) = postProject
 		{5763320B-DB2A-4ED1-AC59-6C59074BD5DF} = {5763320B-DB2A-4ED1-AC59-6C59074BD5DF}
 	EndProjectSection
