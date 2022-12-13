@@ -10,7 +10,7 @@ namespace Domain.AutomapperProfiles
         {
             CreateMap<CreateParticipantDTO, Participant>();
             CreateMap<Participant, ReadParticipantDTO>();
-            CreateMap<UpdateParticipantDTO, Participant>();
+            CreateMap<UpdateParticipantDTO, Participant>().ForAllMembers(m => m.Condition((src, dest, srcMember) => srcMember != default));
         }
     }
 }

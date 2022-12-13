@@ -25,8 +25,12 @@ namespace Application.Extensions
             services.AddScoped<IValidator<CreateParticipantDTO>, CreateParticipantDTOValidator>();
             services.AddScoped<IValidator<UpdateParticipantDTO>, UpdateParticipantDTOValidator>();
 
-
-            services.AddAutoMapper(typeof(GenreProfile), typeof(ParticipantProfile));
+            services.AddAutoMapper(
+                typeof(GenreProfile),
+                typeof(ParticipantProfile),
+                typeof(PerformanceProfile),
+                typeof(DirectionProfile));
+            
             return services;
         }
 

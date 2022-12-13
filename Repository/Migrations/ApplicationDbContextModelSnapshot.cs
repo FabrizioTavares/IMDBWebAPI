@@ -48,7 +48,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Admins");
+                    b.ToTable("Admins", (string)null);
 
                     b.HasData(
                         new
@@ -73,7 +73,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("ParticipantId");
 
-                    b.ToTable("Directions");
+                    b.ToTable("Directions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.Genre", b =>
@@ -91,7 +91,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres");
+                    b.ToTable("Genres", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.Movie", b =>
@@ -119,7 +119,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Movies");
+                    b.ToTable("Movies", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.Participant", b =>
@@ -141,7 +141,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Participants");
+                    b.ToTable("Participants", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.Performance", b =>
@@ -160,7 +160,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("ParticipantId");
 
-                    b.ToTable("Performances");
+                    b.ToTable("Performances", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.User", b =>
@@ -186,7 +186,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.Vote", b =>
@@ -204,7 +204,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("VoterId");
 
-                    b.ToTable("Votes");
+                    b.ToTable("Votes", (string)null);
                 });
 
             modelBuilder.Entity("GenreMovie", b =>
@@ -219,7 +219,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("MoviesId");
 
-                    b.ToTable("GenreMovie");
+                    b.ToTable("GenreMovie", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.Direction", b =>

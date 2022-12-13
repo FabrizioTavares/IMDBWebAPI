@@ -22,6 +22,7 @@ namespace Repository.Seeding
                 Id = 1,
                 Username = "admin",
                 Password = _cryptographer.Hash("admin", new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 }),
+                Salt = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 },
                 Hierarchy = 100
             });
         }
