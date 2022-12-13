@@ -7,7 +7,7 @@ using Repository.Data;
 using Repository.Repositories;
 using Repository.Repositories.Abstract;
 using Service.Services;
-using Service.Services.Abstraction;
+using Service.Services.Abstract;
 using Service.Validation.Genre;
 
 var builder = WebApplication.CreateBuilder(args);

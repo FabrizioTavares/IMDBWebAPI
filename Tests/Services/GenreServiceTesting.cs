@@ -1,7 +1,7 @@
 ﻿using Domain.DTOs.GenreDTOs;
 using Domain.Models;
 using Moq;
-using Service.Services.Abstraction;
+using Service.Services.Abstract;
 using Xunit;
 using AutoMapper;
 using Repository.Repositories.Abstract;

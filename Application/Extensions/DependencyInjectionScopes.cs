@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Repository.Repositories.Abstract;
 using Repository.Repositories;
-using Service.Services.Abstraction;
+using Service.Services.Abstract;
 using Service.Services;
 using Service.Validation.Genre;
 using Domain.DTOs.GenreDTOs;

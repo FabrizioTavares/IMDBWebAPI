@@ -3,7 +3,7 @@ using Domain.Models;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
-using Service.Services.Abstraction;
+using Service.Services.Abstract;
 using Service.Validation.Genre;
 
 namespace Application.Controllers

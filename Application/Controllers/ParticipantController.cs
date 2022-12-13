@@ -1,7 +1,7 @@
 ﻿using Domain.DTOs.ParticipantDTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Service.Services.Abstraction;
+using Service.Services.Abstract;
 using Service.Validation.Participant;
 
 namespace Application.Controllers

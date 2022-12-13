@@ -2,7 +2,7 @@
 using Domain.DTOs.ParticipantDTOs;
 using Domain.Models;
 using Repository.Repositories.Abstract;
-using Service.Services.Abstraction;
+using Service.Services.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
