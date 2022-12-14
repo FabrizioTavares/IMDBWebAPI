@@ -7,7 +7,9 @@ using Service.Validation.Genre;
 using Domain.DTOs.GenreDTOs;
 using Domain.AutomapperProfiles;
 using Domain.DTOs.ParticipantDTOs;
+using Domain.DTOs.PerformanceDTOs;
 using Service.Validation.Participant;
+using Service.Validation.Performance;
 
 namespace Application.Extensions
 {
@@ -24,6 +26,12 @@ namespace Application.Extensions
             services.AddScoped<IParticipantRepository, ParticipantRepository>();
             services.AddScoped<IValidator<CreateParticipantDTO>, CreateParticipantDTOValidator>();
             services.AddScoped<IValidator<UpdateParticipantDTO>, UpdateParticipantDTOValidator>();
+
+            services.AddScoped<IPerformanceService, PerformanceService>();
+            services.AddScoped<IPerformanceRepository, PerformanceRepository>();
+            services.AddScoped<IValidator<CreatePerformanceDTO>, CreatePerformanceDTOValidator>();
+            services.AddScoped<IValidator<UpdatePerformanceDTO>, UpdatePerformanceDTOValidator>();
+
 
             services.AddAutoMapper(
                 typeof(GenreProfile),
