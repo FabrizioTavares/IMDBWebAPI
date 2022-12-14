@@ -12,5 +12,15 @@ namespace Repository.Repositories
         {
             return await base.GetComposite(movieId, participantId, cancellationToken);
         }
+
+        public IEnumerable<Direction?> GetDirectionsByMovie(int movieId, CancellationToken cancellationToken)
+        {
+            return _entities.Where(d => d.MovieId == movieId);
+        }
+
+        public IEnumerable<Direction?> GetDirectionsByParticipant(int participantId, CancellationToken cancellationToken)
+        {
+            return _entities.Where(d => d.ParticipantId == participantId);
+        }
     }
 }

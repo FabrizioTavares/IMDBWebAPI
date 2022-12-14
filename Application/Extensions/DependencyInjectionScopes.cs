@@ -10,6 +10,8 @@ using Domain.DTOs.ParticipantDTOs;
 using Domain.DTOs.PerformanceDTOs;
 using Service.Validation.Participant;
 using Service.Validation.Performance;
+using Domain.DTOs.DirectionDTOs;
+using Service.Validation.Direction;
 
 namespace Application.Extensions
 {
@@ -31,6 +33,10 @@ namespace Application.Extensions
             services.AddScoped<IPerformanceRepository, PerformanceRepository>();
             services.AddScoped<IValidator<CreatePerformanceDTO>, CreatePerformanceDTOValidator>();
             services.AddScoped<IValidator<UpdatePerformanceDTO>, UpdatePerformanceDTOValidator>();
+
+            services.AddScoped<IDirectionService, DirectionService>();
+            services.AddScoped<IDirectionRepository, DirectionRepository>();
+            services.AddScoped<IValidator<CreateDirectionDTO>, CreateDirectionDTOValidator>();
 
 
             services.AddAutoMapper(
