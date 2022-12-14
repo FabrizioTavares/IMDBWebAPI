@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Repository.Data;
 using Repository.Repositories.Abstract;
+using System.Collections;
 
 namespace Repository.Repositories
 {
@@ -11,9 +12,9 @@ namespace Repository.Repositories
         {
         }
 
-        public virtual async Task<Movie?> GetMovieByTitle(string title, CancellationToken cancellationToken)
+        public virtual IEnumerable<Movie?> GetMoviesByTitle(string title, CancellationToken cancellationToken)
         {
-            return await _entities.FirstOrDefaultAsync(m => m.Title == title, cancellationToken);
+            return _entities.Where(m => m.Title.Contains(title));
         }
     }
 }

@@ -12,6 +12,8 @@ using Service.Validation.Participant;
 using Service.Validation.Performance;
 using Domain.DTOs.DirectionDTOs;
 using Service.Validation.Direction;
+using Service.Validation.Movie;
+using Domain.DTOs.MovieDTOs;
 
 namespace Application.Extensions
 {
@@ -38,12 +40,18 @@ namespace Application.Extensions
             services.AddScoped<IDirectionRepository, DirectionRepository>();
             services.AddScoped<IValidator<CreateDirectionDTO>, CreateDirectionDTOValidator>();
 
+            services.AddScoped<IMovieService, MovieService>();
+            services.AddScoped<IMovieRepository, MovieRepository>();
+            services.AddScoped<IValidator<CreateMovieDTO>, CreateMovieDTOValidator>();
+            services.AddScoped<IValidator<UpdateMovieDTO>, UpdateMovieDTOValidator>();
+
 
             services.AddAutoMapper(
                 typeof(GenreProfile),
                 typeof(ParticipantProfile),
                 typeof(PerformanceProfile),
-                typeof(DirectionProfile));
+                typeof(DirectionProfile),
+                typeof(MovieProfile));
             
             return services;
         }
