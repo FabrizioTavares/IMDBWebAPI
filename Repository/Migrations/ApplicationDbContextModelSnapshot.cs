@@ -36,10 +36,15 @@ namespace Repository.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Password")
+                    b.Property<byte[]>("Password")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(32)
+                        .HasColumnType("varbinary(32)");
+
+                    b.Property<byte[]>("Salt")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("varbinary(8)");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -48,7 +53,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Admins", (string)null);
+                    b.ToTable("Admins");
 
                     b.HasData(
                         new
@@ -56,7 +61,8 @@ namespace Repository.Migrations
                             Id = 1,
                             Hierarchy = 100,
                             IsActive = true,
-                            Password = "8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918",
+                            Password = new byte[] { 246, 80, 14, 20, 146, 156, 134, 101, 205, 29, 120, 243, 20, 245, 115, 142, 105, 37, 176, 75, 182, 49, 10, 128, 243, 48, 199, 147, 219, 30, 172, 178 },
+                            Salt = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 },
                             Username = "admin"
                         });
                 });
@@ -73,7 +79,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("ParticipantId");
 
-                    b.ToTable("Directions", (string)null);
+                    b.ToTable("Directions");
                 });
 
             modelBuilder.Entity("Domain.Models.Genre", b =>
@@ -91,7 +97,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres", (string)null);
+                    b.ToTable("Genres");
                 });
 
             modelBuilder.Entity("Domain.Models.Movie", b =>
@@ -102,7 +108,8 @@ namespace Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Duration")
+                    b.Property<int?>("Duration")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int?>("ReleaseYear")
@@ -119,7 +126,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Movies", (string)null);
+                    b.ToTable("Movies");
                 });
 
             modelBuilder.Entity("Domain.Models.Participant", b =>
@@ -141,7 +148,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Participants", (string)null);
+                    b.ToTable("Participants");
                 });
 
             modelBuilder.Entity("Domain.Models.Performance", b =>
@@ -160,7 +167,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("ParticipantId");
 
-                    b.ToTable("Performances", (string)null);
+                    b.ToTable("Performances");
                 });
 
             modelBuilder.Entity("Domain.Models.User", b =>
@@ -174,10 +181,15 @@ namespace Repository.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Password")
+                    b.Property<byte[]>("Password")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(32)
+                        .HasColumnType("varbinary(32)");
+
+                    b.Property<byte[]>("Salt")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("varbinary(8)");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -186,7 +198,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Domain.Models.Vote", b =>
@@ -204,7 +216,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("VoterId");
 
-                    b.ToTable("Votes", (string)null);
+                    b.ToTable("Votes");
                 });
 
             modelBuilder.Entity("GenreMovie", b =>
@@ -219,7 +231,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("MoviesId");
 
-                    b.ToTable("GenreMovie", (string)null);
+                    b.ToTable("GenreMovie");
                 });
 
             modelBuilder.Entity("Domain.Models.Direction", b =>

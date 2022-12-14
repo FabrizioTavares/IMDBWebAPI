@@ -5,11 +5,28 @@
 namespace Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class Teste : Migration
+    public partial class RebuildDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Admins",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Hierarchy = table.Column<int>(type: "int", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Password = table.Column<byte[]>(type: "varbinary(32)", maxLength: 32, nullable: false),
+                    Salt = table.Column<byte[]>(type: "varbinary(8)", maxLength: 8, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Admins", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Genres",
                 columns: table => new
@@ -31,7 +48,8 @@ namespace Repository.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Synopsis = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    ReleaseYear = table.Column<int>(type: "int", nullable: true)
+                    ReleaseYear = table.Column<int>(type: "int", nullable: true),
+                    Duration = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -53,18 +71,19 @@ namespace Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Password = table.Column<byte[]>(type: "varbinary(32)", maxLength: 32, nullable: false),
+                    Salt = table.Column<byte[]>(type: "varbinary(8)", maxLength: 8, nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -92,7 +111,7 @@ namespace Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Direction",
+                name: "Directions",
                 columns: table => new
                 {
                     MovieId = table.Column<int>(type: "int", nullable: false),
@@ -100,15 +119,15 @@ namespace Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Direction", x => new { x.MovieId, x.ParticipantId });
+                    table.PrimaryKey("PK_Directions", x => new { x.MovieId, x.ParticipantId });
                     table.ForeignKey(
-                        name: "FK_Direction_Movies_MovieId",
+                        name: "FK_Directions_Movies_MovieId",
                         column: x => x.MovieId,
                         principalTable: "Movies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Direction_Participants_ParticipantId",
+                        name: "FK_Directions_Participants_ParticipantId",
                         column: x => x.ParticipantId,
                         principalTable: "Participants",
                         principalColumn: "Id");
@@ -120,7 +139,7 @@ namespace Repository.Migrations
                 {
                     MovieId = table.Column<int>(type: "int", nullable: false),
                     ParticipantId = table.Column<int>(type: "int", nullable: false),
-                    CharacterName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    CharacterName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -139,7 +158,7 @@ namespace Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Vote",
+                name: "Votes",
                 columns: table => new
                 {
                     VoterId = table.Column<int>(type: "int", nullable: false),
@@ -148,24 +167,29 @@ namespace Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Vote", x => new { x.MovieId, x.VoterId });
+                    table.PrimaryKey("PK_Votes", x => new { x.MovieId, x.VoterId });
                     table.ForeignKey(
-                        name: "FK_Vote_Movies_MovieId",
+                        name: "FK_Votes_Movies_MovieId",
                         column: x => x.MovieId,
                         principalTable: "Movies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Vote_User_VoterId",
+                        name: "FK_Votes_Users_VoterId",
                         column: x => x.VoterId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Admins",
+                columns: new[] { "Id", "Hierarchy", "IsActive", "Password", "Salt", "Username" },
+                values: new object[] { 1, 100, true, new byte[] { 246, 80, 14, 20, 146, 156, 134, 101, 205, 29, 120, 243, 20, 245, 115, 142, 105, 37, 176, 75, 182, 49, 10, 128, 243, 48, 199, 147, 219, 30, 172, 178 }, new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 }, "admin" });
+
             migrationBuilder.CreateIndex(
-                name: "IX_Direction_ParticipantId",
-                table: "Direction",
+                name: "IX_Directions_ParticipantId",
+                table: "Directions",
                 column: "ParticipantId");
 
             migrationBuilder.CreateIndex(
@@ -179,8 +203,8 @@ namespace Repository.Migrations
                 column: "ParticipantId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vote_VoterId",
-                table: "Vote",
+                name: "IX_Votes_VoterId",
+                table: "Votes",
                 column: "VoterId");
         }
 
@@ -188,7 +212,10 @@ namespace Repository.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Direction");
+                name: "Admins");
+
+            migrationBuilder.DropTable(
+                name: "Directions");
 
             migrationBuilder.DropTable(
                 name: "GenreMovie");
@@ -197,7 +224,7 @@ namespace Repository.Migrations
                 name: "Performances");
 
             migrationBuilder.DropTable(
-                name: "Vote");
+                name: "Votes");
 
             migrationBuilder.DropTable(
                 name: "Genres");
@@ -209,7 +236,7 @@ namespace Repository.Migrations
                 name: "Movies");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Users");
         }
     }
 }

@@ -12,8 +12,8 @@ using Repository.Data;
 namespace Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221125133950_Teste")]
-    partial class Teste
+    [Migration("20221214134737_Rebuild Database")]
+    partial class RebuildDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,51 @@ namespace Repository.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Domain.Models.Admin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Hierarchy")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<byte[]>("Password")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("varbinary(32)");
+
+                    b.Property<byte[]>("Salt")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("varbinary(8)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Admins");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Hierarchy = 100,
+                            IsActive = true,
+                            Password = new byte[] { 246, 80, 14, 20, 146, 156, 134, 101, 205, 29, 120, 243, 20, 245, 115, 142, 105, 37, 176, 75, 182, 49, 10, 128, 243, 48, 199, 147, 219, 30, 172, 178 },
+                            Salt = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 },
+                            Username = "admin"
+                        });
+                });
 
             modelBuilder.Entity("Domain.Models.Direction", b =>
                 {
@@ -37,7 +82,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("ParticipantId");
 
-                    b.ToTable("Direction");
+                    b.ToTable("Directions");
                 });
 
             modelBuilder.Entity("Domain.Models.Genre", b =>
@@ -65,6 +110,10 @@ namespace Repository.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("Duration")
+                        .IsRequired()
+                        .HasColumnType("int");
 
                     b.Property<int?>("ReleaseYear")
                         .HasColumnType("int");
@@ -114,7 +163,8 @@ namespace Repository.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CharacterName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("MovieId", "ParticipantId");
 
@@ -134,17 +184,24 @@ namespace Repository.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Password")
+                    b.Property<byte[]>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(32)
+                        .HasColumnType("varbinary(32)");
+
+                    b.Property<byte[]>("Salt")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("varbinary(8)");
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Domain.Models.Vote", b =>
@@ -162,7 +219,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("VoterId");
 
-                    b.ToTable("Vote");
+                    b.ToTable("Votes");
                 });
 
             modelBuilder.Entity("GenreMovie", b =>
@@ -223,7 +280,7 @@ namespace Repository.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Models.User", "Voter")
-                        .WithMany()
+                        .WithMany("Votes")
                         .HasForeignKey("VoterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -262,6 +319,11 @@ namespace Repository.Migrations
                     b.Navigation("MoviesActedIn");
 
                     b.Navigation("MoviesDirected");
+                });
+
+            modelBuilder.Entity("Domain.Models.User", b =>
+                {
+                    b.Navigation("Votes");
                 });
 #pragma warning restore 612, 618
         }
