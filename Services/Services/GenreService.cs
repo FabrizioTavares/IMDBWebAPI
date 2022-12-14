@@ -43,7 +43,7 @@ namespace Service.Services
             var existingGenre = _genreRepository.GetGenresByTitle(genre.Title);
             if (existingGenre.Any())
             {
-                throw new ApplicationException(("Genre already exists"));
+                throw new ApplicationException("Genre already exists");
             }
             else
             {

@@ -10,11 +10,13 @@ namespace Service.Services.Abstract
 {
     public interface IPerformanceService
     {
-        Task<Performance> Insert(CreatePerformanceDTO performanceDTO);
-        Task<Performance> Update(UpdatePerformanceDTO performanceDTO);
-        Task<Performance> Delete(int id);
-        Task<Performance?> Get(int id);
-        Task<Performance> GetByCharacterName(string characterName);
-        IEnumerable<Performance?> GetAll();
+        Task<ReadPerformanceDTO?> Get(int movieId, int participantId, CancellationToken cancellationToken);
+        IEnumerable<ReadPerformanceDTO?> GetByCharacterName(string characterName, CancellationToken cancellationToken);
+        IEnumerable<ReadPerformanceDTO?> GetByMovieId(int movieId, CancellationToken cancellationToken);
+        IEnumerable<ReadPerformanceDTO?> GetByParticipantId(int participantId, CancellationToken cancellationToken);
+        IEnumerable<ReadPerformanceDTO?> GetAll();
+        Task Insert(int movieId, int participantId, CreatePerformanceDTO performanceDTO, CancellationToken cancellationToken);
+        Task Update(int movieId, int participantId, UpdatePerformanceDTO performanceDTO, CancellationToken cancellationToken);
+        Task Remove(int movieId, int participantId, CancellationToken cancellationToken);
     }
 }

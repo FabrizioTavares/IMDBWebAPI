@@ -16,10 +16,19 @@ namespace Repository.Repositories
             return await base.GetComposite(movieId, participantId, cancellationToken);
         }
 
-        public async Task<Performance?> GetPerformanceByCharacterName(string name, CancellationToken cancellationToken)
+        public IEnumerable<Performance> GetByCharacterName(string name, CancellationToken cancellationToken)
         {
-            return await _entities.FirstOrDefaultAsync(p => p.CharacterName == name, cancellationToken);
+            return _entities.Where(p => p.CharacterName != null && p.CharacterName.Contains(name));
         }
 
+        public IEnumerable<Performance?> GetPerformancesByMovie(int movieId, CancellationToken cancellationToken)
+        {
+            return _entities.Where(p => p.MovieId == movieId);
+        }
+
+        public IEnumerable<Performance?> GetPerformancesByParticipant(int participantId, CancellationToken cancellationToken)
+        {
+            return _entities.Where(p => p.ParticipantId == participantId);
+        }
     }
 }
