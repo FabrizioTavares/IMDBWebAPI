@@ -22,6 +22,8 @@ builder.Services.AddServices();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ApplicationConnection")));
 builder.Services.AddSwaggerGen();
+// configure JSON serializer to ignore cycles
+
 
 var app = builder.Build();
 

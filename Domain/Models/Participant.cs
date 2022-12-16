@@ -6,8 +6,8 @@ namespace Domain.Models
     {
         public string Name { get; set; } = string.Empty;
         public string Biography { get; set; } = string.Empty;
-        public virtual ICollection<Performance>? MoviesActedIn { get; set; }
-        public virtual ICollection<Direction>? MoviesDirected { get; set; }
+        public virtual List<Performance> MoviesActedIn { get; set; } = new List<Performance>();
+        public virtual List<Direction> MoviesDirected { get; set; } = new List<Direction>();
     }
 
 }

@@ -5,6 +5,6 @@ namespace Domain.Models
     public class Genre : IdentifiableEntity
     {
         public string Title { get; set; } = string.Empty;
-        public virtual ICollection<Movie>? Movies { get; set; } = Array.Empty<Movie>();
+        public virtual List<Movie> Movies { get; set; } = new List<Movie>();
     }
 }

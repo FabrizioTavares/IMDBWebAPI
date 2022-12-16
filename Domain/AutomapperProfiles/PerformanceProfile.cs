@@ -9,7 +9,10 @@ namespace Domain.AutomapperProfiles
         public PerformanceProfile()
         {
             CreateMap<CreatePerformanceDTO, Performance>();
-            CreateMap<Performance, ReadPerformanceDTO>();
+            CreateMap<Performance, ReadPerformanceFromMovieDTO>()
+                .ForMember(dest => dest.Actor, opt => opt
+                .MapFrom(src => src.Participant));
+            CreateMap<Performance, ReadPerformanceFromParticipantDTO>();
             CreateMap<UpdatePerformanceDTO, Performance>();
         }
     }

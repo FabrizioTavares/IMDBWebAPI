@@ -10,6 +10,7 @@ namespace Domain.AutomapperProfiles
         {
             CreateMap<CreateGenreDTO, Genre>();
             CreateMap<Genre, ReadGenreDTO>();
+            CreateMap<Genre, ReadGenreReferencelessDTO>();
             CreateMap<UpdateGenreDTO, Genre>();
         }
     }

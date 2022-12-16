@@ -6,6 +6,6 @@ namespace Domain.DTOs.GenreDTOs
     {
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
-        public virtual ICollection<ReadMovieDTO>? Movies { get; set; }
+        public virtual ICollection<ReadMovieReferencelessDTO>? Movies { get; set; }
     }
 }

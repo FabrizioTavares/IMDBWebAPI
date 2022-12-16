@@ -9,8 +9,14 @@ namespace Domain.AutomapperProfiles
         public ParticipantProfile()
         {
             CreateMap<CreateParticipantDTO, Participant>();
-            CreateMap<Participant, ReadParticipantDTO>();
-            CreateMap<UpdateParticipantDTO, Participant>().ForAllMembers(m => m.Condition((src, dest, srcMember) => srcMember != default));
+            CreateMap<Participant, ReadParticipantDTO>()
+                .ForMember(p => p.MoviesDirected, opt => opt
+                .MapFrom(p => p.MoviesDirected
+                .Select(d => d.Movie)));
+            CreateMap<Participant, ReadParticipantReferencelessDTO>();
+            CreateMap<UpdateParticipantDTO, Participant>()
+                .ForAllMembers(m => m
+                .Condition((src, dest, srcMember) => srcMember != default));
         }
     }
 }

@@ -12,7 +12,6 @@ namespace Service.Validation.Direction
     {
         public CreateDirectionDTOValidator()
         {
-            RuleFor(x => x.MovieId).NotEmpty().WithMessage("Movie ID is required");
             RuleFor(x => x.ParticipantId).NotEmpty().WithMessage("Participant ID is required");
         }
     }

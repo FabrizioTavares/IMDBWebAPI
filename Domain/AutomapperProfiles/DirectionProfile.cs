@@ -9,7 +9,6 @@ namespace Domain.AutomapperProfiles
         public DirectionProfile()
         {
             CreateMap<CreateDirectionDTO, Direction>();
-            CreateMap<Direction, ReadDirectionDTO>();
             CreateMap<UpdateDirectionDTO, Direction>();
         }
     }

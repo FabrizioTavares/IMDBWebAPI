@@ -7,7 +7,7 @@ namespace Repository.Repositories
     public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
 
-        private readonly ApplicationDbContext _applicationDbContext;
+        protected readonly ApplicationDbContext _applicationDbContext;
         protected readonly DbSet<T> _entities;
 
         public BaseRepository(ApplicationDbContext applicationDbContext)

@@ -34,7 +34,7 @@ public class PerformanceServiceTesting
         var newPerformance = new CreatePerformanceDTO
         {
             ParticipantId = 1,
-            MovieId = 1
+            //MovieId = 1
         };
 
         var performance = _mapper.Map<Performance>(newPerformance);

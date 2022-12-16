@@ -13,7 +13,7 @@ namespace Repository.Repositories
 
         public virtual IEnumerable<Participant> GetParticipantsByName(string name)
         {
-            return _entities.Where(p => p.Name.Contains(name));
+            return _entities.Where(p => p.Name.Contains(name)).Include(p => p.MoviesActedIn).ThenInclude(p => p.Movie).Include(p => p.MoviesDirected).ThenInclude(p => p.Movie);
         }
 
     }

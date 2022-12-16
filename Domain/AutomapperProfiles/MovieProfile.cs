@@ -9,8 +9,14 @@ namespace Domain.AutomapperProfiles
         public MovieProfile()
         {
             CreateMap<CreateMovieDTO, Movie>();
-            CreateMap<Movie, ReadMovieDTO>();
-            CreateMap<UpdateMovieDTO, Movie>();
+            CreateMap<Movie, ReadMovieDTO>()
+                .ForMember(m => m.Direction, opt => opt
+                .MapFrom(m => m.Direction
+                .Select(d => d.Participant)));
+            CreateMap<Movie, ReadMovieReferencelessDTO>();
+            CreateMap<UpdateMovieDTO, Movie>()
+                .ForAllMembers(m => m
+                .Condition((src, dest, srcMember) => srcMember != default));
         }
     }
 }

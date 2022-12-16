@@ -31,12 +31,10 @@ namespace Application.Extensions
             services.AddScoped<IValidator<CreateParticipantDTO>, CreateParticipantDTOValidator>();
             services.AddScoped<IValidator<UpdateParticipantDTO>, UpdateParticipantDTOValidator>();
 
-            services.AddScoped<IPerformanceService, PerformanceService>();
             services.AddScoped<IPerformanceRepository, PerformanceRepository>();
             services.AddScoped<IValidator<CreatePerformanceDTO>, CreatePerformanceDTOValidator>();
             services.AddScoped<IValidator<UpdatePerformanceDTO>, UpdatePerformanceDTOValidator>();
 
-            services.AddScoped<IDirectionService, DirectionService>();
             services.AddScoped<IDirectionRepository, DirectionRepository>();
             services.AddScoped<IValidator<CreateDirectionDTO>, CreateDirectionDTOValidator>();
 
