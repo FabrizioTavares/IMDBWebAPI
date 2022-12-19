@@ -4,6 +4,6 @@
     {
         public string? Username { get; set; }
         public string? Password { get; set; }
-        public int? Hierarchy { get; private set; }
+        public int? Hierarchy { get; set; }
     }
 }

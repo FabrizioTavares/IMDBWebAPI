@@ -8,7 +8,7 @@ namespace Domain.AutomapperProfiles
     {
         public UserProfile()
         {
-            CreateMap<CreateUserDTO, User>();
+            CreateMap<CredentialsUserDTO, User>();
             CreateMap<User, ReadUserDTO>();
             CreateMap<UpdateUserDTO, User>();
         }
