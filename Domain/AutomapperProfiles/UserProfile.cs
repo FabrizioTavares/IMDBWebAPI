@@ -10,7 +10,9 @@ namespace Domain.AutomapperProfiles
         {
             CreateMap<CredentialsUserDTO, User>();
             CreateMap<User, ReadUserDTO>();
-            CreateMap<UpdateUserDTO, User>();
+            CreateMap<UpdateUserDTO, User>()
+                .ForAllMembers(m => m
+                .Condition((src, dest, srcMember) => srcMember != default)); ;
         }
     }
 }

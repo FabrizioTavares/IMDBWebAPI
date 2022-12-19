@@ -1,14 +1,8 @@
 ﻿using Domain.DTOs.AdminDTOs;
-using Domain.DTOs.UserDTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service.Services.Abstract
 {
-    public interface IAdministrativeService
+    public interface IAdministrativeService : IAuthenticableEntityService
     {
         Task<ReadAdminDTO?> GetAdmin(int id, CancellationToken cancellationToken);
         IEnumerable<ReadAdminDTO?> GetAllAdmins();

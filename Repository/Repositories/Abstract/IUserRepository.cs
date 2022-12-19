@@ -4,6 +4,6 @@ namespace Repository.Repositories.Abstract
 {
     public interface IUserRepository : IBaseRepository<User>
     {
-        Task<User?> GetUserByUserName(string name, CancellationToken cancellationToken);
+        IEnumerable<User?> GetUsersByUserName(string name, CancellationToken cancellationToken);
     }
 }
