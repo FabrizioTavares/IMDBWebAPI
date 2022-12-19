@@ -1,19 +1,19 @@
-﻿using FluentValidation;
-using Repository.Repositories.Abstract;
-using Repository.Repositories;
-using Service.Services.Abstract;
-using Service.Services;
-using Service.Validation.Genre;
+﻿using Domain.AutomapperProfiles;
+using Domain.DTOs.DirectionDTOs;
 using Domain.DTOs.GenreDTOs;
-using Domain.AutomapperProfiles;
+using Domain.DTOs.MovieDTOs;
 using Domain.DTOs.ParticipantDTOs;
 using Domain.DTOs.PerformanceDTOs;
+using FluentValidation;
+using Repository.Repositories;
+using Repository.Repositories.Abstract;
+using Service.Services;
+using Service.Services.Abstract;
+using Service.Validation.Direction;
+using Service.Validation.Genre;
+using Service.Validation.Movie;
 using Service.Validation.Participant;
 using Service.Validation.Performance;
-using Domain.DTOs.DirectionDTOs;
-using Service.Validation.Direction;
-using Service.Validation.Movie;
-using Domain.DTOs.MovieDTOs;
 
 namespace Application.Extensions
 {
@@ -50,7 +50,7 @@ namespace Application.Extensions
                 typeof(PerformanceProfile),
                 typeof(DirectionProfile),
                 typeof(MovieProfile));
-            
+
             return services;
         }
 

@@ -70,7 +70,7 @@ namespace Service.Services
             }
 
             var mappedPerformance = _mapper.Map<Performance>(newPerformance);
-            
+
             mappedPerformance.Movie = movie;
             mappedPerformance.MovieId = movieId;
             mappedPerformance.Participant = participant;

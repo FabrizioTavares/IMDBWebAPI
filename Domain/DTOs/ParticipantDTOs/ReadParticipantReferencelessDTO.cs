@@ -1,7 +1,4 @@
-﻿using Domain.DTOs.DirectionDTOs;
-using Domain.DTOs.PerformanceDTOs;
-
-namespace Domain.DTOs.ParticipantDTOs
+﻿namespace Domain.DTOs.ParticipantDTOs
 {
     public class ReadParticipantReferencelessDTO
     {

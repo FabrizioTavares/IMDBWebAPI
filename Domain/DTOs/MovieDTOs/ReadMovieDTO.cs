@@ -1,5 +1,4 @@
-﻿using Domain.DTOs.DirectionDTOs;
-using Domain.DTOs.GenreDTOs;
+﻿using Domain.DTOs.GenreDTOs;
 using Domain.DTOs.ParticipantDTOs;
 using Domain.DTOs.PerformanceDTOs;
 using Domain.DTOs.VoteDTOs;

@@ -1,5 +1,4 @@
-﻿using Domain.DTOs.MovieDTOs;
-using Domain.DTOs.ParticipantDTOs;
+﻿using Domain.DTOs.ParticipantDTOs;
 
 namespace Domain.DTOs.DirectionDTOs
 {

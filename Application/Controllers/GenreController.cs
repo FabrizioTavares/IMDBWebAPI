@@ -1,7 +1,4 @@
 ﻿using Domain.DTOs.GenreDTOs;
-using Domain.Models;
-using FluentValidation;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Abstract;
 using Service.Validation.Genre;
@@ -43,7 +40,7 @@ namespace Application.Controllers
             {
                 return Ok(_genreService.GetGenresByTitle(title, cancellationToken));
             }
-            
+
         }
 
         [HttpGet("{id}")]
@@ -68,7 +65,7 @@ namespace Application.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteGenre([FromRoute] int id, CancellationToken cancellationToken = default)
         {
-            await _genreService.Remove(id, cancellationToken);           
+            await _genreService.Remove(id, cancellationToken);
             return NoContent();
         }
 

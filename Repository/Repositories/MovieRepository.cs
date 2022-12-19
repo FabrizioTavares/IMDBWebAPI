@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Repository.Data;
 using Repository.Repositories.Abstract;
-using System.Collections;
 
 namespace Repository.Repositories
 {

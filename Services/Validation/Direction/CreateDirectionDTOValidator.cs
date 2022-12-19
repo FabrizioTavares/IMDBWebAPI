@@ -1,10 +1,5 @@
-﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domain.DTOs.DirectionDTOs;
+﻿using Domain.DTOs.DirectionDTOs;
+using FluentValidation;
 
 namespace Service.Validation.Direction
 {

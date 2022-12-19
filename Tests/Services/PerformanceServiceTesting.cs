@@ -2,12 +2,6 @@
 using Domain.AutomapperProfiles;
 using Domain.DTOs.PerformanceDTOs;
 using Domain.Models;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests.Services;

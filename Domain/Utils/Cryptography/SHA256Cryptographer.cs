@@ -20,7 +20,7 @@ namespace Domain.Utils.Cryptography
             var hash = _hashAlgorithm.ComputeHash(combinedBytes);
             return hash;
         }
-        
+
         public bool Verify(string rawText, byte[] hashedText, byte[] salt)
         {
             var hash = Hash(rawText, salt);

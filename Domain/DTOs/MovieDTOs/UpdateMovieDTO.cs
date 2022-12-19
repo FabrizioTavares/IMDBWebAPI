@@ -1,8 +1,4 @@
-﻿using Domain.DTOs.DirectionDTOs;
-using Domain.DTOs.GenreDTOs;
-using Domain.DTOs.PerformanceDTOs;
-
-namespace Domain.DTOs.MovieDTOs
+﻿namespace Domain.DTOs.MovieDTOs
 {
     public class UpdateMovieDTO
     {

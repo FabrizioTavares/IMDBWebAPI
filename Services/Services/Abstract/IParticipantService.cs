@@ -1,9 +1,4 @@
 ﻿using Domain.DTOs.ParticipantDTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service.Services.Abstract
 {
@@ -15,6 +10,6 @@ namespace Service.Services.Abstract
         Task Insert(CreateParticipantDTO participant, CancellationToken cancellationToken);
         Task Update(int id, UpdateParticipantDTO participant, CancellationToken cancellationToken);
         Task Remove(int id, CancellationToken cancellationToken);
-        
+
     }
 }

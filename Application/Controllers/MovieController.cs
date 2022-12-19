@@ -1,7 +1,6 @@
 ﻿using Domain.DTOs.DirectionDTOs;
 using Domain.DTOs.MovieDTOs;
 using Domain.DTOs.PerformanceDTOs;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Abstract;
 using Service.Validation.Direction;

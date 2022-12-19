@@ -1,12 +1,4 @@
-﻿using AutoMapper;
-using Domain.DTOs.GenreDTOs;
-using Domain.Models;
-using Repository.Repositories.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.DTOs.GenreDTOs;
 
 namespace Service.Services.Abstract
 {
