@@ -4,6 +4,8 @@ using Domain.DTOs.GenreDTOs;
 using Domain.DTOs.MovieDTOs;
 using Domain.DTOs.ParticipantDTOs;
 using Domain.DTOs.PerformanceDTOs;
+using Domain.DTOs.UserDTOs;
+using Domain.Utils.Cryptography;
 using FluentValidation;
 using Repository.Repositories;
 using Repository.Repositories.Abstract;
@@ -14,6 +16,7 @@ using Service.Validation.Genre;
 using Service.Validation.Movie;
 using Service.Validation.Participant;
 using Service.Validation.Performance;
+using Service.Validation.User;
 
 namespace Application.Extensions
 {
@@ -43,13 +46,22 @@ namespace Application.Extensions
             services.AddScoped<IValidator<CreateMovieDTO>, CreateMovieDTOValidator>();
             services.AddScoped<IValidator<UpdateMovieDTO>, UpdateMovieDTOValidator>();
 
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IValidator<CreateUserDTO>, CreateUserDTOValidator>();
+
+            services.AddSingleton<ICryptographer, SHA256Cryptographer>();
 
             services.AddAutoMapper(
                 typeof(GenreProfile),
                 typeof(ParticipantProfile),
                 typeof(PerformanceProfile),
                 typeof(DirectionProfile),
-                typeof(MovieProfile));
+                typeof(MovieProfile),
+                typeof(UserProfile),
+                typeof(AdminProfile),
+                typeof(VoteProfile)
+                );
 
             return services;
         }

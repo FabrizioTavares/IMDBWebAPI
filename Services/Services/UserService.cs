@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.DTOs.UserDTOs;
 using Domain.Models;
+using Domain.Utils.Cryptography;
 using Repository.Repositories.Abstract;
 using Service.Services.Abstract;
 using System;
@@ -18,11 +19,14 @@ namespace Service.Services
 
         private readonly IUserRepository _userRepository;
 
+        private readonly ICryptographer _cryptographer;
+
         private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepository, IMapper mapper)
+        public UserService(IUserRepository userRepository, ICryptographer cryptographer, IMapper mapper)
         {
             _userRepository = userRepository;
+            _cryptographer = cryptographer;
             _mapper = mapper;
         }
         
@@ -38,9 +42,32 @@ namespace Service.Services
             return _mapper.Map<ReadUserDTO>(user);
         }
 
-        public async Task InsertUser(CredentialsUserDTO newUser, CancellationToken cancellationToken)
+        public IEnumerable<ReadUserDTO?> GetUsersByUsername(string username, CancellationToken cancellationToken)
         {
-            var user = _mapper.Map<User>(newUser);
+            var user = _userRepository.GetUsersByUserName(username, cancellationToken);
+            return _mapper.Map<IEnumerable<ReadUserDTO>>(user);
+        }
+
+        public async Task InsertUser(CreateUserDTO newUser, CancellationToken cancellationToken)
+        {
+
+            var existingUser =  _userRepository.GetUsersByUserName(newUser.Username, cancellationToken).Any();
+            if (existingUser)
+            {
+                throw new ApplicationException("User already exists");
+            }
+
+            var salt = _cryptographer.GenerateSalt();
+
+            var user = new User
+            {
+                Username = newUser.Username,
+                Salt = salt,
+                Password = _cryptographer.Hash(newUser.Password, salt),
+                IsActive = true
+            };
+
+
             await _userRepository.Insert(user, cancellationToken);
         }
 

@@ -1,9 +1,8 @@
-﻿namespace Domain.DTOs.AdminDTOs
+﻿namespace Domain.DTOs.UserDTOs
 {
-    public class CreateAdminDTO
+    public class CreateUserDTO
     {
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-        public int Hierarchy { get; set; }
     }
 }

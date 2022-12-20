@@ -9,6 +9,8 @@ namespace Service.Services
     public class AdministrativeService : AuthenticationService, IAdministrativeService
     {
 
+        // TODO IMPLEMENT PASSWORD CHECK AND HIERARCHICAL CHECKS
+
         private readonly IAdminRepository _adminRepository;
 
         private readonly IMapper _mapper;
