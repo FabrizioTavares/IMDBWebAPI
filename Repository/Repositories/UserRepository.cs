@@ -13,7 +13,12 @@ namespace Repository.Repositories
         {
             return await _entities.FirstOrDefaultAsync(u => u.Id == id && u.IsActive, cancellationToken);
         }
-        
+
+        public override IEnumerable<User> GetAll()
+        {
+            return _entities.Where(u => u.IsActive == true).AsEnumerable();
+        }
+
         public IEnumerable<User?> GetUsersByUserName(string name, CancellationToken cancellationToken)
         {
             return _entities.Where(u => u.Username == name && u.IsActive);

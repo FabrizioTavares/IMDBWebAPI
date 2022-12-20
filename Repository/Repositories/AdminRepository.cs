@@ -16,7 +16,7 @@ namespace Repository.Repositories
 
         public override IEnumerable<Admin> GetAll()
         {
-            return _entities.ToList().Where(a => a.IsActive == true);
+            return _entities.Where(a => a.IsActive == true).AsEnumerable();
         }
 
         public async Task<Admin?> GetAdminByUserName(string userName, CancellationToken cancellationToken)
