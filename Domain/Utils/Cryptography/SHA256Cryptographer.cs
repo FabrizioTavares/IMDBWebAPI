@@ -7,10 +7,13 @@ namespace Domain.Utils.Cryptography
     {
 
         private readonly HashAlgorithm _hashAlgorithm;
+        private readonly RandomNumberGenerator _randomNumberGenerator;
+
 
         public SHA256Cryptographer()
         {
             _hashAlgorithm = SHA256.Create();
+            _randomNumberGenerator = RandomNumberGenerator.Create();
         }
 
         public byte[] Hash(string rawText, byte[] salt)
@@ -25,6 +28,13 @@ namespace Domain.Utils.Cryptography
         {
             var hash = Hash(rawText, salt);
             return hashedText.SequenceEqual(hash);
+        }
+
+        public byte[] GenerateSalt()
+        {
+            var salt = new byte[8];
+            _randomNumberGenerator.GetBytes(salt);
+            return salt;
         }
     }
 }

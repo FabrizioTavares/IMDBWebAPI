@@ -4,5 +4,6 @@
     {
         byte[] Hash(string rawText, byte[] salt);
         bool Verify(string rawText, byte[] hashedText, byte[] salt);
+        byte[] GenerateSalt();
     }
 }
