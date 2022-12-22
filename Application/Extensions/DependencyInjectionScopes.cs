@@ -5,6 +5,7 @@ using Domain.DTOs.MovieDTOs;
 using Domain.DTOs.ParticipantDTOs;
 using Domain.DTOs.PerformanceDTOs;
 using Domain.DTOs.UserDTOs;
+using Domain.DTOs.VoteDTOs;
 using Domain.Utils.Cryptography;
 using FluentValidation;
 using Repository.Repositories;
@@ -17,6 +18,7 @@ using Service.Validation.Movie;
 using Service.Validation.Participant;
 using Service.Validation.Performance;
 using Service.Validation.User;
+using Service.Validation.Vote;
 
 namespace Application.Extensions
 {
@@ -42,7 +44,7 @@ namespace Application.Extensions
             services.AddScoped<IValidator<CreateDirectionDTO>, CreateDirectionDTOValidator>();
 
             services.AddScoped<IVoteRepository, VoteRepository>();
-            //TODO: Validation
+            services.AddScoped<IValidator<CreateVoteDTO>, CreateVoteDTOValidator>();
 
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IMovieRepository, MovieRepository>();
