@@ -137,6 +137,20 @@ namespace Service.Services
             await _movieRepository.Update(movie, cancellationToken);
         }
 
+        public async Task RemoveGenreFromMovie(int movieId, int genreId, CancellationToken cancellationToken)
+        {
+            var movie = await _movieRepository.Get(movieId, cancellationToken);
+            var genre = await _genreRepository.Get(genreId, cancellationToken);
+
+            if (movie == null || genre == null)
+            {
+                throw new ApplicationException("Invalid movie or genre ID");
+            }
+
+            movie.Genres.Remove(genre);
+            await _movieRepository.Update(movie, cancellationToken);
+        }
+
 
         public async Task Update(int id, UpdateMovieDTO updatedMovie, CancellationToken cancellationToken)
         {

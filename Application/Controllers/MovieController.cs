@@ -67,7 +67,7 @@ namespace Application.Controllers
             return BadRequest(result.Errors);
         }
 
-        [HttpPut("{movieId}/performances/add")]
+        [HttpPost("{movieId}/performances")]
         public async Task<IActionResult> AddPerformanceToMovie([FromRoute] int movieId, [FromBody] CreatePerformanceDTO newPerformance, CancellationToken cancellationToken = default)
         {
             var result = new CreatePerformanceDTOValidator().Validate(newPerformance);
@@ -86,7 +86,7 @@ namespace Application.Controllers
             return Ok();
         }
 
-        [HttpPut("{movieId}/directions/add")]
+        [HttpPost("{movieId}/directions")]
         public async Task<IActionResult> AddDirectionToMovie([FromRoute] int movieId, [FromBody] CreateDirectionDTO newDirection, CancellationToken cancellationToken = default)
         {
             var result = new CreateDirectionDTOValidator().Validate(newDirection);
@@ -105,14 +105,21 @@ namespace Application.Controllers
             return Ok();
         }
 
-        [HttpPut("{movieId}/genres/add/{genreid}")]
+        [HttpPost("{movieId}/genres/{genreid}")]
         public async Task<IActionResult> AddGenreToMovie([FromRoute] int movieId, [FromRoute] int genreid, CancellationToken cancellationToken = default)
         {
             await _movieService.AddGenreToMovie(movieId, genreid, cancellationToken);
             return Ok();
         }
+        
+        [HttpDelete("{movieId}/genres/{genreid}")]
+        public async Task<IActionResult> DeleteGenreFromMovie([FromRoute] int movieId, [FromRoute] int genreid, CancellationToken cancellationToken = default)
+        {
+            await _movieService.RemoveGenreFromMovie(movieId, genreid, cancellationToken);
+            return Ok();
+        }
 
-        [HttpPut("{movieId}/reviews/new")]
+        [HttpPost("{movieId}/reviews")]
         public async Task<IActionResult> AddReviewToMovie([FromRoute] int movieId, [FromBody] CreateVoteDTO newReview, CancellationToken cancellationToken = default)
         {
             var result = new CreateVoteDTOValidator().Validate(newReview);
