@@ -6,5 +6,6 @@ namespace Repository.Repositories.Abstract
     {
         IEnumerable<User?> GetUsersByUserName(string name, CancellationToken cancellationToken);
         Task<User?> GetUserByUserName(string name, CancellationToken cancellationToken);
+        IEnumerable<User?> GetUsersByUserNameOrdered(string name, CancellationToken cancellationToken)
     }
 }

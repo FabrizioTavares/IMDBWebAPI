@@ -29,5 +29,10 @@ namespace Repository.Repositories
             return await _entities.FirstOrDefaultAsync(u => u.Username == name && u.IsActive, cancellationToken);
         }
 
+        public IEnumerable<User?> GetUsersByUserNameOrdered(string name, CancellationToken cancellationToken)
+        {
+            return _entities.Where(u => u.Username == name && u.IsActive).OrderBy(u => u.Username);
+        }
+
     }
 }
