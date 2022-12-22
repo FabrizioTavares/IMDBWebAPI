@@ -49,7 +49,9 @@ namespace Repository.Migrations
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Synopsis = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     ReleaseYear = table.Column<int>(type: "int", nullable: true),
-                    Duration = table.Column<int>(type: "int", nullable: false)
+                    Duration = table.Column<int>(type: "int", nullable: false),
+                    QuantityVotes = table.Column<int>(name: "Quantity_Votes", type: "int", nullable: true),
+                    Rating = table.Column<double>(type: "float", nullable: true)
                 },
                 constraints: table =>
                 {

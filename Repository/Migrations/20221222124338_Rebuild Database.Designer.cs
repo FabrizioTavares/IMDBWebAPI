@@ -12,7 +12,7 @@ using Repository.Data;
 namespace Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221221122448_Rebuild Database")]
+    [Migration("20221222124338_Rebuild Database")]
     partial class RebuildDatabase
     {
         /// <inheritdoc />
@@ -117,6 +117,12 @@ namespace Repository.Migrations
                     b.Property<int?>("Duration")
                         .IsRequired()
                         .HasColumnType("int");
+
+                    b.Property<int?>("Quantity_Votes")
+                        .HasColumnType("int");
+
+                    b.Property<double?>("Rating")
+                        .HasColumnType("float");
 
                     b.Property<int?>("ReleaseYear")
                         .HasColumnType("int");

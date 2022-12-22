@@ -115,6 +115,12 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
+                    b.Property<int?>("Quantity_Votes")
+                        .HasColumnType("int");
+
+                    b.Property<double?>("Rating")
+                        .HasColumnType("float");
+
                     b.Property<int?>("ReleaseYear")
                         .HasColumnType("int");
 
