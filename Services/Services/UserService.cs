@@ -30,10 +30,10 @@ namespace Service.Services
             _mapper = mapper;
         }
         
-        public IEnumerable<ReadUserDTO?> GetAllUsers()
+        public IEnumerable<ReadUserReferencelessDTO?> GetAllUsers()
         {
             var users = _userRepository.GetAll();
-            return _mapper.Map<IEnumerable<ReadUserDTO>>(users);
+            return _mapper.Map<IEnumerable<ReadUserReferencelessDTO>>(users);
         }
 
         public async Task<ReadUserDTO?> GetUser(int id, CancellationToken cancellationToken)
@@ -42,10 +42,10 @@ namespace Service.Services
             return _mapper.Map<ReadUserDTO>(user);
         }
 
-        public IEnumerable<ReadUserDTO?> GetUsersByUsername(string username, CancellationToken cancellationToken)
+        public IEnumerable<ReadUserReferencelessDTO?> GetUsersByUsername(string username, CancellationToken cancellationToken)
         {
             var user = _userRepository.GetUsersByUserName(username, cancellationToken);
-            return _mapper.Map<IEnumerable<ReadUserDTO>>(user);
+            return _mapper.Map<IEnumerable<ReadUserReferencelessDTO>>(user);
         }
 
         public async Task InsertUser(CreateUserDTO newUser, CancellationToken cancellationToken)

@@ -9,9 +9,10 @@ namespace Domain.AutomapperProfiles
         public VoteProfile()
         {
             CreateMap<CreateVoteDTO, Vote>();
-            CreateMap<Vote, ReadVoteDTO>()
+            CreateMap<Vote, ReadVoteWithoutMovieDTO>()
                 .ForMember(dest => dest.Voter, opt => opt
                 .MapFrom(src => src.User));
+            CreateMap<Vote, ReadVoteWithoutVoterDTO>();
             CreateMap<UpdateVoteDTO, Vote>();
         }
     }

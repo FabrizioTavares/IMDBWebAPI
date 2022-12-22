@@ -14,7 +14,7 @@ namespace Domain.DTOs.MovieDTOs
         public int Duration { get; set; } = 0;
         public int Quantity_Votes { get; set; } = 0;
         public double Rating { get; set; } = 0;
-        public virtual IEnumerable<ReadVoteDTO>? Votes { get; set; }
+        public virtual IEnumerable<ReadVoteWithoutMovieDTO>? Votes { get; set; }
         public virtual IEnumerable<ReadGenreReferencelessDTO>? Genres { get; set; }
         public virtual IEnumerable<ReadPerformanceFromMovieDTO>? Cast { get; set; }
         public virtual IEnumerable<ReadParticipantReferencelessDTO>? Direction { get; set; }

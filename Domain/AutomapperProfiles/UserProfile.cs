@@ -9,6 +9,7 @@ namespace Domain.AutomapperProfiles
         public UserProfile()
         {
             CreateMap<CreateUserDTO, User>();
+            CreateMap<User, ReadUserReferencelessDTO>();
             CreateMap<User, ReadUserDTO>();
             CreateMap<UpdateUserDTO, User>()
                 .ForAllMembers(m => m

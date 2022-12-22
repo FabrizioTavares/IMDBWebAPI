@@ -3,9 +3,9 @@ using Domain.DTOs.UserDTOs;
 
 namespace Domain.DTOs.VoteDTOs
 {
-    public class ReadVoteDTO
+    public class ReadVoteWithoutMovieDTO
     {
-        public virtual ReadUserDTO Voter { get; set; } = new();
+        public virtual ReadUserReferencelessDTO Voter { get; set; } = default!;
         public int Rating { get; set; }
     }
 }

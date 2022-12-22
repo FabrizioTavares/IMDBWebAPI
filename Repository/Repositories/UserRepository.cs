@@ -11,7 +11,7 @@ namespace Repository.Repositories
 
         public override async Task<User?> Get(int id, CancellationToken cancellationToken)
         {
-            return await _entities.FirstOrDefaultAsync(u => u.Id == id && u.IsActive, cancellationToken);
+            return await _entities.Include(u => u.Votes).ThenInclude(v => v.Movie).FirstOrDefaultAsync(u => u.Id == id && u.IsActive, cancellationToken);
         }
 
         public override IEnumerable<User> GetAll()
