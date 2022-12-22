@@ -59,7 +59,7 @@ namespace Service.Services
             var movies = _movieRepository.GetMoviesByTitle(title, cancellationToken);
             return _mapper.Map<IEnumerable<ReadMovieReferencelessDTO>>(movies);
         }
-
+        
         public async Task Insert(CreateMovieDTO movie, CancellationToken cancellationToken)
         {
             var newMovie = _mapper.Map<Movie>(movie);
@@ -180,12 +180,11 @@ namespace Service.Services
 
             await _voteRepository.Insert(mappedReview, cancellationToken);
             user.Votes.Add(mappedReview);
-            movieToBeReviewed.Votes.Add(mappedReview);
+            movieToBeReviewed.AddVote(mappedReview);
             await _movieRepository.Update(movieToBeReviewed, cancellationToken);
             await _userRepository.Update(user, cancellationToken);
         }
 
-        // TODO: EditReviewFromMovie
         public async Task RemoveReviewFromMovie(int movieId, int userId, CancellationToken cancellationToken)
         {
             var reviewToBeRemoved = await _voteRepository.GetComposite(movieId, userId, cancellationToken);

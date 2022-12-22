@@ -37,7 +37,6 @@ namespace Repository.Maps
             builder
                 .HasMany(m => m.Votes)
                 .WithOne(r => r.Movie);
-            builder.Navigation(m => m.Cast).AutoInclude(false);
         }
     }
 }
