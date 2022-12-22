@@ -1,6 +1,7 @@
 ﻿using Domain.DTOs.DirectionDTOs;
 using Domain.DTOs.MovieDTOs;
 using Domain.DTOs.PerformanceDTOs;
+using Domain.DTOs.VoteDTOs;
 
 namespace Service.Services.Abstract
 {
@@ -15,6 +16,8 @@ namespace Service.Services.Abstract
         Task AddDirectionToMovie(int movieId, CreateDirectionDTO newDirection, CancellationToken cancellationToken);
         Task RemoveDirectionFromMovie(int movieId, int participantId, CancellationToken cancellationToken);
         Task AddGenreToMovie(int movieId, int genreId, CancellationToken cancellationToken);
+        Task AddReviewToMovie(int movieId, CreateVoteDTO newReview, CancellationToken cancellationToken);
+        Task RemoveReviewFromMovie(int movieId, int userId, CancellationToken cancellationToken);
         Task Update(int id, UpdateMovieDTO movie, CancellationToken cancellationToken);
         Task Remove(int id, CancellationToken cancellationToken);
     }

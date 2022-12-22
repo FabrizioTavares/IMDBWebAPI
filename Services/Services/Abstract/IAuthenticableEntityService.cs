@@ -1,10 +1,9 @@
-﻿using Domain.DTOs.UserDTOs;
+﻿using Domain.DTOs.AuthenticationDTOs;
 
 namespace Service.Services.Abstract
 {
     public interface IAuthenticableEntityService
     {
-        Task Authenticate(CredentialsUserDTO credentials);
-        Task LogOff();
+        Task<string> Authenticate(LoginDTO credentials, CancellationToken cancellationToken);
     }
 }

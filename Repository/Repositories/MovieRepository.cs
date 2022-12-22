@@ -24,7 +24,9 @@ namespace Repository.Repositories
                 .Include(m => m.Genres)
                 .Include(m => m.Direction)
                 .ThenInclude(d => d.Participant)
-                .AsNoTracking().FirstOrDefaultAsync(cancellationToken);
+                .Include(m => m.Votes)
+                .ThenInclude(v => v.User)
+                .FirstOrDefaultAsync(cancellationToken);
         }
 
     }

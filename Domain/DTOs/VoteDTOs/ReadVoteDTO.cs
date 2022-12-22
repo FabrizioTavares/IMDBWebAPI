@@ -1,13 +1,11 @@
-﻿using Domain.Models;
+﻿using Domain.DTOs.MovieDTOs;
+using Domain.DTOs.UserDTOs;
 
 namespace Domain.DTOs.VoteDTOs
 {
     public class ReadVoteDTO
     {
-        public virtual User Voter { get; set; } = new();
-        public int VoterId { get; set; }
-        public virtual Movie Movie { get; set; } = new();
-        public int MovieId { get; set; }
+        public virtual ReadUserDTO Voter { get; set; } = new();
         public int Rating { get; set; }
     }
 }

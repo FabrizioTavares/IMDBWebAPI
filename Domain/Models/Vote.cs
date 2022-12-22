@@ -5,12 +5,12 @@ namespace Domain.Models
 {
     public class Vote
     {
+        public virtual Movie Movie { get; set; } = default!;
         [Key, Column(Order = 0)]
-        public virtual User Voter { get; set; } = new();
-        public int VoterId { get; set; }
-        [Key, Column(Order = 1)]
-        public virtual Movie Movie { get; set; } = new();
         public int MovieId { get; set; }
+        public virtual User User { get; set; } = default!;
+        [Key, Column(Order = 1)]
+        public int UserId { get; set; }
         public int Rating { get; set; }
     }
 }

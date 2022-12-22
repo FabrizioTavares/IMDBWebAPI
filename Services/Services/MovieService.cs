@@ -2,6 +2,7 @@
 using Domain.DTOs.DirectionDTOs;
 using Domain.DTOs.MovieDTOs;
 using Domain.DTOs.PerformanceDTOs;
+using Domain.DTOs.VoteDTOs;
 using Domain.Models;
 using Repository.Repositories.Abstract;
 using Service.Services.Abstract;
@@ -16,6 +17,8 @@ namespace Service.Services
         private readonly IPerformanceRepository _performanceRepository;
         private readonly IParticipantRepository _participantRepository;
         private readonly IGenreRepository _genreRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IVoteRepository _voteRepository;
 
         private readonly IMapper _mapper;
 
@@ -25,6 +28,8 @@ namespace Service.Services
             IPerformanceRepository performanceRepository,
             IParticipantRepository participantRepository,
             IGenreRepository genreRepository,
+            IUserRepository userRepository,
+            IVoteRepository voteRepository,
             IMapper mapper)
         {
             _movieRepository = movieRepository;
@@ -32,6 +37,8 @@ namespace Service.Services
             _performanceRepository = performanceRepository;
             _participantRepository = participantRepository;
             _genreRepository = genreRepository;
+            _userRepository = userRepository;
+            _voteRepository = voteRepository;
             _mapper = mapper;
         }
 
@@ -59,25 +66,20 @@ namespace Service.Services
             await _movieRepository.Insert(newMovie, cancellationToken);
         }
 
-        public async Task AddPerformanceToMovie(int movieId, CreatePerformanceDTO newPerformance, CancellationToken cancellationToken)
+        public async Task AddPerformanceToMovie(int movieId, CreatePerformanceDTO dto, CancellationToken cancellationToken)
         {
             var movie = await _movieRepository.Get(movieId, cancellationToken);
-            var participant = await _participantRepository.Get(newPerformance.ParticipantId, cancellationToken);
+            var participant = await _participantRepository.Get(dto.ParticipantId, cancellationToken);
 
             if (movie == null || participant == null)
             {
                 throw new ApplicationException("Invalid movie or participant ID");
             }
 
-            var mappedPerformance = _mapper.Map<Performance>(newPerformance);
+            var performance = _mapper.Map<Performance>(dto);
 
-            mappedPerformance.Movie = movie;
-            mappedPerformance.MovieId = movieId;
-            mappedPerformance.Participant = participant;
-            mappedPerformance.ParticipantId = participant.Id;
-
-            await _performanceRepository.Insert(mappedPerformance, cancellationToken);
-            movie.Cast.Add(mappedPerformance);
+            performance.Participant = participant;
+            movie.Cast.Add(performance);
             await _movieRepository.Update(movie, cancellationToken);
         }
 
@@ -105,12 +107,7 @@ namespace Service.Services
 
             var mappedDirection = _mapper.Map<Direction>(newDirection);
 
-            mappedDirection.Movie = movie;
-            mappedDirection.MovieId = movieId;
             mappedDirection.Participant = director;
-            mappedDirection.ParticipantId = director.Id;
-
-            await _directionRepository.Insert(mappedDirection, cancellationToken);
             movie.Direction.Add(mappedDirection);
             await _movieRepository.Update(movie, cancellationToken);
         }
@@ -163,6 +160,41 @@ namespace Service.Services
             {
                 await _movieRepository.Remove(movieToBeDeleted, cancellationToken);
             }
+        }
+
+        public async Task AddReviewToMovie(int movieId, CreateVoteDTO newReview, CancellationToken cancellationToken)
+        {
+            var movieToBeReviewed = await _movieRepository.Get(movieId, cancellationToken);
+            var user = await _userRepository.Get(newReview.UserId, cancellationToken);
+
+            if (movieToBeReviewed == null || user == null)
+            {
+                throw new ApplicationException("Invalid movie or user ID");
+            }
+
+            var mappedReview = _mapper.Map<Vote>(newReview);
+            
+            mappedReview.User = user;
+            mappedReview.Movie = movieToBeReviewed;
+            mappedReview.MovieId = movieId;
+
+            await _voteRepository.Insert(mappedReview, cancellationToken);
+            user.Votes.Add(mappedReview);
+            movieToBeReviewed.Votes.Add(mappedReview);
+            await _movieRepository.Update(movieToBeReviewed, cancellationToken);
+            await _userRepository.Update(user, cancellationToken);
+        }
+
+        // TODO: EditReviewFromMovie
+        public async Task RemoveReviewFromMovie(int movieId, int userId, CancellationToken cancellationToken)
+        {
+            var reviewToBeRemoved = await _voteRepository.GetComposite(movieId, userId, cancellationToken);
+
+            if (reviewToBeRemoved == null)
+            {
+                throw new ApplicationException("Invalid movie or user ID");
+            }
+            await _voteRepository.Remove(reviewToBeRemoved, cancellationToken);
         }
     }
 }

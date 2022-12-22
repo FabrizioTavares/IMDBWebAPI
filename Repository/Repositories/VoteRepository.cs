@@ -9,19 +9,19 @@ namespace Repository.Repositories
     {
         public VoteRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext) { }
 
-        public override async Task<Vote?> GetComposite(int movieId, int voterId, CancellationToken cancellationToken)
+        public override async Task<Vote?> GetComposite(int movieId, int userId, CancellationToken cancellationToken)
         {
             return await _entities
                 .Include(v => v.Movie)
-                .Include(v => v.Voter)
-                .FirstAsync(v => v.MovieId == movieId || v.VoterId == voterId, cancellationToken);
+                .Include(v => v.User)
+                .FirstAsync(v => v.MovieId == movieId || v.UserId == userId, cancellationToken);
         }
 
         public async Task<Vote?> GetVotesByRating(int rating, CancellationToken cancellationToken)
         {
             return await _entities
                 .Include(v => v.Movie)
-                .Include(v => v.Voter)
+                .Include(v => v.User)
                 .FirstOrDefaultAsync(v => v.Rating < rating, cancellationToken);
         }
     }

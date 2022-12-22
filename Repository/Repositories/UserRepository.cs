@@ -23,5 +23,11 @@ namespace Repository.Repositories
         {
             return _entities.Where(u => u.Username == name && u.IsActive);
         }
+
+        public async Task<User?> GetUserByUserName(string name, CancellationToken cancellationToken)
+        {
+            return await _entities.FirstOrDefaultAsync(u => u.Username == name && u.IsActive, cancellationToken);
+        }
+
     }
 }

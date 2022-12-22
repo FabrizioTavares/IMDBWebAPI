@@ -2,7 +2,7 @@
 
 namespace Repository.Repositories.Abstract
 {
-    public interface IVoteRepository : IBaseRepository<Vote>
+    public interface IVoteRepository : IBaseCompositeRepository<Vote>
     {
         Task<Vote?> GetVotesByRating(int rating, CancellationToken cancellationToken);
     }

@@ -12,7 +12,7 @@ using Repository.Data;
 namespace Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221214134737_Rebuild Database")]
+    [Migration("20221221122448_Rebuild Database")]
     partial class RebuildDatabase
     {
         /// <inheritdoc />
@@ -55,6 +55,9 @@ namespace Repository.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("Admins");
 
@@ -201,23 +204,28 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Username")
+                        .IsUnique();
+
                     b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Domain.Models.Vote", b =>
                 {
                     b.Property<int>("MovieId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnOrder(0);
 
-                    b.Property<int>("VoterId")
-                        .HasColumnType("int");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
 
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
-                    b.HasKey("MovieId", "VoterId");
+                    b.HasKey("MovieId", "UserId");
 
-                    b.HasIndex("VoterId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Votes");
                 });
@@ -279,15 +287,15 @@ namespace Repository.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Models.User", "Voter")
+                    b.HasOne("Domain.Models.User", "User")
                         .WithMany("Votes")
-                        .HasForeignKey("VoterId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Movie");
 
-                    b.Navigation("Voter");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("GenreMovie", b =>

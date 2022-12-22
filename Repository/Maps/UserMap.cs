@@ -11,6 +11,9 @@ namespace Repository.Maps
             builder
                 .HasKey(u => u.Id);
             builder
+                .HasIndex(u => u.Username)
+                .IsUnique();
+            builder
                 .Property(u => u.Username)
                 .IsRequired()
                 .HasMaxLength(50);
@@ -27,7 +30,7 @@ namespace Repository.Maps
                 .IsRequired();
             builder
                 .HasMany(u => u.Votes)
-                .WithOne(v => v.Voter);
+                .WithOne(v => v.User);
         }
     }
 }

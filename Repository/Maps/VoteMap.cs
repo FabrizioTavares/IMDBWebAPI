@@ -1,6 +1,7 @@
 ﻿using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.ComponentModel.DataAnnotations;
 
 namespace Repository.Maps
 {
@@ -8,8 +9,9 @@ namespace Repository.Maps
     {
         public void Configure(EntityTypeBuilder<Vote> builder)
         {
-            builder.HasKey(v => new { v.MovieId, v.VoterId });
-            builder.Property(v => v.Rating).IsRequired();
+            builder.HasKey(v => new { v.MovieId, v.UserId });
+            builder.Property(v => v.Rating)
+                .IsRequired();
         }
     }
 }

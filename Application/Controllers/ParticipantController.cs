@@ -51,7 +51,7 @@ namespace Application.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateParticipant([FromRoute] int id, [FromBody] UpdateParticipantDTO updatedParticipant, CancellationToken cancellationToken = default)
         {
-            // TODO: Do not direcly instantiate validator
+            // TODO: Do not directly instantiate validator
             var result = new UpdateParticipantDTOValidator().Validate(updatedParticipant);
             if (result.IsValid)
             {

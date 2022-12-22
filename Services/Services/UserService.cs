@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Service.Services
 {
-    public class UserService : AuthenticationService, IAuthenticableEntityService, IUserService
+    public class UserService : IUserService
     {
 
         // TODO IMPLEMENT PASSWORD CHECK

@@ -49,7 +49,7 @@ namespace Application.Controllers
         public async Task<IActionResult> UpdateAccount([FromRoute] int id, [FromBody] UpdateUserDTO updatedUser, CancellationToken cancellationToken = default)
         {
 
-            // TODO: Only admins can reactivate accounts. Only logged account can modify itself.
+            // TODO: Only admins can reactivate accounts. Only logged account can modify itself. other accounts can't modify other accounts.
             // ID from token?
 
             var result = new UpdateUserDTOValidator().Validate(updatedUser);

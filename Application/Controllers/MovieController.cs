@@ -1,11 +1,13 @@
 ﻿using Domain.DTOs.DirectionDTOs;
 using Domain.DTOs.MovieDTOs;
 using Domain.DTOs.PerformanceDTOs;
+using Domain.DTOs.VoteDTOs;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Abstract;
 using Service.Validation.Direction;
 using Service.Validation.Movie;
 using Service.Validation.Performance;
+using Service.Validation.Vote;
 
 namespace Application.Controllers
 {
@@ -107,6 +109,25 @@ namespace Application.Controllers
         public async Task<IActionResult> AddGenreToMovie([FromRoute] int movieId, [FromRoute] int genreid, CancellationToken cancellationToken = default)
         {
             await _movieService.AddGenreToMovie(movieId, genreid, cancellationToken);
+            return Ok();
+        }
+
+        [HttpPut("{movieId}/reviews/new")]
+        public async Task<IActionResult> AddReviewToMovie([FromRoute] int movieId, [FromBody] CreateVoteDTO newReview, CancellationToken cancellationToken = default)
+        {
+            var result = new CreateVoteDTOValidator().Validate(newReview);
+            if (result.IsValid)
+            {
+                await _movieService.AddReviewToMovie(movieId, newReview, cancellationToken);
+                return Ok();
+            }
+            return BadRequest(result.Errors);
+        }
+
+        [HttpDelete("{movieId}/reviews/{userId}")]
+        public async Task<IActionResult> DeleteReviewFromMovie([FromRoute] int movieId, [FromRoute] int userId, CancellationToken cancellationToken = default)
+        {
+            await _movieService.RemoveReviewFromMovie(movieId, userId, cancellationToken);
             return Ok();
         }
 

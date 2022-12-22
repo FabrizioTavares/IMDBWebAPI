@@ -11,6 +11,9 @@ namespace Repository.Maps
             builder
                 .HasKey(a => a.Id);
             builder
+                .HasIndex(a => a.Username)
+                .IsUnique();
+            builder
                 .Property(a => a.Username)
                 .IsRequired()
                 .HasMaxLength(50);

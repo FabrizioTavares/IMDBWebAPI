@@ -1,17 +1,19 @@
 ﻿using AutoMapper;
 using Domain.DTOs.AdminDTOs;
 using Domain.Models;
+using Domain.Utils.Cryptography;
 using Repository.Repositories.Abstract;
 using Service.Services.Abstract;
 
 namespace Service.Services
 {
-    public class AdministrativeService : AuthenticationService, IAdministrativeService
+    public class AdministrativeService : IAdministrativeService
     {
 
         // TODO IMPLEMENT PASSWORD CHECK AND HIERARCHICAL CHECKS
 
         private readonly IAdminRepository _adminRepository;
+        //private readonly IUserRepository _userRepository; TOBE IMPLEMENTED: Administrative actions on users
 
         private readonly IMapper _mapper;
 
@@ -20,6 +22,7 @@ namespace Service.Services
             _adminRepository = adminRepository;
             _mapper = mapper;
         }
+
         public async Task<ReadAdminDTO?> GetAdmin(int id, CancellationToken cancellationToken)
         {
             var admin = await _adminRepository.Get(id, cancellationToken);
@@ -56,6 +59,7 @@ namespace Service.Services
                 throw new Exception("Admin not found");
             }
             var admin = _mapper.Map<Admin>(updatedAdmin);
+            await _adminRepository.Update(admin, cancellationToken);
         }
     }
 }

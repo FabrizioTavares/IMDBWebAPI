@@ -2,7 +2,7 @@
 
 namespace Service.Services.Abstract
 {
-    public interface IAdministrativeService : IAuthenticableEntityService
+    public interface IAdministrativeService
     {
         Task<ReadAdminDTO?> GetAdmin(int id, CancellationToken cancellationToken);
         IEnumerable<ReadAdminDTO?> GetAllAdmins();

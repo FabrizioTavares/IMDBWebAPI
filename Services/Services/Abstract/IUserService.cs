@@ -2,7 +2,7 @@
 
 namespace Service.Services.Abstract
 {
-    public interface IUserService : IAuthenticableEntityService
+    public interface IUserService
     {
         Task<ReadUserDTO?> GetUser(int id, CancellationToken cancellationToken);
         IEnumerable<ReadUserDTO?> GetAllUsers();

@@ -41,10 +41,19 @@ namespace Application.Extensions
             services.AddScoped<IDirectionRepository, DirectionRepository>();
             services.AddScoped<IValidator<CreateDirectionDTO>, CreateDirectionDTOValidator>();
 
+            services.AddScoped<IVoteRepository, VoteRepository>();
+            //TODO: Validation
+
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IValidator<CreateMovieDTO>, CreateMovieDTOValidator>();
             services.AddScoped<IValidator<UpdateMovieDTO>, UpdateMovieDTOValidator>();
+
+            services.AddScoped<IAdministrativeService, AdministrativeService>();
+            services.AddScoped<IAdminRepository, AdminRepository>();
+            //TODO: Validation
+
+            services.AddScoped<IAuthenticableEntityService, AuthenticationService>();
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, UserRepository>();
