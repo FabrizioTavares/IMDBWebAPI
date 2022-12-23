@@ -19,6 +19,11 @@ namespace Repository.Repositories
             return _entities.Where(a => a.IsActive == true).AsEnumerable();
         }
 
+        public IEnumerable<Admin> GetAll(int pageNumber, int pageSize)
+        {
+            return _entities.Skip((pageNumber - 1) * pageSize).Take(pageSize).Where(a => a.IsActive == true).AsEnumerable();
+        }
+
         public async Task<Admin?> GetAdminByUserName(string userName, CancellationToken cancellationToken)
         {
             return await _entities.FirstOrDefaultAsync(a => a.Username == userName && a.IsActive, cancellationToken);

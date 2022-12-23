@@ -19,6 +19,16 @@ namespace Repository.Repositories
             return _entities.Where(u => u.IsActive == true).AsEnumerable();
         }
 
+        public IEnumerable<User> GetAll(int pageNumber, int pageSize) // TODO: Implement interface
+        {
+            return _entities.Skip((pageNumber - 1) * pageSize).Take(pageSize).Where(u => u.IsActive == true).AsEnumerable();
+        }
+        
+        public IEnumerable<User> GetAllOrderByName() // TODO: Merge with GetAll.
+        {
+            return _entities.Where(u => u.IsActive == true).OrderBy(u => u.Username).AsEnumerable();
+        }
+
         public IEnumerable<User?> GetUsersByUserName(string name, CancellationToken cancellationToken)
         {
             return _entities.Where(u => u.Username == name && u.IsActive);

@@ -11,6 +11,8 @@ namespace Repository.Repositories
         {
         }
 
+        // TODO: Merge queries into one
+
         public IEnumerable<Movie?> GetMoviesByTitle(string title, CancellationToken cancellationToken)
         {
             return _entities.Where(m => m.Title.Contains(title)).Include(m => m.Cast).ThenInclude(c => c.Participant).Include(m => m.Genres).Include(m => m.Direction).AsNoTracking();
@@ -43,6 +45,11 @@ namespace Repository.Repositories
                 .Include(m => m.Votes)
                 .ThenInclude(v => v.User)
                 .FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public IEnumerable<Movie> GetAll(int pageNumber, int pageSize)
+        {
+            return _entities.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsEnumerable();
         }
 
     }
