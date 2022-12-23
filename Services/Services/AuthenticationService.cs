@@ -1,7 +1,13 @@
 ﻿using Domain.DTOs.AuthenticationDTOs;
+using Domain.Models;
+using Domain.Models.Abstract;
 using Domain.Utils.Cryptography;
+using Microsoft.IdentityModel.Tokens;
 using Repository.Repositories.Abstract;
 using Service.Services.Abstract;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Service.Services
 {
@@ -19,30 +25,44 @@ namespace Service.Services
             _cryptographer = cryptographer;
         }
 
-        public async Task<string> Authenticate(LoginDTO credentials, CancellationToken cancellationToken)
+        public async Task<string> Authenticate<T>(LoginDTO credentials, CancellationToken cancellationToken) where T : AuthenticableClient
         {
-            if (credentials.LoginType != 0) // for administrator
-            {
-                throw new NotImplementedException();
-            }
+            T? client = default;
             
-            var user = await _userRepository.GetUserByUserName(credentials.Username, cancellationToken);
-
-            if (user == null)
+            if (typeof(T) == typeof(User))
             {
-                throw new ApplicationException("User not found");
+                client = await _userRepository.GetUserByUserName(credentials.Username, cancellationToken) as T;
             }
-
-            var hashedPassword = _cryptographer.Hash(credentials.Password, user.Salt);
-            
-            if (user.Password.Equals(hashedPassword))
+            else if (typeof(T) == typeof(Admin))
             {
-                throw new UnauthorizedAccessException();
+                client = await _adminRepository.GetAdminByUserName(credentials.Username, cancellationToken) as T;
             }
 
-            return "Success";
-            
+            if (client == null || !_cryptographer.Verify(credentials.Password, client.Password, client.Salt))
+            {
+                throw new UnauthorizedAccessException("Invalid username or password");
+            }
 
+            return GenerateToken(client);
+
+        }
+
+        public string GenerateToken(AuthenticableClient user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(Settings.ImdbApiSecret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.Username),
+                    new Claim(ClaimTypes.Role, user.GetType().Name)
+                }),
+                Expires = DateTime.UtcNow.AddHours(24),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
 
     }

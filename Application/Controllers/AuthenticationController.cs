@@ -1,4 +1,5 @@
 ﻿using Domain.DTOs.AuthenticationDTOs;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Abstract;
 
@@ -15,15 +16,21 @@ namespace Application.Controllers
             _authenticationService = authenticationService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Authenticate([FromBody] LoginDTO loginDTO, CancellationToken cancellationToken = default)
+        [HttpPost("{userType}")]
+        public async Task<IActionResult> Authenticate([FromBody] LoginDTO loginDTO, [FromRoute] string userType, CancellationToken cancellationToken = default)
         {
-            var result = await _authenticationService.Authenticate(loginDTO, cancellationToken);
-            if (result != null)
-            {
-                return Ok(result);
+            // HACK
+            if(userType.ToLower() == "admin"){
+                return Ok(await _authenticationService.Authenticate<Admin>(loginDTO, cancellationToken));
             }
-            return BadRequest();
+            else if (userType.ToLower() == "user")
+            {
+                return Ok(await _authenticationService.Authenticate<User>(loginDTO, cancellationToken));
+            }
+            else
+            {
+                return BadRequest("Invalid user type");
+            }
         }
     }
 }

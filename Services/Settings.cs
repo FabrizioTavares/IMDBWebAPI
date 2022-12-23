@@ -1,4 +1,4 @@
-﻿namespace Application
+﻿namespace Service
 {
     public static class Settings
     {

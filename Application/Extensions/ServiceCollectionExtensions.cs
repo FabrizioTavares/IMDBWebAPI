@@ -8,8 +8,13 @@ using Domain.DTOs.UserDTOs;
 using Domain.DTOs.VoteDTOs;
 using Domain.Utils.Cryptography;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
+using Microsoft.OpenApi.Models;
 using Repository.Repositories;
 using Repository.Repositories.Abstract;
+using Service;
 using Service.Services;
 using Service.Services.Abstract;
 using Service.Validation.Direction;
@@ -19,10 +24,11 @@ using Service.Validation.Participant;
 using Service.Validation.Performance;
 using Service.Validation.User;
 using Service.Validation.Vote;
+using System.Text;
 
 namespace Application.Extensions
 {
-    public static class DependencyInjectionScopes
+    public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
@@ -77,5 +83,62 @@ namespace Application.Extensions
             return services;
         }
 
+        public static IServiceCollection AddJwtAuthenticationAndSwagger(this IServiceCollection services)
+        {
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Settings.ImdbApiSecret)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
+            services.AddSwaggerGen(
+                c =>
+                {
+                    c.AddSecurityDefinition(
+                        "token",
+                        new OpenApiSecurityScheme
+                        {
+                            Type = SecuritySchemeType.Http,
+                            BearerFormat = "JWT",
+                            Scheme = "Bearer",
+                            In = ParameterLocation.Header,
+                            Name = HeaderNames.Authorization
+                        }
+                    );
+                    c.AddSecurityRequirement(
+                        new OpenApiSecurityRequirement
+                        {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "token"
+                                },
+                            },
+                            Array.Empty<string>()
+                        }
+                        }
+                    );
+                }
+            );
+
+            return services;
+        }
+
     }
+
+    
 }
