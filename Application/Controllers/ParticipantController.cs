@@ -1,4 +1,5 @@
 ﻿using Domain.DTOs.ParticipantDTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Abstract;
 using Service.Validation.Participant;
@@ -17,6 +18,7 @@ namespace Application.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateParticipant([FromBody] CreateParticipantDTO participant, CancellationToken cancellationToken = default)
         {
             var result = new CreateParticipantDTOValidator().Validate(participant);
@@ -49,6 +51,7 @@ namespace Application.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateParticipant([FromRoute] int id, [FromBody] UpdateParticipantDTO updatedParticipant, CancellationToken cancellationToken = default)
         {
             // TODO: Do not directly instantiate validator
@@ -62,6 +65,7 @@ namespace Application.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteParticipant([FromRoute] int id, CancellationToken cancellationToken = default)
         {
             await _participantService.Remove(id, cancellationToken);
