@@ -31,7 +31,7 @@ namespace Service.Services
             
             if (typeof(T) == typeof(User))
             {
-                client = await _userRepository.GetUserByUserName(credentials.Username, cancellationToken) as T;
+                client = _userRepository.GetByUserName(credentials.Username, cancellationToken) as T;
             }
             else if (typeof(T) == typeof(Admin))
             {
@@ -40,7 +40,7 @@ namespace Service.Services
 
             if (client == null || !_cryptographer.Verify(credentials.Password, client.Password, client.Salt))
             {
-                throw new UnauthorizedAccessException("Invalid username or password");
+                throw new ArgumentException("Invalid username or password");
             }
 
             return GenerateToken(client);

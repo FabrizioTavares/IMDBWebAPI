@@ -30,9 +30,14 @@ namespace Service.Services
             _mapper = mapper;
         }
         
-        public IEnumerable<ReadUserReferencelessDTO?> GetAllUsers()
+        public IEnumerable<ReadUserReferencelessDTO?> GetUsers(
+            bool sortedByName = false,
+            string? name = null,
+            int? pageNumber = null,
+            int? pageSize = null
+            )
         {
-            var users = _userRepository.GetAll();
+            var users = _userRepository.GetUsers(sortedByName, name, pageNumber, pageSize);
             return _mapper.Map<IEnumerable<ReadUserReferencelessDTO>>(users);
         }
 
@@ -42,16 +47,16 @@ namespace Service.Services
             return _mapper.Map<ReadUserDTO>(user);
         }
 
-        public IEnumerable<ReadUserReferencelessDTO?> GetUsersByUsername(string username, CancellationToken cancellationToken)
+        public async Task<ReadUserDTO?> GetUserByName(string username, CancellationToken cancellationToken)
         {
-            var user = _userRepository.GetUsersByUserName(username, cancellationToken);
-            return _mapper.Map<IEnumerable<ReadUserReferencelessDTO>>(user);
+            var user = await _userRepository.GetByUserName(username, cancellationToken);
+            return _mapper.Map<ReadUserDTO>(user);
         }
 
         public async Task InsertUser(CreateUserDTO newUser, CancellationToken cancellationToken)
         {
-
-            var existingUser =  _userRepository.GetUsersByUserName(newUser.Username, cancellationToken).Any();
+            
+            var existingUser =  _userRepository.GetUsers(name: newUser.Username).Any();
             if (existingUser)
             {
                 throw new ApplicationException("User already exists");
@@ -66,7 +71,6 @@ namespace Service.Services
                 Password = _cryptographer.Hash(newUser.Password, salt),
                 IsActive = true
             };
-
 
             await _userRepository.Insert(user, cancellationToken);
         }

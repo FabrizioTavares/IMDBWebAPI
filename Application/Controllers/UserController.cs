@@ -30,13 +30,13 @@ namespace Application.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllAccounts([FromQuery] string? username, CancellationToken cancellationToken = default)
+        public IActionResult GetAccounts(
+            [FromQuery] bool sortedByName = false,
+            [FromQuery] string? username = null,
+            [FromQuery] int? pageNumber = null,
+            [FromQuery] int? pageSize = null)
         {
-            if (username == null)
-            {
-                return Ok(_userService.GetAllUsers());
-            }
-            return Ok(_userService.GetUsersByUsername(username, cancellationToken));
+            return Ok(_userService.GetUsers(sortedByName, username, pageNumber, pageSize));
         }
 
         [HttpGet("{id}")]

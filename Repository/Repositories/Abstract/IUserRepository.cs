@@ -4,8 +4,13 @@ namespace Repository.Repositories.Abstract
 {
     public interface IUserRepository : IBaseRepository<User>
     {
-        IEnumerable<User?> GetUsersByUserName(string name, CancellationToken cancellationToken);
-        Task<User?> GetUserByUserName(string name, CancellationToken cancellationToken);
-        IEnumerable<User?> GetUsersByUserNameOrdered(string name, CancellationToken cancellationToken);
+        public IEnumerable<User> GetUsers(
+                   bool sortedByName = false,
+                   string? name = null,
+                   int? pageNumber = null,
+                   int? pageSize = null
+                   );
+
+        public Task<User?> GetByUserName(string name, CancellationToken cancellationToken);
     }
 }
