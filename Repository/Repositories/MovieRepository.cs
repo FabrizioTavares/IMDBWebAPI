@@ -10,30 +10,67 @@ namespace Repository.Repositories
         public MovieRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         {
         }
-
-        // TODO: Merge queries into one
-
-        public IEnumerable<Movie?> GetMoviesByTitle(string title, CancellationToken cancellationToken)
+        
+        public IEnumerable<Movie?> GetMovies(
+            bool sortedByTitle = false,
+            bool sortedByRating = false,
+            string? title = null,
+            string? actor = null,
+            string? director = null,
+            string? genre = null,
+            int? pageNumber = null,
+            int? pageSize = null,
+            CancellationToken cancellationToken = default
+            )
         {
-            return _entities.Where(m => m.Title.Contains(title)).Include(m => m.Cast).ThenInclude(c => c.Participant).Include(m => m.Genres).Include(m => m.Direction).AsNoTracking();
-        }
+            var movies = _entities
+                .Include(m => m.Votes)
+                .ThenInclude(v => v.User)
+                .Include(m => m.Cast)
+                .ThenInclude(p => p.Participant)
+                .Include(m => m.Direction)
+                .ThenInclude(p => p.Participant)
+                .Include(m => m.Genres)
+                .AsQueryable();
 
+            if (title != null)
+            {
+                movies = movies.Where(m => m.Title.Contains(title));
+            }
 
-        public IEnumerable<Movie?> GetMoviesByActor(string actorName, CancellationToken cancellationToken)
-        {
-            return _entities.Where(m => m.Cast.Any(p => p.Participant.Name.Contains(actorName))).Include(m => m.Cast).ThenInclude(c => c.Participant).Include(m => m.Genres).Include(m => m.Direction).AsNoTracking();
-        }
+            if (actor != null)
+            {
+                movies = movies.Where(m => m.Cast.Any(p => p.Participant.Name.Contains(actor)));
+            }
 
-        public IEnumerable<Movie?> GetMoviesByDirector(string directorName, CancellationToken cancellationToken)
-        {
-            return _entities.Where(m => m.Direction.Any(d => d.Participant.Name.Contains(directorName))).Include(m => m.Cast).ThenInclude(c => c.Participant).Include(m => m.Genres).Include(m => m.Direction).AsNoTracking();
+            if (director != null)
+            {
+                movies = movies.Where(m => m.Direction.Any(p => p.Participant.Name.Contains(director)));
+            }
+
+            if (genre != null)
+            {
+                movies = movies.Where(m => m.Genres.Any(g => g.Title.Contains(genre)));
+            }
+
+            if (pageNumber != null && pageSize != null)
+            {
+                movies = movies.Skip((pageNumber.Value - 1) * pageSize.Value).Take(pageSize.Value);
+            }
+
+            if (sortedByTitle)
+            {
+                movies = movies.OrderBy(m => m.Title);
+            }
+
+            if (sortedByRating)
+            {
+                movies = movies.OrderByDescending(m => m.Votes.Average(v => v.Rating));
+            }
+
+            return movies.AsEnumerable();
         }
         
-        public IEnumerable<Movie?> GetMoviesByGenre(string genreName, CancellationToken cancellationToken)
-        {
-            return _entities.Where(m => m.Genres.Any(g => g.Title.Contains(genreName))).Include(m => m.Cast).ThenInclude(c => c.Participant).Include(m => m.Genres).Include(m => m.Direction).AsNoTracking();
-        }
-
         public override Task<Movie?> Get(int id, CancellationToken cancellationToken)
         {
             return _entities

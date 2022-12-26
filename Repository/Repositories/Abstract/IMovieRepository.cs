@@ -4,11 +4,17 @@ namespace Repository.Repositories.Abstract
 {
     public interface IMovieRepository : IBaseRepository<Movie>
     {
-        IEnumerable<Movie?> GetMoviesByTitle(string title, CancellationToken cancellationToken);
-        IEnumerable<Movie?> GetMoviesByActor(string actorName, CancellationToken cancellationToken);
-        IEnumerable<Movie?> GetMoviesByDirector(string directorName, CancellationToken cancellationToken);
-        IEnumerable<Movie?> GetMoviesByGenre(string genreName, CancellationToken cancellationToken);
+        IEnumerable<Movie?> GetMovies(
+            bool sortedByTitle = false,
+            bool sortedByRating = false,
+            string? title = null,
+            string? actor = null,
+            string? director = null,
+            string? genre = null,
+            int? pageNumber = null,
+            int? pageSize = null,
+            CancellationToken cancellationToken = default
+            );
 
-        // TODO: Sort movies by average rating
     }
 }
