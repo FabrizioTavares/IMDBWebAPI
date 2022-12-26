@@ -41,16 +41,16 @@ namespace Application.Controllers
         public IActionResult GetMovies(
             [FromQuery] bool sortedByTitle,
             [FromQuery] bool sortedByRating,
-            [FromQuery] string title,
-            [FromQuery] string actor,
-            [FromQuery] string director,
-            [FromQuery] string genre,
-            [FromQuery] int pageNumber,
-            [FromQuery] int pageSize
+            [FromQuery] string? title,
+            [FromQuery] string? actor,
+            [FromQuery] string? director,
+            [FromQuery] string? genre,
+            [FromQuery] int? pageNumber,
+            [FromQuery] int? pageSize
             )
         {
-             var value = _movieService.GetMovies(sortedByTitle, sortedByRating, title, actor, director, genre, pageNumber, pageSize);
-             return Ok(value);
+             var movies = _movieService.GetMovies(sortedByTitle, sortedByRating, title, actor, director, genre, pageNumber, pageSize);
+             return Ok(movies);
         }
 
         [HttpGet("{movieId}")]
