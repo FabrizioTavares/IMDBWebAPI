@@ -23,18 +23,20 @@ namespace Service.Services
             return _mapper.Map<ReadParticipantDTO>(participant);
         }
 
-        public IEnumerable<ReadParticipantDTO> GetParticipantsByName(string name, CancellationToken cancellationToken)
+        public IEnumerable<ReadParticipantReferencelessDTO> GetParticipantsByName(string name, CancellationToken cancellationToken)
         {
-            return _mapper.Map<IEnumerable<ReadParticipantDTO>>(_participantRepository.GetParticipantsByName(name));
+            return _mapper.Map<IEnumerable<ReadParticipantReferencelessDTO>>(_participantRepository.GetParticipantsByName(name));
         }
 
-        public IEnumerable<ReadParticipantDTO> GetAll()
+        public IEnumerable<ReadParticipantReferencelessDTO> GetAll()
         {
-            return _mapper.Map<IEnumerable<ReadParticipantDTO>>(_participantRepository.GetAll());
+            return _mapper.Map<IEnumerable<ReadParticipantReferencelessDTO>>(_participantRepository.GetAll());
         }
 
-        public Task Insert(CreateParticipantDTO participant, CancellationToken cancellationToken)
+        public Task Insert(CreateParticipantDTO participant, CancellationToken cancellationToken) 
         {
+            // TODO: Possible improvement: instead of inserting a single participant, insert a list of participants.
+            // This would allow for a more efficient way of inserting data into the database.
             var existingParticipant = _participantRepository.GetParticipantsByName(participant.Name);
             if (existingParticipant.Any())
             {
