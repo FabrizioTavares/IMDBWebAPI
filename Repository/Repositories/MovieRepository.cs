@@ -32,12 +32,12 @@ namespace Repository.Repositories
 
             if (actor != null)
             {
-                movies = movies.Where(m => m.Cast.Any(p => p.Participant.Name.Contains(actor))).Include(m => m.Cast).ThenInclude(p => p.Participant);
+                movies = movies.Include(m => m.Cast).ThenInclude(p => p.Participant).Where(m => m.Cast.Any(p => p.Participant.Name.Contains(actor)));
             }
 
             if (director != null)
             {
-                movies = movies.Where(m => m.Direction.Any(p => p.Participant.Name.Contains(director))).Include(m => m.Direction).ThenInclude(p => p.Participant);
+                movies = movies.Include(m => m.Direction).ThenInclude(p => p.Participant).Where(m => m.Direction.Any(p => p.Participant.Name.Contains(director)));
             }
 
             if (genre != null)
@@ -57,7 +57,7 @@ namespace Repository.Repositories
 
             if (sortedByRating)
             {
-                movies = movies.OrderByDescending(m => m.Votes.Average(v => v.Rating)).Include(m => m.Votes).ThenInclude(v => v.User);
+                movies = movies.Include(m => m.Votes).ThenInclude(v => v.User).OrderByDescending(m => m.Votes.Average(v => v.Rating));
             }
 
             return movies.AsEnumerable();
