@@ -56,13 +56,17 @@ namespace Service.Services
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, user.Username),
-                    new Claim(ClaimTypes.Role, user.GetType().Name)
+                    new Claim(ClaimTypes.Role, user.GetType().Name),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddHours(24),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+
+            // TODO: print token info in a better way
+
+            return tokenHandler.WriteToken(token) + ";" + user.Username + ";" + user.GetType().Name;
         }
 
     }

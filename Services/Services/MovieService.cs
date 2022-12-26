@@ -48,18 +48,30 @@ namespace Service.Services
             return _mapper.Map<ReadMovieDTO>(movie);
         }
 
-        public IEnumerable<ReadMovieReferencelessDTO?> GetAll()
+        public IEnumerable<ReadMovieReferencelessDTO?> GetMovies(
+            bool sortedByTitle = false,
+            bool sortedByRating = false,
+            string? title = null,
+            string? actor = null,
+            string? director = null,
+            string? genre = null,
+            int? pageNumber = null,
+            int? pageSize = null
+            )
         {
-            var movies = _movieRepository.GetAll();
+            var movies = _movieRepository.GetMovies(
+                sortedByTitle,
+                sortedByRating,
+                title,
+                actor,
+                director,
+                genre,
+                pageNumber,
+                pageSize
+                );
             return _mapper.Map<IEnumerable<ReadMovieReferencelessDTO>>(movies);
         }
-
-        public IEnumerable<ReadMovieReferencelessDTO?> GetMoviesByTitle(string title, CancellationToken cancellationToken)
-        {
-            var movies = _movieRepository.GetMoviesByTitle(title, cancellationToken);
-            return _mapper.Map<IEnumerable<ReadMovieReferencelessDTO>>(movies);
-        }
-        
+ 
         public async Task Insert(CreateMovieDTO movie, CancellationToken cancellationToken)
         {
             var newMovie = _mapper.Map<Movie>(movie);

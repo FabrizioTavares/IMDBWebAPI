@@ -12,7 +12,6 @@ namespace Tests.Services
         {
             var newLoginForm = new LoginDTO
             {
-                LoginType = 0,
                 Password = "12345678",
                 Username = "string"
             };

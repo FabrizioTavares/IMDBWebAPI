@@ -1,4 +1,5 @@
 ﻿using Domain.DTOs.GenreDTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Abstract;
 using Service.Validation.Genre;
@@ -16,8 +17,9 @@ namespace Application.Controllers
         {
             _genreService = genreService;
         }
-
+        
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateGenre([FromBody] CreateGenreDTO genre, CancellationToken cancellationToken = default)
         {
             var result = new CreateGenreDTOValidator().Validate(genre);
@@ -51,6 +53,7 @@ namespace Application.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateGenre([FromRoute] int id, [FromBody] UpdateGenreDTO updatedGenre, CancellationToken cancellationToken = default)
         {
             var result = new UpdateGenreDTOValidator().Validate(updatedGenre);
@@ -63,6 +66,7 @@ namespace Application.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteGenre([FromRoute] int id, CancellationToken cancellationToken = default)
         {
             await _genreService.Remove(id, cancellationToken);

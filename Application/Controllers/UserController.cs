@@ -1,4 +1,5 @@
 ﻿using Domain.DTOs.UserDTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Abstract;
 using Service.Validation.User;

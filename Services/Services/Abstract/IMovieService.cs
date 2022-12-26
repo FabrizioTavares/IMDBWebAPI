@@ -8,8 +8,16 @@ namespace Service.Services.Abstract
     public interface IMovieService
     {
         Task<ReadMovieDTO?> Get(int id, CancellationToken cancellationToken);
-        IEnumerable<ReadMovieReferencelessDTO?> GetAll();
-        IEnumerable<ReadMovieReferencelessDTO?> GetMoviesByTitle(string title, CancellationToken cancellationToken);
+        IEnumerable<ReadMovieReferencelessDTO?> GetMovies(
+            bool sortedByTitle = false,
+            bool sortedByRating = false,
+            string? title = null,
+            string? actor = null,
+            string? director = null,
+            string? genre = null,
+            int? pageNumber = null,
+            int? pageSize = null
+            );
         Task Insert(CreateMovieDTO movie, CancellationToken cancellationToken);
         Task AddPerformanceToMovie(int movieId, CreatePerformanceDTO newPerformance, CancellationToken cancellationToken);
         Task RemovePerformanceFromMovie(int movieId, int participantId, CancellationToken cancellationToken);
