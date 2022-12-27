@@ -4,7 +4,7 @@ namespace Domain.Models
 {
     public class Admin : AuthenticableClient
     {
-        public int Hierarchy { get; set; }
+        public int Hierarchy { get; init; }
 
     }
 }
