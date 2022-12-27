@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public string Username { get; set; } = string.Empty;
-        public int Hierarchy { get; private set; }
+        public int Hierarchy { get; set; }
+        public bool IsActive { get; set; }
     }
 }
