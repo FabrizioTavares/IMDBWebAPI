@@ -14,9 +14,6 @@ namespace Service.Services
 {
     public class UserService : IUserService
     {
-
-        // TODO IMPLEMENT PASSWORD CHECK
-
         private readonly IUserRepository _userRepository;
 
         private readonly ICryptographer _cryptographer;
@@ -56,7 +53,7 @@ namespace Service.Services
         public async Task InsertUser(CreateUserDTO newUser, CancellationToken cancellationToken)
         {
             
-            var existingUser =  _userRepository.GetUsers(name: newUser.Username).Any();
+            var existingUser = _userRepository.GetUsers(name: newUser.Username).Any();
             if (existingUser)
             {
                 throw new ApplicationException("User already exists");
@@ -74,7 +71,7 @@ namespace Service.Services
 
             await _userRepository.Insert(user, cancellationToken);
         }
-
+        
         public async Task RemoveUser(int id, CancellationToken cancellationToken)
         {
             var userToBeDeleted = await _userRepository.Get(id, cancellationToken);
@@ -83,6 +80,17 @@ namespace Service.Services
                 throw new ApplicationException("User not found");
             }
             await _userRepository.Remove(userToBeDeleted, cancellationToken);
+        }
+
+        public async Task ToggleUserActivation(int id, CancellationToken cancellationToken)
+        {
+            var userToBeToggled = await _userRepository.Get(id, cancellationToken);
+            if (userToBeToggled == null)
+            {
+                throw new ApplicationException("User not found");
+            }
+            userToBeToggled.IsActive = !userToBeToggled.IsActive;
+            await _userRepository.Update(userToBeToggled, cancellationToken);
         }
 
         public async Task UpdateUser(int id, UpdateUserDTO updatedUser, CancellationToken cancellationToken)

@@ -14,7 +14,7 @@ namespace Repository.Repositories
             return await _entities.Include(u => u.Votes).ThenInclude(v => v.Movie).FirstOrDefaultAsync(u => u.Id == id && u.IsActive, cancellationToken);
         }
 
-        // TODO: optimise
+        // TODO: Add bool to show deactivated users
         public IEnumerable<User> GetUsers(
             bool sortedByName = false,
             string? name = null,

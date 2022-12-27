@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Abstract;
 using Service.Validation.User;
+using System.Security.Claims;
 
 namespace Application.Controllers
 {
@@ -46,30 +47,54 @@ namespace Application.Controllers
             return Ok(user);
         }
 
-        [HttpPut("{id}/edit")]
+        [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateAccount([FromRoute] int id, [FromBody] UpdateUserDTO updatedUser, CancellationToken cancellationToken = default)
         {
+            var agentId = int.Parse(HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            var agentRole = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Role).Value;
 
-            // TODO: Only admins can reactivate accounts. Only logged account can modify itself. other accounts can't modify other accounts.
-            // ID from token?
-
-            var result = new UpdateUserDTOValidator().Validate(updatedUser);
-            if (result.IsValid)
+            if (agentRole == "Admin" || agentId == id)
             {
-                await _userService.UpdateUser(id, updatedUser, cancellationToken);
-                return Ok();
+                var result = new UpdateUserDTOValidator().Validate(updatedUser);
+                if (result.IsValid)
+                {
+                    await _userService.UpdateUser(id, updatedUser, cancellationToken);
+                    return Ok();
+                }
+                return BadRequest(result.Errors);
             }
-            return BadRequest(result.Errors);
+            return Unauthorized();
         }
 
-        [HttpDelete("{id}/delete")]
+        [HttpPut("{id}/activation")]
+        [Authorize]
+        public async Task<IActionResult> ToggleAccountActivation([FromRoute] int id, CancellationToken cancellationToken = default)
+        {
+            var agentId = int.Parse(HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            var agentRole = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Role).Value;
+
+            if (agentRole == "Admin" || agentId == id)
+            {
+                await _userService.ToggleUserActivation(id, cancellationToken);
+                return Ok();
+            }
+            return Unauthorized();
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteAccount([FromRoute] int id, CancellationToken cancellationToken = default)
         {
+            var agentId = int.Parse(HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            var agentRole = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Role).Value;
 
-            // TODO: Only currently logged account can delete itself. ID from Token?
-
-            await _userService.RemoveUser(id, cancellationToken);
-            return Ok();
+            if (agentRole == "Admin" || agentId == id)
+            {
+                await _userService.RemoveUser(id, cancellationToken);
+                return Ok();
+            }
+            return Unauthorized();
         }
 
     }

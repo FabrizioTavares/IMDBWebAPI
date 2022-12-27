@@ -15,5 +15,6 @@ namespace Service.Services.Abstract
         Task InsertUser(CreateUserDTO newUser, CancellationToken cancellationToken);
         Task UpdateUser(int id, UpdateUserDTO updatedUser, CancellationToken cancellationToken);
         Task RemoveUser(int id, CancellationToken cancellationToken);
+        Task ToggleUserActivation(int id, CancellationToken cancellationToken);
     }
 }
