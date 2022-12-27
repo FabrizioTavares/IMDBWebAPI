@@ -1,4 +1,5 @@
 ﻿using Domain.AutomapperProfiles;
+using Domain.DTOs.AdminDTOs;
 using Domain.DTOs.DirectionDTOs;
 using Domain.DTOs.GenreDTOs;
 using Domain.DTOs.MovieDTOs;
@@ -17,6 +18,7 @@ using Repository.Repositories.Abstract;
 using Service;
 using Service.Services;
 using Service.Services.Abstract;
+using Service.Validation.Admin;
 using Service.Validation.Direction;
 using Service.Validation.Genre;
 using Service.Validation.Movie;
@@ -59,13 +61,15 @@ namespace Application.Extensions
 
             services.AddScoped<IAdministrativeService, AdministrativeService>();
             services.AddScoped<IAdminRepository, AdminRepository>();
-            //TODO: Validation
+            services.AddScoped<IValidator<CreateAdminDTO>, CreateAdminDTOValidator>();
+            services.AddScoped<IValidator<UpdateAdminDTO>, UpdateAdminDTOValidator>();
 
             services.AddScoped<IAuthenticableEntityService, AuthenticationService>();
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IValidator<CreateUserDTO>, CreateUserDTOValidator>();
+            services.AddScoped<IValidator<UpdateUserDTO>, UpdateUserDTOValidator>();
 
             services.AddSingleton<ICryptographer, SHA256Cryptographer>();
 
