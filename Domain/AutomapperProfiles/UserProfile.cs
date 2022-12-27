@@ -12,6 +12,7 @@ namespace Domain.AutomapperProfiles
             CreateMap<User, ReadUserReferencelessDTO>();
             CreateMap<User, ReadUserDTO>();
             CreateMap<UpdateUserDTO, User>()
+                .ForMember(x => x.Password, opt => opt.Ignore())
                 .ForAllMembers(m => m
                 .Condition((src, dest, srcMember) => srcMember != default)); ;
         }
