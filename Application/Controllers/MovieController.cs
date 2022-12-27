@@ -10,6 +10,7 @@ using Service.Validation.Movie;
 using Service.Validation.Performance;
 using Service.Validation.Vote;
 using System.Data;
+using System.Security.Claims;
 
 namespace Application.Controllers
 {
@@ -145,9 +146,12 @@ namespace Application.Controllers
         }
 
         [HttpDelete("{movieId}/reviews/{userId}")]
-        [Authorize(Roles = "User")] //TODO: Retrieve ID from token
-        public async Task<IActionResult> DeleteReviewFromMovie([FromRoute] int movieId, [FromRoute] int userId, CancellationToken cancellationToken = default)
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> DeleteReviewFromMovie([FromRoute] int movieId, CancellationToken cancellationToken = default)
         {
+            // TODO: Create static class to retrieve token information
+            var userId = int.Parse(HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
+
             await _movieService.RemoveReviewFromMovie(movieId, userId, cancellationToken);
             return Ok();
         }
