@@ -38,9 +38,9 @@ namespace Service.Services
                 client = await _adminRepository.GetAdminByUserName(credentials.Username, cancellationToken) as T;
             }
 
-            if (client == null || !_cryptographer.Verify(credentials.Password, client.Password, client.Salt))
+            if (client == null || client.IsActive == false ||!_cryptographer.Verify(credentials.Password, client.Password, client.Salt))
             {
-                throw new ArgumentException("Invalid username or password");
+                throw new ArgumentException("The provided credentials are invalid, the account was not found or is deactivated.");
             }
 
             return GenerateToken(client);
@@ -59,7 +59,7 @@ namespace Service.Services
                     new Claim(ClaimTypes.Role, user.GetType().Name),
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
                 }),
-                Expires = DateTime.UtcNow.AddHours(24),
+                Expires = DateTime.UtcNow.AddHours(3),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
