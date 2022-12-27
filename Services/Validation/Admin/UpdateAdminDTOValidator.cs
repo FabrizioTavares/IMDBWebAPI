@@ -12,7 +12,6 @@ namespace Service.Validation.Admin
     {
         public UpdateAdminDTOValidator()
         {
-            RuleFor(a => a.Username).NotEmpty().WithMessage("Username is required");
             RuleFor(a => a.NewPassword).MinimumLength(8)
                 .WithMessage("Password must be at least 8 characters long")
                 .When(a => a.NewPassword != null);
