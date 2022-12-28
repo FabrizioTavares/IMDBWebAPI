@@ -10,7 +10,7 @@ namespace Repository.Repositories
         public MovieRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
         {
         }
-        
+
         public IEnumerable<Movie?> GetMovies(
             bool sortedByTitle = false,
             bool sortedByRating = false,
@@ -62,7 +62,7 @@ namespace Repository.Repositories
 
             return movies.AsEnumerable();
         }
-        
+
         public override Task<Movie?> Get(int id, CancellationToken cancellationToken)
         {
             return _entities

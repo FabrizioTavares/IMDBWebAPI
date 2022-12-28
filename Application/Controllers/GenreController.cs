@@ -1,10 +1,8 @@
 ﻿using Domain.DTOs.GenreDTOs;
-using Domain.DTOs.MovieDTOs;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Abstract;
-using Service.Validation.Genre;
 
 namespace Application.Controllers
 {
@@ -19,7 +17,7 @@ namespace Application.Controllers
         {
             _genreService = genreService;
         }
-        
+
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(201)]
@@ -50,7 +48,7 @@ namespace Application.Controllers
             }
 
         }
-        
+
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ReadGenreDTO), 200)]
         public async Task<IActionResult> GetGenreById([FromRoute] int id, CancellationToken cancellationToken = default)

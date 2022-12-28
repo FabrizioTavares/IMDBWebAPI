@@ -71,7 +71,7 @@ namespace Service.Services
                 );
             return _mapper.Map<IEnumerable<ReadMovieReferencelessDTO>>(movies);
         }
- 
+
         public async Task Insert(CreateMovieDTO movie, CancellationToken cancellationToken)
         {
             var newMovie = _mapper.Map<Movie>(movie);
@@ -199,7 +199,7 @@ namespace Service.Services
             }
 
             var mappedReview = _mapper.Map<Vote>(newReview);
-            
+
             mappedReview.User = user;
             mappedReview.Movie = movieToBeReviewed;
             mappedReview.MovieId = movieId;

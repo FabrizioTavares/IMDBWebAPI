@@ -28,7 +28,7 @@ namespace Service.Services
         public async Task<string> Authenticate<T>(LoginDTO credentials, CancellationToken cancellationToken) where T : AuthenticableClient
         {
             T? client = default;
-            
+
             if (typeof(T) == typeof(User))
             {
                 client = _userRepository.GetByUserName(credentials.Username, cancellationToken) as T;
@@ -38,7 +38,7 @@ namespace Service.Services
                 client = await _adminRepository.GetAdminByUserName(credentials.Username, cancellationToken) as T;
             }
 
-            if (client == null || client.IsActive == false ||!_cryptographer.Verify(credentials.Password, client.Password, client.Salt))
+            if (client == null || client.IsActive == false || !_cryptographer.Verify(credentials.Password, client.Password, client.Salt))
             {
                 throw new ArgumentException("The provided credentials are invalid, the account was not found or is deactivated.");
             }

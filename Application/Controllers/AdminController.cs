@@ -1,10 +1,8 @@
 ﻿using Domain.DTOs.AdminDTOs;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Abstract;
-using Service.Validation.Admin;
 using System.Security.Claims;
 
 namespace Application.Controllers
@@ -21,7 +19,7 @@ namespace Application.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(403)]

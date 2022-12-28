@@ -22,7 +22,8 @@ namespace Application.Controllers
         public async Task<IActionResult> Authenticate([FromBody] LoginDTO loginDTO, [FromRoute] string userType, CancellationToken cancellationToken = default)
         {
             // HACK
-            if(userType.ToLower() == "admin"){
+            if (userType.ToLower() == "admin")
+            {
                 return Ok(await _authenticationService.Authenticate<Admin>(loginDTO, cancellationToken));
             }
             else if (userType.ToLower() == "user")

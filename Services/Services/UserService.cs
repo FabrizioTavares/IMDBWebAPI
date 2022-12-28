@@ -4,11 +4,6 @@ using Domain.Models;
 using Domain.Utils.Cryptography;
 using Repository.Repositories.Abstract;
 using Service.Services.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service.Services
 {
@@ -26,7 +21,7 @@ namespace Service.Services
             _cryptographer = cryptographer;
             _mapper = mapper;
         }
-        
+
         public IEnumerable<ReadUserReferencelessDTO?> GetUsers(
             bool sortedByName = false,
             string? name = null,
@@ -52,7 +47,7 @@ namespace Service.Services
 
         public async Task InsertUser(CreateUserDTO newUser, CancellationToken cancellationToken)
         {
-            
+
             var existingUser = _userRepository.GetUsers(name: newUser.Username).Any();
             if (existingUser)
             {
@@ -71,7 +66,7 @@ namespace Service.Services
 
             await _userRepository.Insert(user, cancellationToken);
         }
-        
+
         public async Task RemoveUser(int id, CancellationToken cancellationToken)
         {
             var userToBeDeleted = await _userRepository.Get(id, cancellationToken);

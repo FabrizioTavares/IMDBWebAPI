@@ -2,7 +2,6 @@
 using Domain.DTOs.AdminDTOs;
 using Domain.Models;
 using Domain.Utils.Cryptography;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Repository.Repositories.Abstract;
 using Service.Services.Abstract;
 using System.Security;
@@ -86,7 +85,7 @@ namespace Service.Services
             var author = await _adminRepository.Get(currentAdminId, cancellationToken);
 
             var adminToBeRemoved = await _adminRepository.Get(id, cancellationToken);
-            
+
             if (adminToBeRemoved == null)
             {
                 throw new ArgumentException("Admin not found");
@@ -108,7 +107,7 @@ namespace Service.Services
         public async Task ToggleAdminActivation(int id, int currentAdminId, CancellationToken cancellationToken)
         {
 
-            var author = await _adminRepository.Get(currentAdminId, cancellationToken); 
+            var author = await _adminRepository.Get(currentAdminId, cancellationToken);
 
             var adminToBeToggled = await _adminRepository.Get(id, cancellationToken);
 
@@ -144,7 +143,7 @@ namespace Service.Services
             }
 
             // Admins with higher hierarchy can modify admins with lower hierarchy. Admins can modify themselves.
-            if (author!.Hierarchy > adminToBeUpdated.Hierarchy || author!.Id == adminToBeUpdated.Id) 
+            if (author!.Hierarchy > adminToBeUpdated.Hierarchy || author!.Id == adminToBeUpdated.Id)
             {
                 var mappedAdmin = _mapper.Map(dto, adminToBeUpdated);
 
@@ -169,7 +168,7 @@ namespace Service.Services
             }
 
             throw new UnauthorizedAccessException("You cannot modify an admin with a higher or equal hierarchy than yours");
-            
+
         }
     }
 }

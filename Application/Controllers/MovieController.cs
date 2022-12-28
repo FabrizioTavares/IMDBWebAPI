@@ -6,11 +6,6 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Abstract;
-using Service.Validation.Direction;
-using Service.Validation.Movie;
-using Service.Validation.Performance;
-using Service.Validation.Vote;
-using System.Data;
 using System.Security.Claims;
 
 namespace Application.Controllers
@@ -54,8 +49,8 @@ namespace Application.Controllers
             [FromQuery] int? pageSize
             )
         {
-             var movies = _movieService.GetMovies(sortedByTitle, sortedByRating, title, actor, director, genre, pageNumber, pageSize);
-             return Ok(movies);
+            var movies = _movieService.GetMovies(sortedByTitle, sortedByRating, title, actor, director, genre, pageNumber, pageSize);
+            return Ok(movies);
         }
 
         [HttpGet("{movieId}")]
@@ -143,7 +138,7 @@ namespace Application.Controllers
             await _movieService.AddGenreToMovie(movieId, genreid, cancellationToken);
             return Ok();
         }
-        
+
         [HttpDelete("{movieId}/genres/{genreid}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(204)]

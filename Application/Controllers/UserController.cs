@@ -3,7 +3,6 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Abstract;
-using Service.Validation.User;
 using System.Security.Claims;
 
 namespace Application.Controllers
@@ -32,7 +31,7 @@ namespace Application.Controllers
             }
             return BadRequest(result.Errors);
         }
-        
+
         [HttpGet]
         [ProducesResponseType(typeof(ReadUserReferencelessDTO), 200)]
         [ProducesResponseType(400)]

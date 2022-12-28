@@ -1,5 +1,4 @@
 ﻿using Domain.DTOs.AuthenticationDTOs;
-using Service.Services;
 using Xunit;
 
 namespace Tests.Services
@@ -19,6 +18,6 @@ namespace Tests.Services
             // TODO finish tests
 
         }
-        
+
     }
 }

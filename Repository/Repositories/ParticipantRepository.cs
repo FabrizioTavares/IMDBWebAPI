@@ -21,7 +21,7 @@ namespace Repository.Repositories
 
         public virtual IEnumerable<Participant> GetParticipantsByName(string name)
         {
-            return _entities.Where(p => p.Name.Contains(name));   
+            return _entities.Where(p => p.Name.Contains(name));
         }
 
     }

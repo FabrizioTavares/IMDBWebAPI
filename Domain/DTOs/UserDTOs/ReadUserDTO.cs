@@ -1,5 +1,4 @@
 ﻿using Domain.DTOs.VoteDTOs;
-using Domain.Models;
 
 namespace Domain.DTOs.UserDTOs
 {
