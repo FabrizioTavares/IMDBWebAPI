@@ -20,6 +20,9 @@ namespace Application.Controllers
         
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> CreateGenre([FromBody] CreateGenreDTO genre, CancellationToken cancellationToken = default)
         {
             var result = new CreateGenreDTOValidator().Validate(genre);
@@ -32,6 +35,7 @@ namespace Application.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(ReadGenreReferencelessDTO), 200)]
         public IActionResult GetAllGenres([FromQuery] string? title, CancellationToken cancellationToken = default)
         {
             if (title == null)
@@ -44,8 +48,9 @@ namespace Application.Controllers
             }
 
         }
-
+        
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(ReadGenreDTO), 200)]
         public async Task<IActionResult> GetGenreById([FromRoute] int id, CancellationToken cancellationToken = default)
         {
             var genre = await _genreService.Get(id, cancellationToken);
@@ -54,19 +59,24 @@ namespace Application.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> UpdateGenre([FromRoute] int id, [FromBody] UpdateGenreDTO updatedGenre, CancellationToken cancellationToken = default)
         {
             var result = new UpdateGenreDTOValidator().Validate(updatedGenre);
             if (result.IsValid)
             {
                 await _genreService.Update(id, updatedGenre, cancellationToken);
-                return Ok();
+                return NoContent();
             }
             return BadRequest(result.Errors);
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> DeleteGenre([FromRoute] int id, CancellationToken cancellationToken = default)
         {
             await _genreService.Remove(id, cancellationToken);

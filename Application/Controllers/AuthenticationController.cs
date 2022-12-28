@@ -17,6 +17,8 @@ namespace Application.Controllers
         }
 
         [HttpPost("{userType}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> Authenticate([FromBody] LoginDTO loginDTO, [FromRoute] string userType, CancellationToken cancellationToken = default)
         {
             // HACK

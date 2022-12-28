@@ -21,6 +21,9 @@ namespace Application.Controllers
 
         [HttpPost]
         [Authorize(Roles="Admin")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> CreateAdmin([FromBody] CreateAdminDTO admin, CancellationToken cancellationToken = default)
         {
 
@@ -39,6 +42,8 @@ namespace Application.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(IEnumerable<ReadAdminDTO>), 200)]
+        [ProducesResponseType(403)]
         public IActionResult GetAdmins()
         {
             return Ok(_administrativeService.GetAllAdmins());
@@ -46,6 +51,8 @@ namespace Application.Controllers
 
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(ReadAdminDTO), 200)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> GetAdminById([FromRoute] int id, CancellationToken cancellationToken = default)
         {
             var admin = await _administrativeService.GetAdmin(id, cancellationToken);
@@ -54,6 +61,9 @@ namespace Application.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> UpdateAdmin([FromRoute] int id, [FromBody] UpdateAdminDTO updatedAdmin, CancellationToken cancellationToken = default)
         {
             var agentId = int.Parse(HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
@@ -69,22 +79,26 @@ namespace Application.Controllers
 
         [HttpPut("{id}/activation")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> ActivateAdmin([FromRoute] int id, CancellationToken cancellationToken = default)
         {
             var agentId = int.Parse(HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
             await _administrativeService.ToggleAdminActivation(id, agentId, cancellationToken);
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> DeleteAdmin([FromRoute] int id, CancellationToken cancellationToken = default)
         {
             var agentId = int.Parse(HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
             await _administrativeService.RemoveAdmin(id, agentId, cancellationToken);
-            return Ok();
+            return NoContent();
         }
 
     }

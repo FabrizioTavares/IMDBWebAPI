@@ -27,6 +27,8 @@ namespace Application.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> CreateMovie([FromBody] CreateMovieDTO movie, CancellationToken cancellationToken = default)
         {
             var result = new CreateMovieDTOValidator().Validate(movie);
@@ -39,6 +41,7 @@ namespace Application.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(ReadMovieReferencelessDTO), 200)]
         public IActionResult GetMovies(
             [FromQuery] bool sortedByTitle,
             [FromQuery] bool sortedByRating,
@@ -55,6 +58,7 @@ namespace Application.Controllers
         }
 
         [HttpGet("{movieId}")]
+        [ProducesResponseType(typeof(ReadMovieDTO), 200)]
         public async Task<IActionResult> GetMovieById([FromRoute] int movieId, CancellationToken cancellationToken = default)
         {
             var movie = await _movieService.Get(movieId, cancellationToken);
@@ -63,19 +67,25 @@ namespace Application.Controllers
 
         [HttpPut("{movieId}")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> UpdateMovie([FromRoute] int movieId, [FromBody] UpdateMovieDTO updatedMovie, CancellationToken cancellationToken = default)
         {
             var result = new UpdateMovieDTOValidator().Validate(updatedMovie);
             if (result.IsValid)
             {
                 await _movieService.Update(movieId, updatedMovie, cancellationToken);
-                return Ok();
+                return NoContent();
             }
             return BadRequest(result.Errors);
         }
 
         [HttpPost("{movieId}/performances")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> AddPerformanceToMovie([FromRoute] int movieId, [FromBody] CreatePerformanceDTO newPerformance, CancellationToken cancellationToken = default)
         {
             var result = new CreatePerformanceDTOValidator().Validate(newPerformance);
@@ -89,14 +99,19 @@ namespace Application.Controllers
 
         [HttpDelete("{movieId}/performances/{participantid}")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> DeletePerformanceFromMovie([FromRoute] int movieId, [FromRoute] int participantid, CancellationToken cancellationToken = default)
         {
             await _movieService.RemovePerformanceFromMovie(movieId, participantid, cancellationToken);
-            return Ok();
+            return NoContent();
         }
 
         [HttpPost("{movieId}/directions")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> AddDirectionToMovie([FromRoute] int movieId, [FromBody] CreateDirectionDTO newDirection, CancellationToken cancellationToken = default)
         {
             var result = new CreateDirectionDTOValidator().Validate(newDirection);
@@ -110,14 +125,18 @@ namespace Application.Controllers
 
         [HttpDelete("{movieId}/directions/{participantid}")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> DeleteDirectionFromMovie([FromRoute] int movieId, [FromRoute] int participantid, CancellationToken cancellationToken = default)
         {
             await _movieService.RemoveDirectionFromMovie(movieId, participantid, cancellationToken);
-            return Ok();
+            return NoContent();
         }
 
         [HttpPost("{movieId}/genres/{genreid}")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> AddGenreToMovie([FromRoute] int movieId, [FromRoute] int genreid, CancellationToken cancellationToken = default)
         {
             await _movieService.AddGenreToMovie(movieId, genreid, cancellationToken);
@@ -126,14 +145,19 @@ namespace Application.Controllers
         
         [HttpDelete("{movieId}/genres/{genreid}")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> DeleteGenreFromMovie([FromRoute] int movieId, [FromRoute] int genreid, CancellationToken cancellationToken = default)
         {
             await _movieService.RemoveGenreFromMovie(movieId, genreid, cancellationToken);
-            return Ok();
+            return NoContent();
         }
 
         [HttpPost("{movieId}/reviews")]
         [Authorize(Roles = "User")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> AddReviewToMovie([FromRoute] int movieId, [FromBody] CreateVoteDTO newReview, CancellationToken cancellationToken = default)
         {
             var result = new CreateVoteDTOValidator().Validate(newReview);
@@ -147,22 +171,26 @@ namespace Application.Controllers
 
         [HttpDelete("{movieId}/reviews/{userId}")]
         [Authorize(Roles = "User")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> DeleteReviewFromMovie([FromRoute] int movieId, CancellationToken cancellationToken = default)
         {
             // TODO: Create static class to retrieve token information
             var userId = int.Parse(HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
             await _movieService.RemoveReviewFromMovie(movieId, userId, cancellationToken);
-            return Ok();
+            return NoContent();
         }
 
 
         [HttpDelete("{movieId}")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> DeleteMovie([FromRoute] int movieId, CancellationToken cancellationToken = default)
         {
             await _movieService.Remove(movieId, cancellationToken);
-            return Ok();
+            return NoContent();
         }
     }
 }

@@ -19,6 +19,8 @@ namespace Application.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> CreateAccount([FromBody] CreateUserDTO newUser, CancellationToken cancellationToken = default)
         {
             var result = new CreateUserDTOValidator().Validate(newUser);
@@ -29,8 +31,10 @@ namespace Application.Controllers
             }
             return BadRequest(result.Errors);
         }
-
+        
         [HttpGet]
+        [ProducesResponseType(typeof(ReadUserReferencelessDTO), 200)]
+        [ProducesResponseType(400)]
         public IActionResult GetAccounts(
             [FromQuery] bool sortedByName = false,
             [FromQuery] string? username = null,
@@ -41,6 +45,7 @@ namespace Application.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(ReadUserDTO), 200)]
         public async Task<IActionResult> GetAccountById([FromRoute] int id, CancellationToken cancellationToken = default)
         {
             var user = await _userService.GetUser(id, cancellationToken);
@@ -48,6 +53,9 @@ namespace Application.Controllers
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         [Authorize]
         public async Task<IActionResult> UpdateAccount([FromRoute] int id, [FromBody] UpdateUserDTO updatedUser, CancellationToken cancellationToken = default)
         {
@@ -60,7 +68,7 @@ namespace Application.Controllers
                 if (result.IsValid)
                 {
                     await _userService.UpdateUser(id, updatedUser, cancellationToken);
-                    return Ok();
+                    return NoContent();
                 }
                 return BadRequest(result.Errors);
             }
@@ -69,6 +77,8 @@ namespace Application.Controllers
 
         [HttpPut("{id}/activation")]
         [Authorize]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
         public async Task<IActionResult> ToggleAccountActivation([FromRoute] int id, CancellationToken cancellationToken = default)
         {
             var agentId = int.Parse(HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
@@ -77,13 +87,15 @@ namespace Application.Controllers
             if (agentRole == "Admin" || agentId == id)
             {
                 await _userService.ToggleUserActivation(id, cancellationToken);
-                return Ok();
+                return NoContent();
             }
             return Unauthorized();
         }
 
         [HttpDelete("{id}")]
         [Authorize]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
         public async Task<IActionResult> DeleteAccount([FromRoute] int id, CancellationToken cancellationToken = default)
         {
             var agentId = int.Parse(HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
@@ -92,7 +104,7 @@ namespace Application.Controllers
             if (agentRole == "Admin" || agentId == id)
             {
                 await _userService.RemoveUser(id, cancellationToken);
-                return Ok();
+                return NoContent();
             }
             return Unauthorized();
         }
