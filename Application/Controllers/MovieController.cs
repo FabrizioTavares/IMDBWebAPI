@@ -2,6 +2,7 @@
 using Domain.DTOs.MovieDTOs;
 using Domain.DTOs.PerformanceDTOs;
 using Domain.DTOs.VoteDTOs;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Abstract;
@@ -29,9 +30,9 @@ namespace Application.Controllers
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> CreateMovie([FromBody] CreateMovieDTO movie, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> CreateMovie([FromServices] IValidator<CreateMovieDTO> validator, [FromBody] CreateMovieDTO movie, CancellationToken cancellationToken = default)
         {
-            var result = new CreateMovieDTOValidator().Validate(movie);
+            var result = validator.Validate(movie);
             if (result.IsValid)
             {
                 await _movieService.Insert(movie, cancellationToken);
@@ -70,9 +71,9 @@ namespace Application.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(403)]
-        public async Task<IActionResult> UpdateMovie([FromRoute] int movieId, [FromBody] UpdateMovieDTO updatedMovie, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> UpdateMovie([FromServices] IValidator<UpdateMovieDTO> validator, [FromRoute] int movieId, [FromBody] UpdateMovieDTO updatedMovie, CancellationToken cancellationToken = default)
         {
-            var result = new UpdateMovieDTOValidator().Validate(updatedMovie);
+            var result = validator.Validate(updatedMovie);
             if (result.IsValid)
             {
                 await _movieService.Update(movieId, updatedMovie, cancellationToken);
@@ -86,9 +87,9 @@ namespace Application.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(403)]
-        public async Task<IActionResult> AddPerformanceToMovie([FromRoute] int movieId, [FromBody] CreatePerformanceDTO newPerformance, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> AddPerformanceToMovie([FromServices] IValidator<CreatePerformanceDTO> validator, [FromRoute] int movieId, [FromBody] CreatePerformanceDTO newPerformance, CancellationToken cancellationToken = default)
         {
-            var result = new CreatePerformanceDTOValidator().Validate(newPerformance);
+            var result = validator.Validate(newPerformance);
             if (result.IsValid)
             {
                 await _movieService.AddPerformanceToMovie(movieId, newPerformance, cancellationToken);
@@ -112,9 +113,9 @@ namespace Application.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(403)]
-        public async Task<IActionResult> AddDirectionToMovie([FromRoute] int movieId, [FromBody] CreateDirectionDTO newDirection, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> AddDirectionToMovie([FromServices] IValidator<CreateDirectionDTO> validator, [FromRoute] int movieId, [FromBody] CreateDirectionDTO newDirection, CancellationToken cancellationToken = default)
         {
-            var result = new CreateDirectionDTOValidator().Validate(newDirection);
+            var result = validator.Validate(newDirection);
             if (result.IsValid)
             {
                 await _movieService.AddDirectionToMovie(movieId, newDirection, cancellationToken);
@@ -158,9 +159,9 @@ namespace Application.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(403)]
-        public async Task<IActionResult> AddReviewToMovie([FromRoute] int movieId, [FromBody] CreateVoteDTO newReview, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> AddReviewToMovie([FromServices] IValidator<CreateVoteDTO> validator, [FromRoute] int movieId, [FromBody] CreateVoteDTO newReview, CancellationToken cancellationToken = default)
         {
-            var result = new CreateVoteDTOValidator().Validate(newReview);
+            var result = validator.Validate(newReview);
             if (result.IsValid)
             {
                 await _movieService.AddReviewToMovie(movieId, newReview, cancellationToken);

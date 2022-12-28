@@ -1,4 +1,5 @@
 ﻿using Domain.DTOs.AdminDTOs;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,14 +25,14 @@ namespace Application.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(403)]
-        public async Task<IActionResult> CreateAdmin([FromBody] CreateAdminDTO admin, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> CreateAdmin([FromServices] IValidator<CreateAdminDTO> validator, [FromBody] CreateAdminDTO admin, CancellationToken cancellationToken = default)
         {
 
             // TODO: Optimise hierarchical check: use token instead of database query
 
             var agentId = int.Parse(HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
-            var result = new CreateAdminDTOValidator().Validate(admin);
+            var result = validator.Validate(admin);
             if (result.IsValid)
             {
                 await _administrativeService.InsertAdmin(agentId, admin, cancellationToken);
@@ -64,11 +65,11 @@ namespace Application.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(403)]
-        public async Task<IActionResult> UpdateAdmin([FromRoute] int id, [FromBody] UpdateAdminDTO updatedAdmin, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> UpdateAdmin([FromServices] IValidator<UpdateAdminDTO> validator, [FromRoute] int id, [FromBody] UpdateAdminDTO updatedAdmin, CancellationToken cancellationToken = default)
         {
             var agentId = int.Parse(HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
-            var result = new UpdateAdminDTOValidator().Validate(updatedAdmin);
+            var result = validator.Validate(updatedAdmin);
             if (result.IsValid)
             {
                 await _administrativeService.UpdateAdmin(id, agentId, updatedAdmin, cancellationToken);
@@ -81,7 +82,7 @@ namespace Application.Controllers
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(204)]
         [ProducesResponseType(403)]
-        public async Task<IActionResult> ActivateAdmin([FromRoute] int id, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> ToggleAdminActivation([FromRoute] int id, CancellationToken cancellationToken = default)
         {
             var agentId = int.Parse(HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
 

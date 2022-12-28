@@ -1,4 +1,6 @@
 ﻿using Domain.DTOs.GenreDTOs;
+using Domain.DTOs.MovieDTOs;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Abstract;
@@ -23,9 +25,9 @@ namespace Application.Controllers
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(403)]
-        public async Task<IActionResult> CreateGenre([FromBody] CreateGenreDTO genre, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> CreateGenre([FromServices] IValidator<CreateGenreDTO> validator, [FromBody] CreateGenreDTO genre, CancellationToken cancellationToken = default)
         {
-            var result = new CreateGenreDTOValidator().Validate(genre);
+            var result = validator.Validate(genre);
             if (result.IsValid)
             {
                 await _genreService.Insert(genre, cancellationToken);
@@ -62,9 +64,9 @@ namespace Application.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(403)]
-        public async Task<IActionResult> UpdateGenre([FromRoute] int id, [FromBody] UpdateGenreDTO updatedGenre, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> UpdateGenre([FromServices] IValidator<UpdateGenreDTO> validator, [FromRoute] int id, [FromBody] UpdateGenreDTO updatedGenre, CancellationToken cancellationToken = default)
         {
-            var result = new UpdateGenreDTOValidator().Validate(updatedGenre);
+            var result = validator.Validate(updatedGenre);
             if (result.IsValid)
             {
                 await _genreService.Update(id, updatedGenre, cancellationToken);

@@ -61,7 +61,6 @@ namespace Application.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> UpdateParticipant([FromServices] IValidator<UpdateParticipantDTO> validator, [FromRoute] int id, [FromBody] UpdateParticipantDTO updatedParticipant, CancellationToken cancellationToken = default)
         {
-            // TODO: Do not directly instantiate validator
             var result = validator.Validate(updatedParticipant);
             if (result.IsValid)
             {

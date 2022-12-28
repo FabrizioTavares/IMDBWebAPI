@@ -1,4 +1,5 @@
 ﻿using Domain.DTOs.UserDTOs;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Abstract;
@@ -21,9 +22,9 @@ namespace Application.Controllers
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> CreateAccount([FromBody] CreateUserDTO newUser, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> CreateAccount([FromServices] IValidator<CreateUserDTO> validator, [FromBody] CreateUserDTO newUser, CancellationToken cancellationToken = default)
         {
-            var result = new CreateUserDTOValidator().Validate(newUser);
+            var result = validator.Validate(newUser);
             if (result.IsValid)
             {
                 await _userService.InsertUser(newUser, cancellationToken);
@@ -57,14 +58,14 @@ namespace Application.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [Authorize]
-        public async Task<IActionResult> UpdateAccount([FromRoute] int id, [FromBody] UpdateUserDTO updatedUser, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> UpdateAccount([FromServices] IValidator<UpdateUserDTO> validator, [FromRoute] int id, [FromBody] UpdateUserDTO updatedUser, CancellationToken cancellationToken = default)
         {
             var agentId = int.Parse(HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
             var agentRole = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Role).Value;
 
             if (agentRole == "Admin" || agentId == id)
             {
-                var result = new UpdateUserDTOValidator().Validate(updatedUser);
+                var result = validator.Validate(updatedUser);
                 if (result.IsValid)
                 {
                     await _userService.UpdateUser(id, updatedUser, cancellationToken);
