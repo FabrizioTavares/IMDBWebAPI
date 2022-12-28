@@ -23,14 +23,14 @@ namespace Service.Services
             return _mapper.Map<ReadGenreDTO>(genre);
         }
 
-        public IEnumerable<ReadGenreDTO> GetGenresByTitle(string title, CancellationToken cancellationToken)
+        public IEnumerable<ReadGenreReferencelessDTO> GetGenresByTitle(string title, CancellationToken cancellationToken)
         {
-            return _mapper.Map<IEnumerable<ReadGenreDTO>>(_genreRepository.GetGenresByTitle(title));
+            return _mapper.Map<IEnumerable<ReadGenreReferencelessDTO>>(_genreRepository.GetGenresByTitle(title));
         }
 
-        public IEnumerable<ReadGenreDTO> GetAll()
+        public IEnumerable<ReadGenreReferencelessDTO> GetAll()
         {
-            return _mapper.Map<IEnumerable<ReadGenreDTO>>(_genreRepository.GetAll());
+            return _mapper.Map<IEnumerable<ReadGenreReferencelessDTO>>(_genreRepository.GetAll());
         }
 
         public Task Insert(CreateGenreDTO genre, CancellationToken cancellationToken)
