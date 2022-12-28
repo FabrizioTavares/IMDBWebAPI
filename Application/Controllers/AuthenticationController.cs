@@ -16,17 +16,17 @@ namespace Application.Controllers
             _authenticationService = authenticationService;
         }
 
-        [HttpPost("{userType}")]
+        [HttpPost("{role}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Authenticate([FromBody] LoginDTO loginDTO, [FromRoute] string userType, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Authenticate([FromBody] LoginDTO loginDTO, [FromRoute] string role, CancellationToken cancellationToken = default)
         {
             // HACK
-            if (userType.ToLower() == "admin")
+            if (role.ToLower() == "admin")
             {
                 return Ok(await _authenticationService.Authenticate<Admin>(loginDTO, cancellationToken));
             }
-            else if (userType.ToLower() == "user")
+            else if (role.ToLower() == "user")
             {
                 return Ok(await _authenticationService.Authenticate<User>(loginDTO, cancellationToken));
             }

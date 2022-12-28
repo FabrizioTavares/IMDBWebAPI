@@ -64,9 +64,7 @@ namespace Service.Services
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            // TODO: print token info in a better way
-
-            return tokenHandler.WriteToken(token) + ";" + user.Username + ";" + user.GetType().Name;
+            return tokenHandler.WriteToken(token) + "\nWith Username:" + user.Username + "\nWith Role:" + user.GetType().Name;
         }
 
     }
