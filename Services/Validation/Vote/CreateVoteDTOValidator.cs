@@ -11,9 +11,6 @@ namespace Service.Validation.Vote
                 .NotEmpty()
                 .WithMessage("UserId is required");
             RuleFor(vote => vote.Rating)
-                .NotEmpty()
-                .WithMessage("Rating is required");
-            RuleFor(vote => vote.Rating)
                 .InclusiveBetween(0, 4)
                 .WithMessage("Rating must be between 0 stars and 4 stars");
         }
