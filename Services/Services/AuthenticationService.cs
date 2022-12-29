@@ -31,7 +31,7 @@ namespace Service.Services
 
             if (typeof(T) == typeof(User))
             {
-                client = _userRepository.GetByUserName(credentials.Username, cancellationToken) as T;
+                client = await _userRepository.GetByUserName(credentials.Username, cancellationToken) as T;
             }
             else if (typeof(T) == typeof(Admin))
             {
