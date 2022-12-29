@@ -188,10 +188,10 @@ namespace Service.Services
             }
         }
 
-        public async Task AddReviewToMovie(int movieId, CreateVoteDTO newReview, CancellationToken cancellationToken)
+        public async Task AddReviewToMovie(int movieId, int userId, CreateVoteDTO newReview, CancellationToken cancellationToken)
         {
             var movieToBeReviewed = await _movieRepository.Get(movieId, cancellationToken);
-            var user = await _userRepository.Get(newReview.UserId, cancellationToken);
+            var user = await _userRepository.Get(userId, cancellationToken);
 
             if (movieToBeReviewed == null || user == null)
             {
@@ -219,7 +219,14 @@ namespace Service.Services
             {
                 throw new ApplicationException("Invalid movie or user ID");
             }
+
+            var movieReviewed = reviewToBeRemoved.Movie;
+            var reviewer = reviewToBeRemoved.User;
+
+            reviewToBeRemoved.Movie.RemoveVote(reviewToBeRemoved);
             await _voteRepository.Remove(reviewToBeRemoved, cancellationToken);
+            await _movieRepository.Update(movieReviewed, cancellationToken);
+            await _userRepository.Update(reviewer, cancellationToken);
         }
     }
 }

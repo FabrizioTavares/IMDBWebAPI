@@ -156,16 +156,18 @@ namespace Application.Controllers
         [ProducesResponseType(403)]
         public async Task<IActionResult> AddReviewToMovie([FromServices] IValidator<CreateVoteDTO> validator, [FromRoute] int movieId, [FromBody] CreateVoteDTO newReview, CancellationToken cancellationToken = default)
         {
+            var userId = int.Parse(HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            
             var result = validator.Validate(newReview);
             if (result.IsValid)
             {
-                await _movieService.AddReviewToMovie(movieId, newReview, cancellationToken);
+                await _movieService.AddReviewToMovie(movieId, userId, newReview, cancellationToken);
                 return Ok();
             }
             return BadRequest(result.Errors);
         }
 
-        [HttpDelete("{movieId}/reviews/{userId}")]
+        [HttpDelete("{movieId}/reviews/")]
         [Authorize(Roles = "User")]
         [ProducesResponseType(204)]
         [ProducesResponseType(403)]

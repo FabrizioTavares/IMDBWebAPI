@@ -73,7 +73,7 @@ namespace Repository.Repositories
                 .ThenInclude(d => d.Participant)
                 .Include(m => m.Votes)
                 .ThenInclude(v => v.User)
-                .FirstOrDefaultAsync(cancellationToken);
+                .FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
         }
 
         public IEnumerable<Movie> GetAll(int pageNumber, int pageSize)

@@ -15,12 +15,25 @@ namespace Domain.Models
         public virtual List<Performance> Cast { get; set; } = new List<Performance>();
         public virtual List<Direction> Direction { get; set; } = new List<Direction>();
 
-        // Method to increment Quantity_Votes and Rating
         public void AddVote(Vote vote)
         {
             Votes.Add(vote);
             Quantity_Votes++;
             Rating = (Rating * (Quantity_Votes - 1) + vote.Rating) / Quantity_Votes;
+        }
+
+        public void RemoveVote(Vote vote)
+        {
+            Votes.Remove(vote);
+            Quantity_Votes--;
+            if (Quantity_Votes <= 0)
+            {
+                Rating = 0;
+            }
+            else
+            {
+                Rating = (Rating * (Quantity_Votes + 1) - vote.Rating) / Quantity_Votes;
+            }
         }
     }
 }
