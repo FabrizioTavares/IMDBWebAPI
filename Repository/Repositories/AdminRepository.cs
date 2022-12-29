@@ -16,7 +16,7 @@ namespace Repository.Repositories
 
         public async Task<Admin?> GetAdminByUserName(string userName, CancellationToken cancellationToken)
         {
-            return await _entities.FirstOrDefaultAsync(a => a.Username.Contains(userName), cancellationToken);
+            return await _entities.FirstOrDefaultAsync(a => a.Username == userName, cancellationToken);
         }
     }
 }

@@ -5,6 +5,7 @@ using Domain.Utils.Cryptography;
 using Microsoft.IdentityModel.Tokens;
 using Repository.Repositories.Abstract;
 using Service.Services.Abstract;
+using Service.Utils.Response;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -17,15 +18,17 @@ namespace Service.Services
         private readonly IUserRepository _userRepository;
         private readonly IAdminRepository _adminRepository;
         private readonly ICryptographer _cryptographer;
+        private readonly IResultService _resultService;
 
-        public AuthenticationService(IUserRepository userRepository, IAdminRepository adminRepository, ICryptographer cryptographer)
+        public AuthenticationService(IUserRepository userRepository, IAdminRepository adminRepository, ICryptographer cryptographer, IResultService resultService)
         {
             _userRepository = userRepository;
             _adminRepository = adminRepository;
             _cryptographer = cryptographer;
+            _resultService = resultService;
         }
 
-        public async Task<string> Authenticate(LoginDTO credentials, string role, CancellationToken cancellationToken)
+        public async Task<Result<string>> Authenticate(LoginDTO credentials, string role, CancellationToken cancellationToken)
         {
             AuthenticableClient? client = default!;
             
@@ -42,10 +45,10 @@ namespace Service.Services
 
             if (client == null || client.IsActive == false || !_cryptographer.Verify(credentials.Password, client.Password, client.Salt))
             {
-                return ("The provided credentials are invalid, the role doesn't exists, the account was not found or is deactivated.");
+                return _resultService.CreateResult<string>(null, false, 400, "Credentials are invalid, the account does not exists or is deactivated.");
             }
-
-            return GenerateToken(client);
+            
+            return _resultService.CreateResult<string>(GenerateToken(client), true, 200, $"Authentication successful for user '{client.Username}' with role '{client.GetType().Name}'.");
 
         }
         
@@ -66,7 +69,7 @@ namespace Service.Services
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return tokenHandler.WriteToken(token) + "\nWith Username: " + user.Username + "\nWith Role: " + user.GetType().Name;
+            return tokenHandler.WriteToken(token);
         }
 
     }

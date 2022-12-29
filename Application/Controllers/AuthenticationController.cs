@@ -22,7 +22,8 @@ namespace Application.Controllers
         public async Task<IActionResult> Authenticate([FromBody] LoginDTO loginDTO, [FromRoute] string role, CancellationToken cancellationToken = default)
         {
             // TODO: Implement fluent results
-            return Ok(await _authenticationService.Authenticate(loginDTO, role, cancellationToken));
+            var res = await _authenticationService.Authenticate(loginDTO, role, cancellationToken);
+            return StatusCode(res.StatusCode, res);
         }
     }
 }

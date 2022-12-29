@@ -45,7 +45,7 @@ namespace Repository.Repositories
 
         public async Task<User?> GetByUserName(string name, CancellationToken cancellationToken)
         {
-            return await _entities.FirstOrDefaultAsync(u => u.Username.Contains(name) && u.IsActive, cancellationToken);
+            return await _entities.FirstOrDefaultAsync(u => u.Username == name && u.IsActive, cancellationToken);
         }
 
     }
