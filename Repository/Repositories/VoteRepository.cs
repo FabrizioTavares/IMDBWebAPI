@@ -14,7 +14,7 @@ namespace Repository.Repositories
             return await _entities
                 .Include(v => v.Movie)
                 .Include(v => v.User)
-                .FirstAsync(v => v.MovieId == movieId || v.UserId == userId, cancellationToken);
+                .FirstAsync(v => v.MovieId == movieId && v.UserId == userId, cancellationToken);
         }
 
         public async Task<Vote?> GetVotesByRating(int rating, CancellationToken cancellationToken)
@@ -22,7 +22,7 @@ namespace Repository.Repositories
             return await _entities
                 .Include(v => v.Movie)
                 .Include(v => v.User)
-                .FirstOrDefaultAsync(v => v.Rating < rating, cancellationToken);
+                .FirstOrDefaultAsync(v => v.Rating <= rating, cancellationToken);
         }
     }
 }
