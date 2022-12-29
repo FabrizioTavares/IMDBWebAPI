@@ -27,7 +27,7 @@ namespace Application.Controllers
             if (validation.IsValid)
             {
                 var res = await _participantService.Insert(participant, cancellationToken);
-                return StatusCode(res.StatusCode, res.Data);
+                return StatusCode(res.StatusCode, res);
                 // TODO: For all Create methods on all services, return the created entity (201)
             }
             return BadRequest(validation.Errors);
