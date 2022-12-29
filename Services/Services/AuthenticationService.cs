@@ -25,28 +25,30 @@ namespace Service.Services
             _cryptographer = cryptographer;
         }
 
-        public async Task<string> Authenticate<T>(LoginDTO credentials, CancellationToken cancellationToken) where T : AuthenticableClient
+        public async Task<string> Authenticate(LoginDTO credentials, string role, CancellationToken cancellationToken)
         {
-            T? client = default;
+            AuthenticableClient? client = default!;
+            
+            role = role[0].ToString().ToUpper() + role[1..].ToLower();
 
-            if (typeof(T) == typeof(User))
+            if (role == "User")
             {
-                client = await _userRepository.GetByUserName(credentials.Username, cancellationToken) as T;
+                client = await _userRepository.GetByUserName(credentials.Username, cancellationToken);
             }
-            else if (typeof(T) == typeof(Admin))
+            else if (role == "Admin")
             {
-                client = await _adminRepository.GetAdminByUserName(credentials.Username, cancellationToken) as T;
+                client = await _adminRepository.GetAdminByUserName(credentials.Username, cancellationToken);
             }
 
             if (client == null || client.IsActive == false || !_cryptographer.Verify(credentials.Password, client.Password, client.Salt))
             {
-                throw new ArgumentException("The provided credentials are invalid, the account was not found or is deactivated.");
+                return ("The provided credentials are invalid, the role doesn't exists, the account was not found or is deactivated.");
             }
 
             return GenerateToken(client);
 
         }
-
+        
         public string GenerateToken(AuthenticableClient user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -64,7 +66,7 @@ namespace Service.Services
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return tokenHandler.WriteToken(token) + "\nWith Username:" + user.Username + "\nWith Role:" + user.GetType().Name;
+            return tokenHandler.WriteToken(token) + "\nWith Username: " + user.Username + "\nWith Role: " + user.GetType().Name;
         }
 
     }

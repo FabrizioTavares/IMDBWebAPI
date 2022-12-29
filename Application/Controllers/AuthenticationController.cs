@@ -21,19 +21,8 @@ namespace Application.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> Authenticate([FromBody] LoginDTO loginDTO, [FromRoute] string role, CancellationToken cancellationToken = default)
         {
-            // HACK
-            if (role.ToLower() == "admin")
-            {
-                return Ok(await _authenticationService.Authenticate<Admin>(loginDTO, cancellationToken));
-            }
-            else if (role.ToLower() == "user")
-            {
-                return Ok(await _authenticationService.Authenticate<User>(loginDTO, cancellationToken));
-            }
-            else
-            {
-                return BadRequest("Invalid user type");
-            }
+            // TODO: Implement fluent results
+            return Ok(await _authenticationService.Authenticate(loginDTO, role, cancellationToken));
         }
     }
 }
