@@ -14,7 +14,6 @@ namespace Repository.Repositories
             return await _entities.Include(u => u.Votes).ThenInclude(v => v.Movie).FirstOrDefaultAsync(u => u.Id == id && u.IsActive, cancellationToken);
         }
 
-        // TODO: Add bool to show deactivated users
         public IEnumerable<User> GetUsers(
             bool sortedByName = false,
             string? name = null,
@@ -46,7 +45,7 @@ namespace Repository.Repositories
 
         public async Task<User?> GetByUserName(string name, CancellationToken cancellationToken)
         {
-            return await _entities.FirstOrDefaultAsync(u => u.Username == name && u.IsActive, cancellationToken);
+            return await _entities.FirstOrDefaultAsync(u => u.Username.Contains(name) && u.IsActive, cancellationToken);
         }
 
     }
