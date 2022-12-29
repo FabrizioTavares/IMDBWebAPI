@@ -22,7 +22,7 @@ namespace Repository.Repositories
             return await _entities
                 .Include(v => v.Movie)
                 .Include(v => v.User)
-                .FirstOrDefaultAsync(v => v.Rating <= rating, cancellationToken);
+                .FirstOrDefaultAsync(v => v.Rating >= rating, cancellationToken);
         }
     }
 }
