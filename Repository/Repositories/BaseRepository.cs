@@ -26,10 +26,11 @@ namespace Repository.Repositories
             return _entities.ToList();
         }
 
-        public virtual async Task Insert(T entity, CancellationToken cancellationToken)
+        public virtual async Task<T> Insert(T entity, CancellationToken cancellationToken)
         {
             await _entities.AddAsync(entity, cancellationToken);
             await SaveChanges(cancellationToken);
+            return entity;
         }
 
         public virtual async Task Update(T entity, CancellationToken cancellationToken)
