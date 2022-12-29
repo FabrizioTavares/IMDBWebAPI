@@ -2,7 +2,6 @@
 using Domain.AutomapperProfiles;
 using Domain.DTOs.PerformanceDTOs;
 using Domain.Models;
-using Xunit;
 
 namespace Tests.Services;
 

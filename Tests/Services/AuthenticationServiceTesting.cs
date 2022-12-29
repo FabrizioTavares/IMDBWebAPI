@@ -1,5 +1,4 @@
 ﻿using Domain.DTOs.AuthenticationDTOs;
-using Xunit;
 
 namespace Tests.Services
 {
