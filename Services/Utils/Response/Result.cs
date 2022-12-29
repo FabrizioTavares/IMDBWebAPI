@@ -3,14 +3,14 @@
     public class Result
     {
         public bool Success { get; set; }
-        public string? ErrorMessage { get; set; }
+        public string? Message { get; set; }
         public int StatusCode { get; set; }
         
-        public Result(bool success, int statusCode, string? errorMessage = default)
+        public Result(bool success, int statusCode, string? message = default)
         {
             Success = success;
             StatusCode = statusCode;
-            ErrorMessage = errorMessage;
+            Message = message;
         }
 
     }
@@ -19,7 +19,7 @@
     {
         public T? Data { get; set; }
 
-        public Result(T? data, bool success, int statusCode, string? errorMessage) : base(success, statusCode, errorMessage)
+        public Result(T? data, bool success, int statusCode, string? message = default) : base(success, statusCode, message)
         {
             Data = data;
         }
