@@ -3,17 +3,20 @@ using Domain.DTOs.ParticipantDTOs;
 using Domain.Models;
 using Repository.Repositories.Abstract;
 using Service.Services.Abstract;
+using Service.Utils.Response;
 
 namespace Service.Services
 {
     public class ParticipantService : IParticipantService
     {
         private readonly IMapper _mapper;
+        private readonly IResultService _resultService;
         private readonly IParticipantRepository _participantRepository;
-
-        public ParticipantService(IMapper mapper, IParticipantRepository participantRepository)
+        
+        public ParticipantService(IMapper mapper, IResultService resultService, IParticipantRepository participantRepository)
         {
             _mapper = mapper;
+            _resultService = resultService;
             _participantRepository = participantRepository;
         }
 
@@ -32,19 +35,21 @@ namespace Service.Services
         {
             return _mapper.Map<IEnumerable<ReadParticipantReferencelessDTO>>(_participantRepository.GetAll());
         }
-
-        public Task Insert(CreateParticipantDTO participant, CancellationToken cancellationToken)
+        
+        public Task<Result<Participant>> Insert(CreateParticipantDTO participant, CancellationToken cancellationToken)
         {
             // TODO: Possible improvement: instead of inserting a single participant, insert a list of participants. do this for all inserts.
             // This would allow for a more efficient way of inserting data into the database.
             var existingParticipant = _participantRepository.GetParticipantsByName(participant.Name);
             if (existingParticipant.Any())
             {
-                throw new ApplicationException(("Participant already exists"));
+                return Task.FromResult(_resultService.CreateResult<Participant>(null, false, 400, "Participant already exists"));
             }
             else
             {
-                return _participantRepository.Insert(_mapper.Map<Participant>(participant), cancellationToken);
+                var mappedParticipant = _mapper.Map<Participant>(participant);
+                var createdParticipant = _participantRepository.Insert(mappedParticipant, cancellationToken);
+                return Task.FromResult(_resultService.CreateResult<Participant>(createdParticipant.Result, true, 201, "Participant inserted successfully"));
             }
         }
 

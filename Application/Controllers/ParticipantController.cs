@@ -23,13 +23,14 @@ namespace Application.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> CreateParticipant([FromServices] IValidator<CreateParticipantDTO> validator, [FromBody] CreateParticipantDTO participant, CancellationToken cancellationToken = default)
         {
-            var result = validator.Validate(participant);
-            if (result.IsValid)
+            var validation = validator.Validate(participant);
+            if (validation.IsValid)
             {
-                await _participantService.Insert(participant, cancellationToken);
-                return Ok(); // TODO: For all Create methods on all services, return the created entity (201)
+                var res = await _participantService.Insert(participant, cancellationToken);
+                return StatusCode(res.StatusCode, res.Data);
+                // TODO: For all Create methods on all services, return the created entity (201)
             }
-            return BadRequest(result.Errors);
+            return BadRequest(validation.Errors);
         }
 
         [HttpGet]
