@@ -2,8 +2,10 @@
 using Domain.DTOs.UserDTOs;
 using Domain.Models;
 using Domain.Utils.Cryptography;
+using FluentResults;
 using Repository.Repositories.Abstract;
 using Service.Services.Abstract;
+using Service.Utils.Responses;
 
 namespace Service.Services
 {
@@ -45,13 +47,13 @@ namespace Service.Services
             return _mapper.Map<ReadUserDTO>(user);
         }
 
-        public async Task InsertUser(CreateUserDTO newUser, CancellationToken cancellationToken)
+        public async Task<Result> InsertUser(CreateUserDTO newUser, CancellationToken cancellationToken)
         {
 
             var existingUser = _userRepository.GetUsers(name: newUser.Username).Any();
             if (existingUser)
             {
-                throw new ApplicationException("User already exists");
+                return Result.Fail(new BadRequestError($"There's already an user with the username \"{newUser.Username}\"."));
             }
 
             var salt = _cryptographer.GenerateSalt();
@@ -65,38 +67,42 @@ namespace Service.Services
             };
 
             await _userRepository.Insert(user, cancellationToken);
+            return Result.Ok(); 
         }
 
-        public async Task RemoveUser(int id, CancellationToken cancellationToken)
+        public async Task<Result> RemoveUser(int id, CancellationToken cancellationToken)
         {
             var userToBeDeleted = await _userRepository.Get(id, cancellationToken);
             if (userToBeDeleted == null)
             {
-                throw new ApplicationException("User not found");
+                return Result.Fail(new BadRequestError($"The user with Id {id} doesn't exist."));
             }
             await _userRepository.Remove(userToBeDeleted, cancellationToken);
+            return Result.Ok();
         }
 
-        public async Task ToggleUserActivation(int id, CancellationToken cancellationToken)
+        public async Task<Result> ToggleUserActivation(int id, CancellationToken cancellationToken)
         {
             var userToBeToggled = await _userRepository.Get(id, cancellationToken);
             if (userToBeToggled == null)
             {
-                throw new ApplicationException("User not found");
+                return Result.Fail(new BadRequestError($"The user with Id {id} doesn't exist."));
             }
             userToBeToggled.IsActive = !userToBeToggled.IsActive;
             await _userRepository.Update(userToBeToggled, cancellationToken);
+            return Result.Ok();
         }
 
-        public async Task UpdateUser(int id, UpdateUserDTO updatedUser, CancellationToken cancellationToken)
+        public async Task<Result> UpdateUser(int id, UpdateUserDTO updatedUser, CancellationToken cancellationToken)
         {
             var userToBeUpdated = await _userRepository.Get(id, cancellationToken);
             if (userToBeUpdated == null)
             {
-                throw new ApplicationException("User not found");
+                return Result.Fail(new BadRequestError($"The user with Id {id} doesn't exist."));
             }
             var user = _mapper.Map(updatedUser, userToBeUpdated);
             await _userRepository.Update(user, cancellationToken);
+            return Result.Ok();
         }
     }
 }

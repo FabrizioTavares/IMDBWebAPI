@@ -1,4 +1,5 @@
-﻿using Domain.DTOs.AuthenticationDTOs;
+﻿using Application.Utils;
+using Domain.DTOs.AuthenticationDTOs;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Abstract;
@@ -21,9 +22,8 @@ namespace Application.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> Authenticate([FromBody] LoginDTO loginDTO, [FromRoute] string role, CancellationToken cancellationToken = default)
         {
-            // TODO: Implement fluent results
             var res = await _authenticationService.Authenticate(loginDTO, role, cancellationToken);
-            return StatusCode(res.StatusCode, res);
+            return Ok(ConvertResult.Convert(res));
         }
     }
 }

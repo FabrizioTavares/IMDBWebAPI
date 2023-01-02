@@ -1,11 +1,10 @@
 ﻿using Domain.DTOs.AuthenticationDTOs;
-using Domain.Models;
 using Domain.Models.Abstract;
 using Domain.Utils.Cryptography;
+using FluentResults;
 using Microsoft.IdentityModel.Tokens;
 using Repository.Repositories.Abstract;
 using Service.Services.Abstract;
-using Service.Utils.Response;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -18,14 +17,12 @@ namespace Service.Services
         private readonly IUserRepository _userRepository;
         private readonly IAdminRepository _adminRepository;
         private readonly ICryptographer _cryptographer;
-        private readonly IResultService _resultService;
 
-        public AuthenticationService(IUserRepository userRepository, IAdminRepository adminRepository, ICryptographer cryptographer, IResultService resultService)
+        public AuthenticationService(IUserRepository userRepository, IAdminRepository adminRepository, ICryptographer cryptographer)
         {
             _userRepository = userRepository;
             _adminRepository = adminRepository;
             _cryptographer = cryptographer;
-            _resultService = resultService;
         }
 
         public async Task<Result<string>> Authenticate(LoginDTO credentials, string role, CancellationToken cancellationToken)
@@ -45,10 +42,10 @@ namespace Service.Services
 
             if (client == null || client.IsActive == false || !_cryptographer.Verify(credentials.Password, client.Password, client.Salt))
             {
-                return _resultService.CreateResult<string>(null, false, 400, "Credentials are invalid, the account does not exists or is deactivated.");
+                return Result.Fail<string>("The credentials are invalid, the account is deactivated or the account doesn't exists");
             }
-            
-            return _resultService.CreateResult<string>(GenerateToken(client), true, 200, $"Authentication successful for user '{client.Username}' with role '{client.GetType().Name}'.");
+
+            return Result.Ok(GenerateToken(client) + $" - Authentication successful for user '{client.Username}' with role '{client.GetType().Name}'.");
 
         }
         

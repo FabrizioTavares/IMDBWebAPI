@@ -55,6 +55,7 @@ namespace Application.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         [Authorize]
         public async Task<IActionResult> UpdateAccount([FromServices] IValidator<UpdateUserDTO> validator, [FromRoute] int id, [FromBody] UpdateUserDTO updatedUser, CancellationToken cancellationToken = default)

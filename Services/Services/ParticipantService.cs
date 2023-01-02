@@ -1,22 +1,21 @@
 ﻿using AutoMapper;
 using Domain.DTOs.ParticipantDTOs;
 using Domain.Models;
+using FluentResults;
 using Repository.Repositories.Abstract;
 using Service.Services.Abstract;
-using Service.Utils.Response;
+using Service.Utils.Responses;
 
 namespace Service.Services
 {
     public class ParticipantService : IParticipantService
     {
         private readonly IMapper _mapper;
-        private readonly IResultService _resultService;
         private readonly IParticipantRepository _participantRepository;
         
-        public ParticipantService(IMapper mapper, IResultService resultService, IParticipantRepository participantRepository)
+        public ParticipantService(IMapper mapper, IParticipantRepository participantRepository)
         {
             _mapper = mapper;
-            _resultService = resultService;
             _participantRepository = participantRepository;
         }
 
@@ -36,47 +35,50 @@ namespace Service.Services
             return _mapper.Map<IEnumerable<ReadParticipantReferencelessDTO>>(_participantRepository.GetAll());
         }
         
-        public Task<Result<Participant>> Insert(CreateParticipantDTO participant, CancellationToken cancellationToken)
+        public async Task<Result<int>> Insert(CreateParticipantDTO participant, CancellationToken cancellationToken)
         {
             // TODO: Possible improvement: instead of inserting a single participant, insert a list of participants. do this for all inserts.
             // This would allow for a more efficient way of inserting data into the database.
             var existingParticipant = _participantRepository.GetParticipantsByName(participant.Name);
             if (existingParticipant.Any())
             {
-                return Task.FromResult(_resultService.CreateResult<Participant>(null, false, 400, "Participant already exists"));
+                return Result.Fail(new BadRequestError("Participant already exists"));
             }
             else
             {
                 var mappedParticipant = _mapper.Map<Participant>(participant);
-                var createdParticipant = _participantRepository.Insert(mappedParticipant, cancellationToken);
-                return Task.FromResult(_resultService.CreateResult<Participant>(createdParticipant.Result, true, 201, "Participant inserted successfully"));
+                var createdParticipant = await _participantRepository.Insert(mappedParticipant, cancellationToken);
+
+                return Result.Ok(createdParticipant.Id);
             }
         }
 
-        public async Task Remove(int id, CancellationToken cancellationToken)
+        public async Task<Result> Remove(int id, CancellationToken cancellationToken)
         {
             var participant = await _participantRepository.Get(id, cancellationToken);
             if (participant == null)
             {
-                throw new ApplicationException("Participant not found");
+                return Result.Fail(new NotFoundError("Participant not found"));
             }
             else
             {
                 await _participantRepository.Remove(participant, cancellationToken);
+                return Result.Ok();
             }
         }
 
-        public async Task Update(int id, UpdateParticipantDTO updatedParticipant, CancellationToken cancellationToken)
+        public async Task<Result> Update(int id, UpdateParticipantDTO updatedParticipant, CancellationToken cancellationToken)
         {
             var participantToBeUpdated = await _participantRepository.Get(id, cancellationToken);
             if (participantToBeUpdated == null)
             {
-                throw new ApplicationException("Participant not found");
+                return Result.Fail(new NotFoundError("Participant not found"));
             }
             else
             {
                 var map = _mapper.Map(updatedParticipant, participantToBeUpdated);
                 await _participantRepository.Update(map, cancellationToken);
+                return Result.Ok();
             }
         }
     }

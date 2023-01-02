@@ -24,7 +24,9 @@ namespace Application.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> CreateMovie([FromServices] IValidator<CreateMovieDTO> validator, [FromBody] CreateMovieDTO movie, CancellationToken cancellationToken = default)
         {
             var result = validator.Validate(movie);
@@ -65,6 +67,7 @@ namespace Application.Controllers
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         public async Task<IActionResult> UpdateMovie([FromServices] IValidator<UpdateMovieDTO> validator, [FromRoute] int movieId, [FromBody] UpdateMovieDTO updatedMovie, CancellationToken cancellationToken = default)
         {
@@ -81,6 +84,7 @@ namespace Application.Controllers
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         public async Task<IActionResult> AddPerformanceToMovie([FromServices] IValidator<CreatePerformanceDTO> validator, [FromRoute] int movieId, [FromBody] CreatePerformanceDTO newPerformance, CancellationToken cancellationToken = default)
         {
@@ -96,6 +100,7 @@ namespace Application.Controllers
         [HttpDelete("{movieId}/performances/{participantid}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         public async Task<IActionResult> DeletePerformanceFromMovie([FromRoute] int movieId, [FromRoute] int participantid, CancellationToken cancellationToken = default)
         {
@@ -107,6 +112,7 @@ namespace Application.Controllers
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         public async Task<IActionResult> AddDirectionToMovie([FromServices] IValidator<CreateDirectionDTO> validator, [FromRoute] int movieId, [FromBody] CreateDirectionDTO newDirection, CancellationToken cancellationToken = default)
         {
@@ -122,6 +128,7 @@ namespace Application.Controllers
         [HttpDelete("{movieId}/directions/{participantid}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         public async Task<IActionResult> DeleteDirectionFromMovie([FromRoute] int movieId, [FromRoute] int participantid, CancellationToken cancellationToken = default)
         {
@@ -132,6 +139,7 @@ namespace Application.Controllers
         [HttpPost("{movieId}/genres/{genreid}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         public async Task<IActionResult> AddGenreToMovie([FromRoute] int movieId, [FromRoute] int genreid, CancellationToken cancellationToken = default)
         {
@@ -142,6 +150,7 @@ namespace Application.Controllers
         [HttpDelete("{movieId}/genres/{genreid}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         public async Task<IActionResult> DeleteGenreFromMovie([FromRoute] int movieId, [FromRoute] int genreid, CancellationToken cancellationToken = default)
         {
@@ -153,6 +162,7 @@ namespace Application.Controllers
         [Authorize(Roles = "User")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         public async Task<IActionResult> AddReviewToMovie([FromServices] IValidator<CreateVoteDTO> validator, [FromRoute] int movieId, [FromBody] CreateVoteDTO newReview, CancellationToken cancellationToken = default)
         {
@@ -170,6 +180,7 @@ namespace Application.Controllers
         [HttpDelete("{movieId}/reviews/")]
         [Authorize(Roles = "User")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         public async Task<IActionResult> DeleteReviewFromMovie([FromRoute] int movieId, CancellationToken cancellationToken = default)
         {
@@ -184,6 +195,7 @@ namespace Application.Controllers
         [HttpDelete("{movieId}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         public async Task<IActionResult> DeleteMovie([FromRoute] int movieId, CancellationToken cancellationToken = default)
         {

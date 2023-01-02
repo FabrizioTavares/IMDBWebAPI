@@ -18,7 +18,6 @@ using Repository.Repositories.Abstract;
 using Service;
 using Service.Services;
 using Service.Services.Abstract;
-using Service.Utils.Response;
 using Service.Validation.Admin;
 using Service.Validation.Direction;
 using Service.Validation.Genre;
@@ -73,7 +72,6 @@ namespace Application.Extensions
             services.AddScoped<IValidator<UpdateUserDTO>, UpdateUserDTOValidator>();
 
             services.AddSingleton<ICryptographer, SHA256Cryptographer>();
-            services.AddSingleton<IResultService, ResultService>();
 
             services.AddAutoMapper(
                 typeof(GenreProfile),

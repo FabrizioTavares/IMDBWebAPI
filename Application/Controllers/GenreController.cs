@@ -22,6 +22,7 @@ namespace Application.Controllers
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         public async Task<IActionResult> CreateGenre([FromServices] IValidator<CreateGenreDTO> validator, [FromBody] CreateGenreDTO genre, CancellationToken cancellationToken = default)
         {
@@ -61,6 +62,7 @@ namespace Application.Controllers
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         public async Task<IActionResult> UpdateGenre([FromServices] IValidator<UpdateGenreDTO> validator, [FromRoute] int id, [FromBody] UpdateGenreDTO updatedGenre, CancellationToken cancellationToken = default)
         {
@@ -76,6 +78,7 @@ namespace Application.Controllers
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         public async Task<IActionResult> DeleteGenre([FromRoute] int id, CancellationToken cancellationToken = default)
         {

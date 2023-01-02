@@ -1,4 +1,5 @@
 ﻿using Domain.DTOs.UserDTOs;
+using FluentResults;
 
 namespace Service.Services.Abstract
 {
@@ -12,9 +13,9 @@ namespace Service.Services.Abstract
             int? pageSize = null
             );
         Task<ReadUserDTO?> GetUserByName(string username, CancellationToken cancellationToken);
-        Task InsertUser(CreateUserDTO newUser, CancellationToken cancellationToken);
-        Task UpdateUser(int id, UpdateUserDTO updatedUser, CancellationToken cancellationToken);
-        Task RemoveUser(int id, CancellationToken cancellationToken);
-        Task ToggleUserActivation(int id, CancellationToken cancellationToken);
+        Task<Result> InsertUser(CreateUserDTO newUser, CancellationToken cancellationToken);
+        Task<Result> UpdateUser(int id, UpdateUserDTO updatedUser, CancellationToken cancellationToken);
+        Task<Result> RemoveUser(int id, CancellationToken cancellationToken);
+        Task<Result> ToggleUserActivation(int id, CancellationToken cancellationToken);
     }
 }

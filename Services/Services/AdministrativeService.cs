@@ -2,16 +2,16 @@
 using Domain.DTOs.AdminDTOs;
 using Domain.Models;
 using Domain.Utils.Cryptography;
+using FluentResults;
 using Repository.Repositories.Abstract;
 using Service.Services.Abstract;
+using Service.Utils.Responses;
 using System.Security;
 
 namespace Service.Services
 {
     public class AdministrativeService : IAdministrativeService
     {
-
-        // TODO IMPLEMENT PASSWORD CHECK AND HIERARCHICAL CHECKS
 
         private readonly IAdminRepository _adminRepository;
         private readonly ICryptographer _cryptographer;
@@ -25,18 +25,21 @@ namespace Service.Services
         }
 
         // TODO: Requires optimisation - database is accessed twice.
-        private async Task CheckHierarchy(int currentAdminId, int targetAdminId, CancellationToken cancellationToken)
+        private async Task<bool> CheckHierarchy(int currentAdminId, int targetAdminId, CancellationToken cancellationToken)
         {
             var superior = await _adminRepository.Get(currentAdminId, cancellationToken);
             var targetAdmin = await _adminRepository.Get(targetAdminId, cancellationToken);
 
             if (superior == null || targetAdmin == null)
-                throw new ArgumentException("Admin(s) not found.");
+                return false;
 
             if (superior!.Hierarchy <= targetAdmin.Hierarchy)
             {
-                throw new UnauthorizedAccessException("You do not have the required privileges to perform this action");
+                return false;
             }
+
+            return true;
+
         }
 
         public async Task<ReadAdminDTO?> GetAdmin(int id, CancellationToken cancellationToken)
@@ -48,22 +51,21 @@ namespace Service.Services
         public IEnumerable<ReadAdminDTO?> GetAllAdmins()
         {
             var admins = _adminRepository.GetAll();
-            var alladmins = _mapper.Map<IEnumerable<ReadAdminDTO>>(admins);
-            return alladmins;
-            //return _mapper.Map<IEnumerable<ReadAdminDTO>>(admins);
+            var allAdmins = _mapper.Map<IEnumerable<ReadAdminDTO>>(admins);
+            return allAdmins;
         }
 
-        public async Task InsertAdmin(int currentAdminId, CreateAdminDTO newAdmin, CancellationToken cancellationToken)
+        public async Task<Result<int>> InsertAdmin(int currentAdminId, CreateAdminDTO newAdmin, CancellationToken cancellationToken)
         {
             var author = await _adminRepository.Get(currentAdminId, cancellationToken);
             var existingAdmin = await _adminRepository.GetAdminByUserName(newAdmin.Username, cancellationToken);
 
-            if (existingAdmin != null)
-                throw new ArgumentException("This admin already exists");
+            if (existingAdmin is not null)
+                return Result.Fail(new BadRequestError("Admin already exists"));
 
             if (author!.Hierarchy <= newAdmin.Hierarchy)
             {
-                throw new SecurityException("You cannot create an admin with a higher or equal hierarchy than yours");
+                return Result.Fail(new ForbiddenError("You do not have the required permissions to create an admin with this hierarchy"));
             }
 
             var salt = _cryptographer.GenerateSalt();
@@ -78,9 +80,11 @@ namespace Service.Services
             };
 
             await _adminRepository.Insert(admin, cancellationToken);
+
+            return Result.Ok(admin.Id);
         }
 
-        public async Task RemoveAdmin(int id, int currentAdminId, CancellationToken cancellationToken)
+        public async Task<Result> RemoveAdmin(int id, int currentAdminId, CancellationToken cancellationToken)
         {
             var author = await _adminRepository.Get(currentAdminId, cancellationToken);
 
@@ -88,23 +92,24 @@ namespace Service.Services
 
             if (adminToBeRemoved == null)
             {
-                throw new ArgumentException("Admin not found");
+                return Result.Fail(new NotFoundError("Admin not found"));
             }
 
             if (author!.Id == id)
             {
-                throw new SecurityException("You cannot delete your own account.");
+                return Result.Fail(new ForbiddenError("You cannot remove yourself"));
             }
 
             if (author!.Hierarchy <= adminToBeRemoved.Hierarchy)
             {
-                throw new UnauthorizedAccessException("You do not have the required privileges to perform this action");
+                return Result.Fail(new ForbiddenError("You do not have the required permissions to remove this admin"));
             }
 
             await _adminRepository.Remove(adminToBeRemoved, cancellationToken);
+            return Result.Ok();
         }
 
-        public async Task ToggleAdminActivation(int id, int currentAdminId, CancellationToken cancellationToken)
+        public async Task<Result<string>> ToggleAdminActivation(int id, int currentAdminId, CancellationToken cancellationToken)
         {
 
             var author = await _adminRepository.Get(currentAdminId, cancellationToken);
@@ -113,24 +118,26 @@ namespace Service.Services
 
             if (adminToBeToggled == null)
             {
-                throw new ArgumentException("Admin not found");
+                return Result.Fail(new NotFoundError("Admin not found"));
             }
 
             if (author!.Id == id)
             {
-                throw new SecurityException("You cannot deactivate your own account.");
+                return Result.Fail(new ForbiddenError("You cannot deactivate yourself"));
             }
 
-            if (author!.Hierarchy <= adminToBeToggled.Hierarchy) // There must be an admin performing this action, so "!" is used.
+            if (author!.Hierarchy <= adminToBeToggled.Hierarchy)
             {
-                throw new UnauthorizedAccessException("You do not have the required privileges to perform this action");
+                return Result.Fail(new ForbiddenError("You do not have the required permissions to deactivate this admin"));
             }
 
             adminToBeToggled.IsActive = !adminToBeToggled.IsActive;
             await _adminRepository.Update(adminToBeToggled, cancellationToken);
+            return Result.Ok($"Admin {adminToBeToggled.Username} is now {(adminToBeToggled.IsActive ? "active" : "inactive")}.");
+
         }
 
-        public async Task UpdateAdmin(int id, int currentAdminId, UpdateAdminDTO dto, CancellationToken cancellationToken)
+        public async Task<Result> UpdateAdmin(int id, int currentAdminId, UpdateAdminDTO dto, CancellationToken cancellationToken)
         {
 
             var author = await _adminRepository.Get(currentAdminId, cancellationToken);
@@ -139,7 +146,7 @@ namespace Service.Services
 
             if (adminToBeUpdated == null)
             {
-                throw new Exception("Admin not found");
+                return Result.Fail(new NotFoundError("Admin not found"));
             }
 
             // Admins with higher hierarchy can modify admins with lower hierarchy. Admins can modify themselves.
@@ -148,11 +155,10 @@ namespace Service.Services
                 var mappedAdmin = _mapper.Map(dto, adminToBeUpdated);
 
                 var hashedDTONewPassword = _cryptographer.Hash(dto.NewPassword!, adminToBeUpdated.Salt);
-                //var hashedDTOCurrentPassword = _cryptographer.Hash(dto.CurrentPassword!, author.Salt);
 
                 if (!_cryptographer.Verify(dto.CurrentPassword!, author.Password, author.Salt))
                 {
-                    throw new ArgumentException("Wrong password");
+                    return Result.Fail(new ForbiddenError("Current password is incorrect"));
                 }
 
                 // check if the password has changed
@@ -164,10 +170,10 @@ namespace Service.Services
                 }
 
                 await _adminRepository.Update(mappedAdmin, cancellationToken);
-                return;
+                return Result.Ok();
             }
 
-            throw new UnauthorizedAccessException("You cannot modify an admin with a higher or equal hierarchy than yours");
+            return Result.Fail(new ForbiddenError("You cannot modify an admin with a higher or equal hierarchy than yours"));
 
         }
     }

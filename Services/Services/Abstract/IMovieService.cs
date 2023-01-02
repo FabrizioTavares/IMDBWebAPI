@@ -2,6 +2,7 @@
 using Domain.DTOs.MovieDTOs;
 using Domain.DTOs.PerformanceDTOs;
 using Domain.DTOs.VoteDTOs;
+using FluentResults;
 
 namespace Service.Services.Abstract
 {
@@ -18,16 +19,16 @@ namespace Service.Services.Abstract
             int? pageNumber = null,
             int? pageSize = null
             );
-        Task Insert(CreateMovieDTO movie, CancellationToken cancellationToken);
-        Task AddPerformanceToMovie(int movieId, CreatePerformanceDTO newPerformance, CancellationToken cancellationToken);
-        Task RemovePerformanceFromMovie(int movieId, int participantId, CancellationToken cancellationToken);
-        Task AddDirectionToMovie(int movieId, CreateDirectionDTO newDirection, CancellationToken cancellationToken);
-        Task RemoveDirectionFromMovie(int movieId, int participantId, CancellationToken cancellationToken);
-        Task AddGenreToMovie(int movieId, int genreId, CancellationToken cancellationToken);
-        Task AddReviewToMovie(int movieId, int userId, CreateVoteDTO newReview, CancellationToken cancellationToken);
-        Task RemoveGenreFromMovie(int movieId, int genreId, CancellationToken cancellationToken);
-        Task RemoveReviewFromMovie(int movieId, int userId, CancellationToken cancellationToken);
-        Task Update(int id, UpdateMovieDTO movie, CancellationToken cancellationToken);
-        Task Remove(int id, CancellationToken cancellationToken);
+        Task<Result> Insert(CreateMovieDTO movie, CancellationToken cancellationToken);
+        Task<Result> AddPerformanceToMovie(int movieId, CreatePerformanceDTO newPerformance, CancellationToken cancellationToken);
+        Task<Result> RemovePerformanceFromMovie(int movieId, int participantId, CancellationToken cancellationToken);
+        Task<Result> AddDirectionToMovie(int movieId, CreateDirectionDTO newDirection, CancellationToken cancellationToken);
+        Task<Result> RemoveDirectionFromMovie(int movieId, int participantId, CancellationToken cancellationToken);
+        Task<Result> AddGenreToMovie(int movieId, int genreId, CancellationToken cancellationToken);
+        Task<Result> AddReviewToMovie(int movieId, int userId, CreateVoteDTO newReview, CancellationToken cancellationToken);
+        Task<Result> RemoveGenreFromMovie(int movieId, int genreId, CancellationToken cancellationToken);
+        Task<Result> RemoveReviewFromMovie(int movieId, int userId, CancellationToken cancellationToken);
+        Task<Result> Update(int id, UpdateMovieDTO movie, CancellationToken cancellationToken);
+        Task<Result> Remove(int id, CancellationToken cancellationToken);
     }
 }

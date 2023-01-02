@@ -1,6 +1,6 @@
 ﻿using Domain.DTOs.AuthenticationDTOs;
 using Domain.Models.Abstract;
-using Service.Utils.Response;
+using FluentResults;
 
 namespace Service.Services.Abstract
 {

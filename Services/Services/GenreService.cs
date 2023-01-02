@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Domain.DTOs.GenreDTOs;
 using Domain.Models;
+using FluentResults;
 using Repository.Repositories.Abstract;
 using Service.Services.Abstract;
+using Service.Utils.Responses;
 
 namespace Service.Services
 {
@@ -33,43 +35,46 @@ namespace Service.Services
             return _mapper.Map<IEnumerable<ReadGenreReferencelessDTO>>(_genreRepository.GetAll());
         }
 
-        public Task Insert(CreateGenreDTO genre, CancellationToken cancellationToken)
+        public async Task<Result> Insert(CreateGenreDTO genre, CancellationToken cancellationToken)
         {
             var existingGenre = _genreRepository.GetGenresByTitle(genre.Title);
             if (existingGenre.Any())
             {
-                throw new ApplicationException("Genre already exists");
+                return Result.Fail(new BadRequestError($"The genre with title {genre.Title} already exists.")); 
             }
             else
             {
-                return _genreRepository.Insert(_mapper.Map<Genre>(genre), cancellationToken);
+                 await _genreRepository.Insert(_mapper.Map<Genre>(genre), cancellationToken);
+                return Result.Ok(); // TODO: Possible improvement?
             }
         }
 
-        public async Task Remove(int id, CancellationToken cancellationToken)
+        public async Task<Result> Remove(int id, CancellationToken cancellationToken)
         {
             var genre = await _genreRepository.Get(id, cancellationToken);
             if (genre == null)
             {
-                throw new ApplicationException("Genre not found");
+                return Result.Fail(new NotFoundError($"The genre with id {id} does not exist."));
             }
             else
             {
                 await _genreRepository.Remove(genre, cancellationToken);
+                return Result.Ok();
             }
         }
 
-        public async Task Update(int id, UpdateGenreDTO updatedGenre, CancellationToken cancellationToken)
+        public async Task<Result> Update(int id, UpdateGenreDTO updatedGenre, CancellationToken cancellationToken)
         {
             var genreToBeUpdated = await _genreRepository.Get(id, cancellationToken);
             if (genreToBeUpdated == null)
             {
-                throw new ApplicationException("Genre not found");
+                return Result.Fail(new NotFoundError($"The genre with id {id} does not exist."));
             }
             else
             {
                 var map = _mapper.Map(updatedGenre, genreToBeUpdated);
                 await _genreRepository.Update(map, cancellationToken);
+                return Result.Ok();
             }
         }
     }

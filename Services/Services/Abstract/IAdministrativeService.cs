@@ -1,4 +1,5 @@
 ﻿using Domain.DTOs.AdminDTOs;
+using FluentResults;
 
 namespace Service.Services.Abstract
 {
@@ -6,9 +7,9 @@ namespace Service.Services.Abstract
     {
         Task<ReadAdminDTO?> GetAdmin(int id, CancellationToken cancellationToken);
         IEnumerable<ReadAdminDTO?> GetAllAdmins();
-        Task InsertAdmin(int currentAdminId, CreateAdminDTO newAdmin, CancellationToken cancellationToken);
-        Task UpdateAdmin(int id, int currentAdminId, UpdateAdminDTO updatedAdmin, CancellationToken cancellationToken);
-        Task RemoveAdmin(int id, int currentAdminId, CancellationToken cancellationToken);
-        Task ToggleAdminActivation(int id, int hierarchy, CancellationToken cancellationToken);
+        Task<Result<int>> InsertAdmin(int currentAdminId, CreateAdminDTO newAdmin, CancellationToken cancellationToken);
+        Task<Result> UpdateAdmin(int id, int currentAdminId, UpdateAdminDTO updatedAdmin, CancellationToken cancellationToken);
+        Task<Result> RemoveAdmin(int id, int currentAdminId, CancellationToken cancellationToken);
+        Task<Result<string>> ToggleAdminActivation(int id, int hierarchy, CancellationToken cancellationToken);
     }
 }

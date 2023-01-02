@@ -1,4 +1,5 @@
-﻿using Domain.DTOs.ParticipantDTOs;
+﻿using Application.Utils;
+using Domain.DTOs.ParticipantDTOs;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,13 +22,15 @@ namespace Application.Controllers
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> CreateParticipant([FromServices] IValidator<CreateParticipantDTO> validator, [FromBody] CreateParticipantDTO participant, CancellationToken cancellationToken = default)
         {
             var validation = validator.Validate(participant);
             if (validation.IsValid)
             {
                 var res = await _participantService.Insert(participant, cancellationToken);
-                return StatusCode(res.StatusCode, res);
+                return ConvertResult.Convert(res);
                 // TODO: For all Create methods on all services, return the created entity (201)
             }
             return BadRequest(validation.Errors);
@@ -59,24 +62,28 @@ namespace Application.Controllers
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> UpdateParticipant([FromServices] IValidator<UpdateParticipantDTO> validator, [FromRoute] int id, [FromBody] UpdateParticipantDTO updatedParticipant, CancellationToken cancellationToken = default)
         {
-            var result = validator.Validate(updatedParticipant);
-            if (result.IsValid)
+            var validation = validator.Validate(updatedParticipant);
+            if (validation.IsValid)
             {
-                await _participantService.Update(id, updatedParticipant, cancellationToken);
-                return NoContent();
+                var res = await _participantService.Update(id, updatedParticipant, cancellationToken);
+                return ConvertResult.Convert(res);
             }
-            return BadRequest(result.Errors);
+            return BadRequest(validation.Errors);
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(204)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> DeleteParticipant([FromRoute] int id, CancellationToken cancellationToken = default)
         {
-            await _participantService.Remove(id, cancellationToken);
-            return NoContent();
+            var res = await _participantService.Remove(id, cancellationToken);
+            return ConvertResult.Convert(res);
         }
 
     }
