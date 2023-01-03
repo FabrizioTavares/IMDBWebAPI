@@ -35,7 +35,7 @@ namespace Service.Services
             return _mapper.Map<IEnumerable<ReadGenreReferencelessDTO>>(_genreRepository.GetAll());
         }
 
-        public async Task<Result> Insert(CreateGenreDTO genre, CancellationToken cancellationToken)
+        public async Task<Result<Genre>> Insert(CreateGenreDTO genre, CancellationToken cancellationToken)
         {
             var existingGenre = _genreRepository.GetGenresByTitle(genre.Title);
             if (existingGenre.Any())
@@ -44,8 +44,8 @@ namespace Service.Services
             }
             else
             {
-                 await _genreRepository.Insert(_mapper.Map<Genre>(genre), cancellationToken);
-                return Result.Ok(); // TODO: Possible improvement?
+                var newGenre = await _genreRepository.Insert(_mapper.Map<Genre>(genre), cancellationToken);
+                return Result.Ok(newGenre);
             }
         }
 

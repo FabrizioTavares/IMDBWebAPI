@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using Domain.AutomapperProfiles;
+using Domain.DTOs.GenreDTOs;
 using Domain.Models;
-using Moq;
+using NSubstitute;
 using Repository.Repositories.Abstract;
+using Service.Services;
+using Service.Utils.Responses;
 
 namespace Tests.Services;
 
@@ -10,8 +13,9 @@ public class GenreServiceTesting
 {
 
     private readonly IMapper _mapper;
-    private readonly Mock<IGenreRepository> _mockGenreRepository = new();
-    private readonly List<Genre>? context;
+    private readonly IGenreRepository _genreRepository;
+    private readonly List<Genre> context;
+    private readonly GenreService _sut;
 
     public GenreServiceTesting()
     {
@@ -20,8 +24,10 @@ public class GenreServiceTesting
         {
             cfg.AddProfile(new GenreProfile());
         });
-        _mapper = config.CreateMapper();
 
+        _genreRepository = Substitute.For<IGenreRepository>();
+        _mapper = Substitute.For<IMapper>();
+        _sut = new GenreService(_mapper, _genreRepository);
 
         context = new List<Genre>
         {
@@ -30,13 +36,167 @@ public class GenreServiceTesting
             new Genre { Id = 3, Title = "Drama" }
         };
 
-        //_mockGenreRepository.Setup(repo => repo.GetAll()).Returns(context);
-        //_mockGenreRepository.Setup(repo => repo.Get(It.IsAny<int>(), It.IsAny<CancellationToken>())).Returns((int i, CancellationToken cancellationToken) => context.FirstOrDefault(x => x.Id == i));
-        //_mockGenreRepository.Setup(repo => repo.Insert(It.IsAny<Genre>(), It.IsAny<CancellationToken>())).Returns((Genre genre, CancellationToken cancellationToken) => Task.FromResult(genre));
+    }
+    
+    [Fact]
+    public void GetAllGenresTest()
+    {
+        // Arrange
+        _genreRepository.GetAll().Returns(context);
+        _mapper.Map<IEnumerable<ReadGenreReferencelessDTO>>(context).Returns(new List<ReadGenreReferencelessDTO>
+        {
+            new ReadGenreReferencelessDTO { Id = 1, Title = "Action" },
+            new ReadGenreReferencelessDTO { Id = 2, Title = "Adventure" },
+            new ReadGenreReferencelessDTO { Id = 3, Title = "Drama" }
+        });
 
+        // Act
+        var genres = _sut.GetAll();
 
+        // Assert
+        Assert.Equal(3, genres.Count());
     }
 
+    [Fact]
+    public void GetGenresByTitle_WhenTitleContainsQuer_ShouldReturnGenrey()
+    {
+        // Arrange
+        var _context = new List<Genre>
+        {
+            new Genre { Id = 1, Title = "Action" },
+        };
 
+        _genreRepository.GetGenresByTitle("Action").Returns(_context);
+        _mapper.Map<IEnumerable<ReadGenreReferencelessDTO>>(_context).Returns(new List<ReadGenreReferencelessDTO>
+        {
+            new ReadGenreReferencelessDTO { Id = 1, Title = "Action" }
+        });
+
+        // Act
+        var result = _sut.GetGenresByTitle("Action", CancellationToken.None);
+
+        // Assert
+        Assert.Equal(1, result.Count());
+    }
+
+    [Fact]
+    public async void GetById_WhenIdIsValid_ShouldReturnGenre()
+    {
+        // Arrange
+        _genreRepository.Get(2, CancellationToken.None).Returns(context[1]);
+        _mapper.Map<ReadGenreDTO>(context[1]).Returns(new ReadGenreDTO { Id = 2, Title = "Adventure" });
+
+        // Act
+        var result = await _sut.Get(2, CancellationToken.None);
+
+        // Assert
+        Assert.Equal("Adventure", result?.Title);
+    }
+    
+    [Fact]
+    public async void Insert_ShouldReturnBadRequestError_WhenGenreAlreadyExists()
+    {
+        // Arrange
+        _genreRepository.GetGenresByTitle("Action").Returns(new List<Genre> { new Genre { Title = "Action" } });
+        _mapper.Map<Genre>(Arg.Any<CreateGenreDTO>()).Returns(new Genre());
+
+        var createGenreDTO = new CreateGenreDTO { Title = "Action" };
+        var cancellationToken = new CancellationToken();
+        
+        // Act
+        var result = await _sut.Insert(createGenreDTO, cancellationToken);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        Assert.IsType<BadRequestError>(result.Errors.First());
+        Assert.Equal("The genre with title Action already exists.", result.Errors.First().Message);
+    }
+
+    [Fact]
+    public async void Insert_ShouldReturnNewGenre_WhenGenreDoesNotExist()
+    {
+        // Arrange
+        _genreRepository.GetGenresByTitle("Action").Returns(new List<Genre>());
+        _genreRepository.Insert(Arg.Any<Genre>(), Arg.Any<CancellationToken>()).Returns(new Genre { Title = "Action" });
+        _mapper.Map<Genre>(Arg.Any<CreateGenreDTO>()).Returns(new Genre());
+
+        var createGenreDTO = new CreateGenreDTO { Title = "Action" };
+        var cancellationToken = new CancellationToken();
+
+        // Act
+        var result = await _sut.Insert(createGenreDTO, cancellationToken);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+        Assert.IsType<Genre>(result.Value);
+        Assert.Equal("Action", result.Value.Title);
+    }
+
+    [Fact]
+    public async void Remove_ShouldReturnNotFoundError_WhenGenreDoesNotExist()
+    {
+        // Arrange
+        _genreRepository.Get(1, Arg.Any<CancellationToken>()).Returns((Genre?)null);
+
+        var cancellationToken = new CancellationToken();
+
+        // Act
+        var result = await _sut.Remove(1, cancellationToken);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        Assert.IsType<NotFoundError>(result.Errors.First());
+        Assert.Equal("The genre with id 1 does not exist.", result.Errors.First().Message);
+    }
+
+    [Fact]
+    public async void Remove_ShouldReturnSuccess_WhenGenreExists()
+    {
+        // Arrange
+        _genreRepository.Get(1, Arg.Any<CancellationToken>()).Returns(new Genre { Id = 1, Title = "Action" });
+
+        var cancellationToken = new CancellationToken();
+
+        // Act
+        var result = await _sut.Remove(1, cancellationToken);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+    }
+
+    [Fact]
+    public async void Update_ShouldReturnSuccess_OnUpdateSuccessful()
+    {
+        // Arrange
+        _genreRepository.Get(1, Arg.Any<CancellationToken>()).Returns(new Genre { Id = 1, Title = "Action" });
+        _mapper.Map<Genre>(Arg.Any<UpdateGenreDTO>()).Returns(new Genre { Id = 1, Title = "Adventure" });
+        
+        var updateGenreDTO = new UpdateGenreDTO { Title = "Adventure" };
+        var cancellationToken = new CancellationToken();
+
+        // Act
+        var result = await _sut.Update(1, updateGenreDTO, cancellationToken);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+    }
+
+    [Fact]
+    public async void Update_ShouldReturnNotFoundError_WhenGenreDoesNotExist()
+    {
+        // Arrange
+        _genreRepository.Get(1, Arg.Any<CancellationToken>()).Returns((Genre?)null);
+
+        var updateGenreDTO = new UpdateGenreDTO { Title = "Adventure" };
+        var cancellationToken = new CancellationToken();
+
+        // Act
+        var result = await _sut.Update(1, updateGenreDTO, cancellationToken);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        Assert.IsType<NotFoundError>(result.Errors.First());
+        Assert.Equal("The genre with id 1 does not exist.", result.Errors.First().Message);
+    }
 
 }
