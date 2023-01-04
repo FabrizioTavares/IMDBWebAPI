@@ -85,7 +85,7 @@ public class AdministrativeServiceTesting
     }
 
     [Fact]
-    public async void Insert_WhenUsernameIsUniqueAndHierarchyIsValid_ReturnsIndex()
+    public async void InsertAdmin_WhenUsernameIsUniqueAndHierarchyIsValid_ReturnsIndex()
     {
         // Arrange
         var newAdmin = new CreateAdminDTO
@@ -125,7 +125,7 @@ public class AdministrativeServiceTesting
     }
 
     [Fact]
-    public async void Insert_WhenUsernameIsTaken_ReturnsBadRequestError()
+    public async void InsertAdmin_WhenUsernameIsTaken_ReturnsBadRequestError()
     {
         // Arrange
         var newAdmin = new CreateAdminDTO
@@ -151,7 +151,7 @@ public class AdministrativeServiceTesting
     }
 
     [Fact]
-    public async void Insert_WhenHierarchyIsTooHigh_ReturnsForbiddenError()
+    public async void InsertAdmin_WhenHierarchyIsTooHigh_ReturnsForbiddenError()
     {
         // Arrange
         var newAdmin = new CreateAdminDTO
@@ -177,7 +177,7 @@ public class AdministrativeServiceTesting
     }
 
     [Fact]
-    public async void Remove_WhenRemovingLowerHierarchyAdmin_ShouldReturnSuccess()
+    public async void RemoveAdmin_WhenRemovingLowerHierarchyAdmin_ShouldReturnSuccess()
     {
         // Arrange
         var superiorAdmin = _context[0];
@@ -196,7 +196,7 @@ public class AdministrativeServiceTesting
     }
 
     [Fact]
-    public async void Remove_WhenRemovingHigherHierarchyAdmin_ShouldReturnForbiddenError()
+    public async void RemoveAdmin_WhenRemovingHigherHierarchyAdmin_ShouldReturnForbiddenError()
     {
         // Arrange
         var inferiorAdmin = _context[1];
@@ -217,7 +217,7 @@ public class AdministrativeServiceTesting
     }
 
     [Fact]
-    public async void Remove_WhenRemovingOneself_ShouldReturnForbiddenError()
+    public async void RemoveAdmin_WhenRemovingOneself_ShouldReturnForbiddenError()
     {
         // Arrange
         var admin = _context[0];
@@ -235,7 +235,7 @@ public class AdministrativeServiceTesting
     }
 
     [Fact]
-    public async void Remove_WhenAdminToBeRemovedIsInvalid_ShouldReturnNotFoundError()
+    public async void RemoveAdmin_WhenAdminToBeRemovedIsInvalid_ShouldReturnNotFoundError()
     {
         // Arrange
         var admin = _context[0];
