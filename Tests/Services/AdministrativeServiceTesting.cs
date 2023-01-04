@@ -371,7 +371,7 @@ public class AdministrativeServiceTesting
     }
     
     [Fact]
-    public async void Update_WhenUpdatingOneSelfWithValidPassword_ShouldReturnSuccess()
+    public async void UpdateAdmin_WhenUpdatingOneSelfWithValidPassword_ShouldReturnSuccess()
     {
         // Arrange
         var loggedAdmin = _context[0];
