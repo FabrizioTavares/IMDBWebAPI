@@ -14,7 +14,7 @@ namespace Domain.AutomapperProfiles
             CreateMap<UpdateUserDTO, User>()
                 .ForMember(x => x.Password, opt => opt.Ignore())
                 .ForAllMembers(m => m
-                .Condition((src, dest, srcMember) => srcMember != default)); ;
+                .Condition((src, dest, srcMember) => srcMember != default));
         }
     }
 }

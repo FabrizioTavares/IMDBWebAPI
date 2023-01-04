@@ -96,9 +96,17 @@ namespace Service.Services
         public async Task<Result> UpdateUser(int id, UpdateUserDTO updatedUser, CancellationToken cancellationToken)
         {
             var userToBeUpdated = await _userRepository.Get(id, cancellationToken);
-            if (userToBeUpdated == null)
+            if (userToBeUpdated is null)
             {
                 return Result.Fail(new BadRequestError($"The user with Id {id} doesn't exist."));
+            }
+            if (userToBeUpdated.Username != updatedUser.Username)
+            {
+                var existingUser = _userRepository.GetUsers(name: updatedUser.Username).Any();
+                if (existingUser)
+                {
+                    return Result.Fail(new BadRequestError($"There's already an user with the username \"{updatedUser.Username}\"."));
+                }
             }
             var user = _mapper.Map(updatedUser, userToBeUpdated);
             await _userRepository.Update(user, cancellationToken);

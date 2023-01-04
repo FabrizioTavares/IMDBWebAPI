@@ -19,7 +19,6 @@ public class GenreServiceTesting
 
     public GenreServiceTesting()
     {
-
         var config = new MapperConfiguration(cfg =>
         {
             cfg.AddProfile(new GenreProfile());
@@ -39,7 +38,7 @@ public class GenreServiceTesting
     }
     
     [Fact]
-    public void GetAllGenresTest()
+    public void GetAll_WhenCalled_ShouldReturnAllGenres()
     {
         // Arrange
         _genreRepository.GetAll().Returns(context);
@@ -58,7 +57,7 @@ public class GenreServiceTesting
     }
 
     [Fact]
-    public void GetGenresByTitle_WhenTitleContainsQuer_ShouldReturnGenrey()
+    public void GetGenresByTitle_WhenTitleContainsQuery_ShouldReturnGenre()
     {
         // Arrange
         var _context = new List<Genre>
@@ -77,6 +76,7 @@ public class GenreServiceTesting
 
         // Assert
         Assert.Equal(1, result.Count());
+        Assert.Equal("Action", result.First().Title);
     }
 
     [Fact]
@@ -94,7 +94,7 @@ public class GenreServiceTesting
     }
     
     [Fact]
-    public async void Insert_ShouldReturnBadRequestError_WhenGenreAlreadyExists()
+    public async void Insert_WhenGenreAlreadyExists_ShouldReturnBadRequestError()
     {
         // Arrange
         _genreRepository.GetGenresByTitle("Action").Returns(new List<Genre> { new Genre { Title = "Action" } });
@@ -113,7 +113,7 @@ public class GenreServiceTesting
     }
 
     [Fact]
-    public async void Insert_ShouldReturnNewGenre_WhenGenreDoesNotExist()
+    public async void Insert_WhenGenreDoesNotExist_ShouldReturnNewGenre()
     {
         // Arrange
         _genreRepository.GetGenresByTitle("Action").Returns(new List<Genre>());

@@ -7,6 +7,7 @@ using Repository.Repositories.Abstract;
 using Service.Services.Abstract;
 using Service.Utils.Responses;
 using System.Security;
+using System.Security.Principal;
 
 namespace Service.Services
 {
@@ -78,24 +79,24 @@ namespace Service.Services
                 Hierarchy = newAdmin.Hierarchy,
                 IsActive = true
             };
+            
+            var createdAdmin = await _adminRepository.Insert(admin, cancellationToken);
 
-            await _adminRepository.Insert(admin, cancellationToken);
-
-            return Result.Ok(admin.Id);
+            return Result.Ok(createdAdmin.Id);
         }
 
-        public async Task<Result> RemoveAdmin(int id, int currentAdminId, CancellationToken cancellationToken)
+        public async Task<Result> RemoveAdmin(int adminTobeRemovedId, int adminPerformingRemovalId, CancellationToken cancellationToken)
         {
-            var author = await _adminRepository.Get(currentAdminId, cancellationToken);
+            var author = await _adminRepository.Get(adminPerformingRemovalId, cancellationToken);
 
-            var adminToBeRemoved = await _adminRepository.Get(id, cancellationToken);
+            var adminToBeRemoved = await _adminRepository.Get(adminTobeRemovedId, cancellationToken);
 
             if (adminToBeRemoved == null)
             {
                 return Result.Fail(new NotFoundError("Admin not found"));
             }
 
-            if (author!.Id == id)
+            if (author!.Id == adminTobeRemovedId)
             {
                 return Result.Fail(new ForbiddenError("You cannot remove yourself"));
             }
@@ -149,32 +150,49 @@ namespace Service.Services
                 return Result.Fail(new NotFoundError("Admin not found"));
             }
 
-            // Admins with higher hierarchy can modify admins with lower hierarchy. Admins can modify themselves.
-            if (author!.Hierarchy > adminToBeUpdated.Hierarchy || author!.Id == adminToBeUpdated.Id)
+            // Admins with higher hierarchy can modify admins with lower hierarchy. Admins can modify themselves, but require a password check.
+            if (author!.Hierarchy > adminToBeUpdated.Hierarchy)
             {
-                var mappedAdmin = _mapper.Map(dto, adminToBeUpdated);
+                var mappedAdmin = AdminUpdateDTOToClass(dto, adminToBeUpdated);
 
-                var hashedDTONewPassword = _cryptographer.Hash(dto.NewPassword!, adminToBeUpdated.Salt);
+                await _adminRepository.Update(mappedAdmin, cancellationToken);
+                return Result.Ok();
+            }
+            
+            if (author!.Id == adminToBeUpdated.Id)
+            {
 
                 if (!_cryptographer.Verify(dto.CurrentPassword!, author.Password, author.Salt))
                 {
                     return Result.Fail(new ForbiddenError("Current password is incorrect"));
                 }
 
-                // check if the password has changed
-                if (hashedDTONewPassword != adminToBeUpdated.Password)
-                {
-                    var newSalt = _cryptographer.GenerateSalt();
-                    mappedAdmin.Salt = newSalt;
-                    mappedAdmin.Password = _cryptographer.Hash(dto.NewPassword!, newSalt);
-                }
+                var mappedAdmin = AdminUpdateDTOToClass(dto, adminToBeUpdated);
 
                 await _adminRepository.Update(mappedAdmin, cancellationToken);
                 return Result.Ok();
+
             }
 
             return Result.Fail(new ForbiddenError("You cannot modify an admin with a higher or equal hierarchy than yours"));
 
         }
-    }
+
+        private Admin AdminUpdateDTOToClass(UpdateAdminDTO dto, Admin adminToBeUpdated)
+        {
+            var mappedAdmin = _mapper.Map(dto, adminToBeUpdated);
+
+            var hashedDTONewPassword = _cryptographer.Hash(dto.NewPassword!, adminToBeUpdated.Salt);
+
+            // check if the password has changed
+            if (hashedDTONewPassword != adminToBeUpdated.Password)
+            {
+                var newSalt = _cryptographer.GenerateSalt();
+                mappedAdmin.Salt = newSalt;
+                mappedAdmin.Password = _cryptographer.Hash(dto.NewPassword!, newSalt);
+            }
+
+            return mappedAdmin;
+        }
+    }   
 }
