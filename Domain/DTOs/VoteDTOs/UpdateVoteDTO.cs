@@ -1,7 +1,6 @@
-﻿namespace Domain.DTOs.VoteDTOs
+﻿namespace Domain.DTOs.VoteDTOs;
+
+public class UpdateVoteDTO
 {
-    public class UpdateVoteDTO
-    {
-        public int Rating { get; set; }
-    }
+    public int Rating { get; set; }
 }

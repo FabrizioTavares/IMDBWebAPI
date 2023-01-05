@@ -1,9 +1,8 @@
 ﻿using Domain.Models.Abstract;
 
-namespace Domain.Models
+namespace Domain.Models;
+
+public class User : AuthenticableClient
 {
-    public class User : AuthenticableClient
-    {
-        public ICollection<Vote> Votes { get; set; } = new List<Vote>();
-    }
+    public ICollection<Vote> Votes { get; set; } = new List<Vote>();
 }

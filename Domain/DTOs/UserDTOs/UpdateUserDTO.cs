@@ -1,8 +1,7 @@
-﻿namespace Domain.DTOs.UserDTOs
+﻿namespace Domain.DTOs.UserDTOs;
+
+public class UpdateUserDTO
 {
-    public class UpdateUserDTO
-    {
-        public string? Username { get; set; }
-        public string? Password { get; set; }
-    }
+    public string? Username { get; set; }
+    public string? Password { get; set; }
 }

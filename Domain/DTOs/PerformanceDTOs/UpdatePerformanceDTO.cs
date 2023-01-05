@@ -1,7 +1,6 @@
-﻿namespace Domain.DTOs.PerformanceDTOs
+﻿namespace Domain.DTOs.PerformanceDTOs;
+
+public class UpdatePerformanceDTO
 {
-    public class UpdatePerformanceDTO
-    {
-        public string? CharacterName { get; set; }
-    }
+    public string? CharacterName { get; set; }
 }

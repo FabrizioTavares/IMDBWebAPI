@@ -2,19 +2,18 @@
 using Domain.DTOs.UserDTOs;
 using Domain.Models;
 
-namespace Domain.AutomapperProfiles
+namespace Domain.AutomapperProfiles;
+
+public class UserProfile : Profile
 {
-    public class UserProfile : Profile
+    public UserProfile()
     {
-        public UserProfile()
-        {
-            CreateMap<CreateUserDTO, User>();
-            CreateMap<User, ReadUserReferencelessDTO>();
-            CreateMap<User, ReadUserDTO>();
-            CreateMap<UpdateUserDTO, User>()
-                .ForMember(x => x.Password, opt => opt.Ignore())
-                .ForAllMembers(m => m
-                .Condition((src, dest, srcMember) => srcMember != default));
-        }
+        CreateMap<CreateUserDTO, User>();
+        CreateMap<User, ReadUserReferencelessDTO>();
+        CreateMap<User, ReadUserDTO>();
+        CreateMap<UpdateUserDTO, User>()
+            .ForMember(x => x.Password, opt => opt.Ignore())
+            .ForAllMembers(m => m
+            .Condition((src, dest, srcMember) => srcMember != default));
     }
 }
