@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
 using Domain.AutomapperProfiles;
+using Domain.DTOs.DirectionDTOs;
+using Domain.DTOs.GenreDTOs;
 using Domain.DTOs.MovieDTOs;
 using Domain.DTOs.PerformanceDTOs;
+using Domain.DTOs.VoteDTOs;
 using Domain.Models;
 using NSubstitute;
 using Repository.Repositories.Abstract;
 using Service.Services;
+using Service.Utils.Responses;
 
 namespace Tests.Services;
 
@@ -319,6 +323,8 @@ public class MovieServiceTesting
             .Returns(_moviesContext[0]);
         _participantRepository.Get(performance.ParticipantId, default)
             .Returns(_participantsContext[2]);
+        _mapper.Map<Performance>(performance)
+            .Returns(_trueMapper.Map<Performance>(performance));
 
         // Act
         var result = await _sut.AddPerformanceToMovie(1, performance, CancellationToken.None);
@@ -326,5 +332,361 @@ public class MovieServiceTesting
         // Assert
         Assert.True(result.IsSuccess);
     }
+
+    [Fact]
+    public async void AddPerformanceToMovie_WhenParticipantIdIsInvalid_ShouldReturnBadRequestError()
+    {
+        // Arrange
+        var performance = new CreatePerformanceDTO
+        {
+            CharacterName = "Villain",
+            ParticipantId = 4,
+        };
+
+        _movieRepository.Get(1, default)
+            .Returns(_moviesContext[0]);
+        _participantRepository.Get(performance.ParticipantId, default)
+            .Returns((Participant?)null);
+
+        // Act
+        var result = await _sut.AddPerformanceToMovie(1, performance, CancellationToken.None);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        Assert.IsType<BadRequestError>(result.Errors.First());
+        Assert.Equal("Invalid movie or participant ID", result.Errors.First().Message);
+    }
+
+    [Fact]
+    public async void RemovePerformanceFromMovie_WhenParticipantIdIsValid_ShouldReturnSuccess()
+    {
+        // Arrange
+        var movie = _moviesContext[0];
+        var performance = _moviesContext[0].Cast.First();
+
+
+        _performanceRepository.GetComposite(movie.Id, performance.ParticipantId, default)
+            .Returns(performance);
+
+        // Act
+        var result = await _sut.RemovePerformanceFromMovie(movie.Id, performance.ParticipantId, CancellationToken.None);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+    }
+
+    [Fact]
+    public async void RemovePerformanceFromMovie_WhenParticipantIdIsInvalid_ShouldReturnBadRequestError()
+    {
+        
+        // Arrange
+        var movie = _moviesContext[0];
+        var performance = _moviesContext[0].Cast.First();
+
+        _performanceRepository.GetComposite(movie.Id, performance.ParticipantId, default)
+            .Returns((Performance?)null);
+
+        // Act
+        var result = await _sut.RemovePerformanceFromMovie(movie.Id, performance.ParticipantId, CancellationToken.None);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        Assert.IsType<BadRequestError>(result.Errors.First());
+        Assert.Equal("Invalid movie or participant ID", result.Errors.First().Message);
+
+    }
+
+    [Fact]
+    public async void AddDirectionToMovie_WhenParticipantIdIsValid_ShouldReturnSuccess()
+    {
+        // Arrange
+        var direction = new CreateDirectionDTO
+        {
+            ParticipantId = 3,
+        };
+
+        _movieRepository.Get(1, default)
+            .Returns(_moviesContext[0]);
+        _participantRepository.Get(direction.ParticipantId, default)
+            .Returns(_participantsContext[2]);
+        _mapper.Map<Direction>(direction)
+            .Returns(_trueMapper.Map<Direction>(direction));
+
+        // Act
+        var result = await _sut.AddDirectionToMovie(1, direction, CancellationToken.None);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+    }
+
+    [Fact]
+    public async void AddDirectionToMovie_WhenParticipantIdIsInvalid_ShouldReturnFailure()
+    {
+        // Arrange
+        var direction = new CreateDirectionDTO
+        {
+            ParticipantId = 4,
+        };
+
+        _movieRepository.Get(1, default)
+            .Returns(_moviesContext[0]);
+        _participantRepository.Get(direction.ParticipantId, default)
+            .Returns((Participant?)null);
+
+        // Act
+        var result = await _sut.AddDirectionToMovie(1, direction, CancellationToken.None);
+
+        // Assert
+        Assert.True(result.IsFailed);
+    }
+
+    [Fact]
+    public async void RemoveDirectionFromMovie_WhenParticipantIdisValid_ShouldReturnSuccess()
+    {
+        // Arrange
+        var movie = _moviesContext[0];
+        var direction = _moviesContext[0].Direction.First();
+
+        _directionRepository.GetComposite(movie.Id, direction.ParticipantId, default)
+            .Returns(direction);
+
+        // Act
+        var result = await _sut.RemoveDirectionFromMovie(movie.Id, direction.ParticipantId, CancellationToken.None);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+    }
+
+    [Fact]
+    public async void RemoveDirectionFromMovie_WhenParticipantIdIsInvalid_ShouldReturnBadRequestError()
+    {
+        // Arrange
+        var movie = _moviesContext[0];
+
+        _directionRepository.GetComposite(movie.Id, 4, default)
+            .Returns((Direction?)null);
+
+        // Act
+        var result = await _sut.RemoveDirectionFromMovie(movie.Id, 4, CancellationToken.None);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        Assert.IsType<BadRequestError>(result.Errors.First());
+        Assert.Equal("Invalid movie or participant ID", result.Errors.First().Message);
+    }
+
+    [Fact]
+    public async void AddGenreToMovie_WhenGenreIdIsValid_ShouldReturnSuccess()
+    {
+        // Arrange
+
+        var movie = _moviesContext[0];
+        var genre = new Genre
+        {
+            Id = 4,
+            Title = "Terror",
+        };
+
+        _movieRepository.Get(movie.Id, default)
+            .Returns(movie);
+        _genreRepository.Get(genre.Id, default)
+            .Returns(genre);
+        _mapper.Map<Genre>(genre)
+            .Returns(_trueMapper.Map<Genre>(genre));
+
+        // Act
+        var result = await _sut.AddGenreToMovie(movie.Id, genre.Id, CancellationToken.None);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+    }
+
+    [Fact]
+    public async void AddGenreToMovie_WhenGenreIdIsInvalid_ShouldReturnBadRequestError()
+    {
+        // Arrange
+        var movie = _moviesContext[0];
+
+        _movieRepository.Get(movie.Id, default)
+            .Returns(movie);
+        _genreRepository.Get(4, default)
+            .Returns((Genre?)null);
+
+        // Act
+        var result = await _sut.AddGenreToMovie(movie.Id, 4, CancellationToken.None);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        Assert.IsType<BadRequestError>(result.Errors.First());
+        Assert.Equal("Invalid movie or genre ID", result.Errors.First().Message);
+    }
+
+    [Fact]
+    public async void RemoveGenreFromMovie_WhenGenreIdIsValid_ShouldReturnSuccess()
+    {
+        // Arrange
+        var movie = _moviesContext[0];
+        var genre = _moviesContext[0].Genres.First();
+
+        _movieRepository.Get(movie.Id, default)
+            .Returns(movie);
+        _genreRepository.Get(genre.Id, default)
+            .Returns(genre);
+
+        // Act
+        var result = await _sut.RemoveGenreFromMovie(movie.Id, genre.Id, CancellationToken.None);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+    }
+
+    [Fact]
+    public async void Update_WhenMovieIdisValid_ShouldReturnSuccess()
+    {
+        // Arrange
+        var movie = _moviesContext[0];
+        var updateMovieDTO = new UpdateMovieDTO
+        {
+            Title = "New Title",
+            Synopsis = "New Synopsis",
+        };
+
+        _movieRepository.Get(movie.Id, default)
+            .Returns(movie);
+        _mapper.Map(updateMovieDTO, movie)
+            .Returns(_trueMapper.Map(updateMovieDTO, movie));
+        
+        // Act
+        var result = await _sut.Update(movie.Id, updateMovieDTO, CancellationToken.None);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+    }
+
+    [Fact]
+    public async void Update_WhenMovieIdIsInvalid_ShouldReturnBadRequestError()
+    {
+        // Arrange
+        var updateMovieDTO = new UpdateMovieDTO
+        {
+            Title = "New Title",
+            Synopsis = "New Synopsis",
+        };
+
+        _movieRepository.Get(4, default)
+            .Returns((Movie?)null);
+
+        // Act
+        var result = await _sut.Update(4, updateMovieDTO, CancellationToken.None);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        Assert.IsType<BadRequestError>(result.Errors.First());
+        Assert.Equal("Invalid movie ID", result.Errors.First().Message);
+    }
+
+    [Fact]
+    public async void Remove_WhenMovieIdIsValid_ShouldReturnSuccess()
+    {
+        // Arrange
+        var movie = _moviesContext[0];
+
+        _movieRepository.Get(movie.Id, default)
+            .Returns(movie);
+
+        // Act
+        var result = await _sut.Remove(movie.Id, CancellationToken.None);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+    }
+
+    [Fact]
+    public async void Remove_WhenMovieIdIsInvalid_ShouldReturnBadRequestError()
+    {
+        // Arrange
+        _movieRepository.Get(4, default)
+            .Returns((Movie?)null);
+
+        // Act
+        var result = await _sut.Remove(4, CancellationToken.None);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        Assert.IsType<BadRequestError>(result.Errors.First());
+        Assert.Equal("Invalid movie ID", result.Errors.First().Message);
+    }
+
+    [Fact]
+    public async void AddReviewToMovie_WhenMovieIdAndUserIdIsValid_ShouldReturnSuccess()
+    {
+        // Arrange
+        var movie = _moviesContext[0];
+        var user = new User { Id = 4, Username = "User4" };
+        var review = new CreateVoteDTO
+        {
+            Rating = 4
+        };
+
+        _movieRepository.Get(movie.Id, default)
+            .Returns(movie);
+        _userRepository.Get(user.Id, default)
+            .Returns(user);
+        _mapper.Map<Vote>(review)
+            .Returns(_trueMapper.Map<Vote>(review));
+
+        // Act
+        var result = await _sut.AddReviewToMovie(movie.Id, user.Id, review, CancellationToken.None);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+        Assert.Equal(4, movie.Quantity_Votes);
+    }
+
+    [Fact]
+    public async void AddReviewToMovie_WhenMovieIdIsInvalid_ShouldReturnBadRequestError()
+    {
+        // Arrange
+        var user = new User { Id = 4, Username = "User4" };
+        var review = new CreateVoteDTO { Rating = 4 };
+
+        _movieRepository.Get(4, default)
+            .Returns((Movie?)null);
+        _userRepository.Get(user.Id, default)
+            .Returns(user);
+
+        // Act
+        var result = await _sut.AddReviewToMovie(4, user.Id, review, CancellationToken.None);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        Assert.IsType<BadRequestError>(result.Errors.First());
+        Assert.Equal("Invalid movie or user ID", result.Errors.First().Message);
+    }
+
+    [Fact]
+    public async void RemoveReviewFromMovie_WhenMovieIdisValid_ShouldReturnSuccess()
+    {
+        // Arrange
+        var movie = _moviesContext[0];
+        var user = new User { Id = 1, Username = "User1" };
+
+
+        _voteRepository.GetComposite(movie.Id, user.Id, default)
+            .Returns(new Vote {
+                MovieId = movie.Id,
+                Movie = movie,
+                UserId = user.Id,
+                User = user,
+                Rating = 4 });
+
+        // Act
+        var result = await _sut.RemoveReviewFromMovie(movie.Id, user.Id, CancellationToken.None);
+
+        // Assert
+        Assert.True(result.IsSuccess);
+        Assert.Equal(2, movie.Quantity_Votes);
+    }
+
 
 }
