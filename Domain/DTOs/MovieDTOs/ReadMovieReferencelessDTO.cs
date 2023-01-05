@@ -7,5 +7,7 @@
         public string? Synopsis { get; set; } = string.Empty;
         public int? ReleaseYear { get; set; } = null;
         public int? Duration { get; set; } = 0;
+        public int? Quantity_Votes { get; set; } = 0;
+        public double? Rating { get; set; } = 0;
     }
 }
