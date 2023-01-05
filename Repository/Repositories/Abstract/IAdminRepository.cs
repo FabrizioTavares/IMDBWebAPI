@@ -1,9 +1,8 @@
 ﻿using Domain.Models;
 
-namespace Repository.Repositories.Abstract
+namespace Repository.Repositories.Abstract;
+
+public interface IAdminRepository : IBaseRepository<Admin>
 {
-    public interface IAdminRepository : IBaseRepository<Admin>
-    {
-        Task<Admin?> GetAdminByUserName(string userName, CancellationToken cancellationToken);
-    }
+    Task<Admin?> GetAdminByUserName(string userName, CancellationToken cancellationToken);
 }

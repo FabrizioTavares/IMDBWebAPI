@@ -1,8 +1,7 @@
-﻿namespace Domain.DTOs.ParticipantDTOs
+﻿namespace Domain.DTOs.ParticipantDTOs;
+
+public class CreateParticipantDTO
 {
-    public class CreateParticipantDTO
-    {
-        public string Name { get; set; } = string.Empty;
-        public string Biography { get; set; } = string.Empty;
-    }
+    public string Name { get; set; } = string.Empty;
+    public string Biography { get; set; } = string.Empty;
 }

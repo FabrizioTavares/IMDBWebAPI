@@ -1,7 +1,6 @@
-﻿namespace Domain.DTOs.DirectionDTOs
+﻿namespace Domain.DTOs.DirectionDTOs;
+
+public class CreateDirectionDTO
 {
-    public class CreateDirectionDTO
-    {
-        public int ParticipantId { get; set; }
-    }
+    public int ParticipantId { get; set; }
 }

@@ -2,18 +2,17 @@
 using Domain.DTOs.AdminDTOs;
 using Domain.Models;
 
-namespace Domain.AutomapperProfiles
+namespace Domain.AutomapperProfiles;
+
+public class AdminProfile : Profile
 {
-    public class AdminProfile : Profile
+    public AdminProfile()
     {
-        public AdminProfile()
-        {
-            CreateMap<CreateAdminDTO, Admin>();
-            CreateMap<Admin, ReadAdminDTO>();
-            CreateMap<UpdateAdminDTO, Admin>()
-                .ForMember(a => a.Password, opt => opt.Ignore())
-                .ForAllMembers(m => m
-                .Condition((src, dest, srcMember) => srcMember != default)); ;
-        }
+        CreateMap<CreateAdminDTO, Admin>();
+        CreateMap<Admin, ReadAdminDTO>();
+        CreateMap<UpdateAdminDTO, Admin>()
+            .ForMember(a => a.Password, opt => opt.Ignore())
+            .ForAllMembers(m => m
+            .Condition((src, dest, srcMember) => srcMember != default)); ;
     }
 }

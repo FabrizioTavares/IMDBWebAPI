@@ -1,11 +1,10 @@
 ﻿using Domain.DTOs.MovieDTOs;
 
-namespace Domain.DTOs.GenreDTOs
+namespace Domain.DTOs.GenreDTOs;
+
+public class ReadGenreDTO
 {
-    public class ReadGenreDTO
-    {
-        public int Id { get; set; }
-        public string Title { get; set; } = string.Empty;
-        public virtual ICollection<ReadMovieReferencelessDTO>? Movies { get; set; }
-    }
+    public int Id { get; set; }
+    public string Title { get; set; } = string.Empty;
+    public virtual ICollection<ReadMovieReferencelessDTO>? Movies { get; set; }
 }

@@ -1,7 +1,6 @@
-﻿namespace Domain.DTOs.GenreDTOs
+﻿namespace Domain.DTOs.GenreDTOs;
+
+public class CreateGenreDTO
 {
-    public class CreateGenreDTO
-    {
-        public string Title { get; set; } = string.Empty;
-    }
+    public string Title { get; set; } = string.Empty;
 }

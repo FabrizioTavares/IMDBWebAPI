@@ -36,7 +36,7 @@ public class GenreServiceTesting
         };
 
     }
-    
+
     [Fact]
     public void GetAll_WhenCalled_ShouldReturnAllGenres()
     {
@@ -92,7 +92,7 @@ public class GenreServiceTesting
         // Assert
         Assert.Equal("Adventure", result?.Title);
     }
-    
+
     [Fact]
     public async void Insert_WhenGenreAlreadyExists_ShouldReturnBadRequestError()
     {
@@ -102,7 +102,7 @@ public class GenreServiceTesting
 
         var createGenreDTO = new CreateGenreDTO { Title = "Action" };
         var cancellationToken = new CancellationToken();
-        
+
         // Act
         var result = await _sut.Insert(createGenreDTO, cancellationToken);
 
@@ -170,7 +170,7 @@ public class GenreServiceTesting
         // Arrange
         _genreRepository.Get(1, Arg.Any<CancellationToken>()).Returns(new Genre { Id = 1, Title = "Action" });
         _mapper.Map<Genre>(Arg.Any<UpdateGenreDTO>()).Returns(new Genre { Id = 1, Title = "Adventure" });
-        
+
         var updateGenreDTO = new UpdateGenreDTO { Title = "Adventure" };
         var cancellationToken = new CancellationToken();
 

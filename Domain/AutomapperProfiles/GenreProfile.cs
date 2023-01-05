@@ -2,16 +2,15 @@
 using Domain.DTOs.GenreDTOs;
 using Domain.Models;
 
-namespace Domain.AutomapperProfiles
+namespace Domain.AutomapperProfiles;
+
+public class GenreProfile : Profile
 {
-    public class GenreProfile : Profile
+    public GenreProfile()
     {
-        public GenreProfile()
-        {
-            CreateMap<CreateGenreDTO, Genre>();
-            CreateMap<Genre, ReadGenreDTO>();
-            CreateMap<Genre, ReadGenreReferencelessDTO>();
-            CreateMap<UpdateGenreDTO, Genre>();
-        }
+        CreateMap<CreateGenreDTO, Genre>();
+        CreateMap<Genre, ReadGenreDTO>();
+        CreateMap<Genre, ReadGenreReferencelessDTO>();
+        CreateMap<UpdateGenreDTO, Genre>();
     }
 }

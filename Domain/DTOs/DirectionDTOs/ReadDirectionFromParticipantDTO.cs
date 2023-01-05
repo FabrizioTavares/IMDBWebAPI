@@ -1,9 +1,8 @@
 ﻿using Domain.DTOs.MovieDTOs;
 
-namespace Domain.DTOs.DirectionDTOs
+namespace Domain.DTOs.DirectionDTOs;
+
+public class ReadDirectionFromParticipantDTO
 {
-    public class ReadDirectionFromParticipantDTO
-    {
-        public virtual ReadMovieReferencelessDTO Movie { get; set; } = new();
-    }
+    public virtual ReadMovieReferencelessDTO Movie { get; set; } = new();
 }

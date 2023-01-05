@@ -1,7 +1,6 @@
-﻿namespace Repository.Repositories.Abstract
+﻿namespace Repository.Repositories.Abstract;
+
+public interface IBaseCompositeRepository<T> : IBaseRepository<T>
 {
-    public interface IBaseCompositeRepository<T> : IBaseRepository<T>
-    {
-        Task<T?> GetComposite(int firstId, int secondId, CancellationToken cancellationToken);
-    }
+    Task<T?> GetComposite(int firstId, int secondId, CancellationToken cancellationToken);
 }

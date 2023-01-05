@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Domain.AutomapperProfiles;
 using Domain.DTOs.DirectionDTOs;
-using Domain.DTOs.GenreDTOs;
 using Domain.DTOs.MovieDTOs;
 using Domain.DTOs.PerformanceDTOs;
 using Domain.DTOs.VoteDTOs;
@@ -24,7 +23,7 @@ public class MovieServiceTesting
     private readonly IVoteRepository _voteRepository;
     private readonly IMapper _mapper;
     private readonly IMapper _trueMapper;
-    
+
     private List<Movie> _moviesContext;
     private List<Participant> _participantsContext;
 
@@ -175,7 +174,7 @@ public class MovieServiceTesting
     public async void Get_WhenCalled_ReturnMovie()
     {
         // Arrange
-        
+
         var movie = _moviesContext[0];
         var movieDto = _trueMapper.Map<ReadMovieDTO>(movie);
 
@@ -238,7 +237,7 @@ public class MovieServiceTesting
     public void GetMovies_WhenSortedByTitle_ReturnsMoviesSortedByTitle()
     {
         // Arrange
-        
+
         var sortedMoviesContext = _moviesContext.OrderBy(m => m.Title).ToList();
         var sortedMoviesContextDTO = _trueMapper.Map<IEnumerable<ReadMovieReferencelessDTO>>(sortedMoviesContext);
 
@@ -261,7 +260,7 @@ public class MovieServiceTesting
     [Fact]
     public void GetMovies_WhenSortedByRating_ReturnsMoviesSortedByRating()
     {
-        
+
         // Arrange
 
         var sortedMoviesContext = _moviesContext.OrderByDescending(m => m.Rating).ToList();
@@ -281,11 +280,11 @@ public class MovieServiceTesting
         Assert.Equal("Alpha Movie", result.First()!.Title);
         Assert.Equal("Gamma Movie", result.ElementAt(1)!.Title);
         Assert.Equal("Beta Movie", result.Last()!.Title);
-        
+
     }
 
     // TODO: Cover all queries
-    
+
 
     [Fact]
     public async void Insert_WhenCalled_ShouldReturnSuccess()
@@ -298,7 +297,7 @@ public class MovieServiceTesting
             ReleaseYear = 2019,
             Duration = 80,
         };
-        
+
         _mapper.Map<Movie>(newMovie)
             .Returns(_trueMapper.Map<Movie>(newMovie));
 
@@ -378,7 +377,7 @@ public class MovieServiceTesting
     [Fact]
     public async void RemovePerformanceFromMovie_WhenParticipantIdIsInvalid_ShouldReturnBadRequestError()
     {
-        
+
         // Arrange
         var movie = _moviesContext[0];
         var performance = _moviesContext[0].Cast.First();
@@ -555,7 +554,7 @@ public class MovieServiceTesting
             .Returns(movie);
         _mapper.Map(updateMovieDTO, movie)
             .Returns(_trueMapper.Map(updateMovieDTO, movie));
-        
+
         // Act
         var result = await _sut.Update(movie.Id, updateMovieDTO, CancellationToken.None);
 
@@ -673,12 +672,14 @@ public class MovieServiceTesting
 
 
         _voteRepository.GetComposite(movie.Id, user.Id, default)
-            .Returns(new Vote {
+            .Returns(new Vote
+            {
                 MovieId = movie.Id,
                 Movie = movie,
                 UserId = user.Id,
                 User = user,
-                Rating = 4 });
+                Rating = 4
+            });
 
         // Act
         var result = await _sut.RemoveReviewFromMovie(movie.Id, user.Id, CancellationToken.None);

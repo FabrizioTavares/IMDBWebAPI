@@ -2,14 +2,13 @@
 using Domain.DTOs.DirectionDTOs;
 using Domain.Models;
 
-namespace Domain.AutomapperProfiles
+namespace Domain.AutomapperProfiles;
+
+public class DirectionProfile : Profile
 {
-    public class DirectionProfile : Profile
+    public DirectionProfile()
     {
-        public DirectionProfile()
-        {
-            CreateMap<CreateDirectionDTO, Direction>();
-            CreateMap<UpdateDirectionDTO, Direction>();
-        }
+        CreateMap<CreateDirectionDTO, Direction>();
+        CreateMap<UpdateDirectionDTO, Direction>();
     }
 }

@@ -89,7 +89,7 @@ public class AdministrativeServiceTesting
     {
         // Arrange
         var newAdmin = new CreateAdminDTO
-        {   
+        {
             Username = "Delta",
             Password = "password",
             Hierarchy = 30
@@ -312,8 +312,8 @@ public class AdministrativeServiceTesting
         Assert.Equal("You cannot deactivate yourself", result.Errors.First().Message);
     }
 
-   [Fact]
-   public async void ToggleAdminActivation_WhenToggledAdminDoesNotExists_ShouldReturnNotFoundError()
+    [Fact]
+    public async void ToggleAdminActivation_WhenToggledAdminDoesNotExists_ShouldReturnNotFoundError()
     {
         // Arrange
         var admin = _context[0];
@@ -369,7 +369,7 @@ public class AdministrativeServiceTesting
         // Assert
         Assert.True(result.IsSuccess);
     }
-    
+
     [Fact]
     public async void UpdateAdmin_WhenUpdatingOneSelfWithValidPassword_ShouldReturnSuccess()
     {
@@ -406,7 +406,7 @@ public class AdministrativeServiceTesting
 
         // Assert
         Assert.True(result.IsSuccess);
-        
+
     }
 
     [Fact]

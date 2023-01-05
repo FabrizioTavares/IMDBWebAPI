@@ -2,11 +2,10 @@
 using Domain.Models.Abstract;
 using FluentResults;
 
-namespace Service.Services.Abstract
+namespace Service.Services.Abstract;
+
+public interface IAuthenticableEntityService
 {
-    public interface IAuthenticableEntityService
-    {
-        Task<Result<string>> Authenticate(LoginDTO credentials, string role, CancellationToken cancellationToken);
-        string GenerateToken(AuthenticableClient authenticableClient);
-    }
+    Task<Result<string>> Authenticate(LoginDTO credentials, string role, CancellationToken cancellationToken);
+    string GenerateToken(AuthenticableClient authenticableClient);
 }

@@ -4,5 +4,5 @@ namespace Service.Utils.Responses;
 
 public class ForbiddenError : Error
 {
-	public ForbiddenError(string errorMessage) : base(errorMessage) { }
+    public ForbiddenError(string errorMessage) : base(errorMessage) { }
 }

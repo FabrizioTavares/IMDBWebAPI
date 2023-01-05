@@ -1,10 +1,9 @@
 ﻿using Domain.DTOs.MovieDTOs;
 
-namespace Domain.DTOs.PerformanceDTOs
+namespace Domain.DTOs.PerformanceDTOs;
+
+public class ReadPerformanceFromParticipantDTO
 {
-    public class ReadPerformanceFromParticipantDTO
-    {
-        public string? CharacterName { get; set; }
-        public virtual ReadMovieReferencelessDTO? Movie { get; set; }
-    }
+    public string? CharacterName { get; set; }
+    public virtual ReadMovieReferencelessDTO? Movie { get; set; }
 }

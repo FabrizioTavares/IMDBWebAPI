@@ -67,7 +67,7 @@ namespace Service.Services
             };
 
             await _userRepository.Insert(user, cancellationToken);
-            return Result.Ok(); 
+            return Result.Ok();
         }
 
         public async Task<Result> RemoveUser(int id, CancellationToken cancellationToken)

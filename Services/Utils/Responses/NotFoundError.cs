@@ -4,5 +4,5 @@ namespace Service.Utils.Responses;
 
 public class NotFoundError : Error
 {
-	public NotFoundError(string errorMessage) : base (errorMessage) {  }
+    public NotFoundError(string errorMessage) : base(errorMessage) { }
 }

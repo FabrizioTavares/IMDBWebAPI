@@ -117,7 +117,7 @@ public class UserServiceTesting
     [Fact]
     public async void GetUser_WhenUserIsDeactivated_ShouldReturnNull()
     {
-        
+
         // Arrange
         var user = _context.Last();
         var cancellationToken = new CancellationToken();
@@ -130,7 +130,7 @@ public class UserServiceTesting
 
         // Assert
         Assert.Null(result);
-        
+
     }
 
     [Fact]
@@ -146,7 +146,7 @@ public class UserServiceTesting
         _userRepository.GetUsers(name: newUser.Username).Returns(new List<User>());
         _cryptographer.GenerateSalt().Returns(commonSalt);
         _cryptographer.Hash(newUser.Password, commonSalt).Returns(commonPassword);
-        
+
         // Act
         var result = await _sut.InsertUser(newUser, cancellationToken: new CancellationToken());
 

@@ -1,9 +1,8 @@
 ﻿using Domain.Models;
 
-namespace Repository.Repositories.Abstract
+namespace Repository.Repositories.Abstract;
+
+public interface IGenreRepository : IBaseRepository<Genre>
 {
-    public interface IGenreRepository : IBaseRepository<Genre>
-    {
-        IEnumerable<Genre> GetGenresByTitle(string title);
-    }
+    IEnumerable<Genre> GetGenresByTitle(string title);
 }

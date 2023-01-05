@@ -6,11 +6,6 @@ using NSubstitute;
 using Repository.Repositories.Abstract;
 using Service.Services;
 using Service.Utils.Responses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tests.Services;
 
@@ -144,7 +139,7 @@ public class ParticipantServiceTesting
     public async void Update_WhenIdIsValid_ShouldReturnSuccess()
     {
         // Arrange
-        var updatedParticipant = new UpdateParticipantDTO {Name = "Delta", Biography = "Biography" };
+        var updatedParticipant = new UpdateParticipantDTO { Name = "Delta", Biography = "Biography" };
 
         _participantRepository.Get(1, CancellationToken.None)
             .Returns(new Participant { Id = 1, Name = "Beta", Biography = "Biography" });
