@@ -184,13 +184,11 @@ public class MovieController : ControllerBase
     [ProducesResponseType(403)]
     public async Task<IActionResult> DeleteReviewFromMovie([FromRoute] int movieId, CancellationToken cancellationToken = default)
     {
-        // TODO: Create static class to retrieve token information
         var userId = int.Parse(HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
         await _movieService.RemoveReviewFromMovie(movieId, userId, cancellationToken);
         return NoContent();
     }
-
 
     [HttpDelete("{movieId}")]
     [Authorize(Roles = "Admin")]

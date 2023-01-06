@@ -31,7 +31,6 @@ public class ParticipantController : ControllerBase
         {
             var res = await _participantService.Insert(participant, cancellationToken);
             return ConvertResult.Convert(res);
-            // TODO: For all Create methods on all services, return the created entity (201)
         }
         return BadRequest(validation.Errors);
     }

@@ -76,9 +76,4 @@ public class MovieRepository : BaseRepository<Movie>, IMovieRepository
             .FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
     }
 
-    public IEnumerable<Movie> GetAll(int pageNumber, int pageSize)
-    {
-        return _entities.Skip((pageNumber - 1) * pageSize).Take(pageSize).AsEnumerable();
-    }
-
 }

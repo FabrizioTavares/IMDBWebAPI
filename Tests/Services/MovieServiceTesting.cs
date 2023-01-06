@@ -283,9 +283,6 @@ public class MovieServiceTesting
 
     }
 
-    // TODO: Cover all queries
-
-
     [Fact]
     public async void Insert_WhenCalled_ShouldReturnSuccess()
     {

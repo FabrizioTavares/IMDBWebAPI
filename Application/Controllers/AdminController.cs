@@ -27,9 +27,6 @@ public class AdminController : ControllerBase
     [ProducesResponseType(403)]
     public async Task<IActionResult> CreateAdmin([FromServices] IValidator<CreateAdminDTO> validator, [FromBody] CreateAdminDTO admin, CancellationToken cancellationToken = default)
     {
-
-        // TODO: Optimise hierarchical check: use token instead of database query
-
         var agentId = int.Parse(HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
         var result = validator.Validate(admin);

@@ -37,8 +37,6 @@ public class ParticipantService : IParticipantService
 
     public async Task<Result<int>> Insert(CreateParticipantDTO participant, CancellationToken cancellationToken)
     {
-        // TODO: Possible improvement: instead of inserting a single participant, insert a list of participants. do this for all inserts.
-        // This would allow for a more efficient way of inserting data into the database.
         var existingParticipant = _participantRepository.GetParticipantsByName(participant.Name);
         if (existingParticipant.Any())
         {

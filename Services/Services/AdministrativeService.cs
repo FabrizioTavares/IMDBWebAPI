@@ -23,24 +23,6 @@ public class AdministrativeService : IAdministrativeService
         _mapper = mapper;
     }
 
-    // TODO: Requires optimisation - database is accessed twice.
-    private async Task<bool> CheckHierarchy(int currentAdminId, int targetAdminId, CancellationToken cancellationToken)
-    {
-        var superior = await _adminRepository.Get(currentAdminId, cancellationToken);
-        var targetAdmin = await _adminRepository.Get(targetAdminId, cancellationToken);
-
-        if (superior == null || targetAdmin == null)
-            return false;
-
-        if (superior!.Hierarchy <= targetAdmin.Hierarchy)
-        {
-            return false;
-        }
-
-        return true;
-
-    }
-
     public async Task<ReadAdminDTO?> GetAdmin(int id, CancellationToken cancellationToken)
     {
         var admin = await _adminRepository.Get(id, cancellationToken);
