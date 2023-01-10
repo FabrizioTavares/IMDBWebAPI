@@ -4,5 +4,5 @@ namespace Domain.Models;
 
 public class User : AuthenticableClient
 {
-    public ICollection<Vote> Votes { get; set; } = new List<Vote>();
+    public List<Vote> Votes { get; set; } = new List<Vote>();
 }

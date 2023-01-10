@@ -23,7 +23,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
 
     public virtual IEnumerable<T> GetAll()
     {
-        return _entities.ToList();
+        return _entities.AsEnumerable<T>();
     }
 
     public virtual async Task<T> Insert(T entity, CancellationToken cancellationToken)

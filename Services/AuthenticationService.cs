@@ -28,7 +28,7 @@ public class AuthenticationService : IAuthenticableEntityService
 
     public async Task<Result<string>> Authenticate(LoginDTO credentials, string role, CancellationToken cancellationToken)
     {
-        AuthenticableClient? client = default!;
+        AuthenticableClient? client;
 
         role = role[0].ToString().ToUpper() + role[1..].ToLower();
 
