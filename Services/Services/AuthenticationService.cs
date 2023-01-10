@@ -5,6 +5,7 @@ using FluentResults;
 using Microsoft.IdentityModel.Tokens;
 using Repository.Repositories.Abstract;
 using Service.Services.Abstract;
+using Service.Utils.Responses;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -39,10 +40,14 @@ public class AuthenticationService : IAuthenticableEntityService
         {
             client = await _adminRepository.GetAdminByUserName(credentials.Username, cancellationToken);
         }
+        else
+        {
+            return Result.Fail(new BadRequestError("The role you're attempting to use does not exists"));
+        }
 
         if (client == null || client.IsActive == false || !_cryptographer.Verify(credentials.Password, client.Password, client.Salt))
         {
-            return Result.Fail<string>("The credentials are invalid, the account is deactivated or the account doesn't exists");
+            return Result.Fail(new BadRequestError("The credentials are invalid, the account is deactivated or the account doesn't exists"));
         }
 
         return Result.Ok(GenerateToken(client) + $" - Authentication successful for user '{client.Username}' with role '{client.GetType().Name}'.");
