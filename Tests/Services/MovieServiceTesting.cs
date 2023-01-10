@@ -1,13 +1,15 @@
 ﻿using AutoMapper;
-using Domain.AutomapperProfiles;
-using Domain.DTOs.DirectionDTOs;
-using Domain.DTOs.MovieDTOs;
-using Domain.DTOs.PerformanceDTOs;
-using Domain.DTOs.VoteDTOs;
 using Domain.Models;
 using NSubstitute;
-using Repository.Repositories.Abstract;
-using Service.Services;
+using Repository.Abstraction;
+using Service;
+using Service.Abstraction.GenreServiceAbstractions;
+using Service.Abstraction.MovieServiceAbstractions;
+using Service.Abstraction.MovieServiceAbstractions.DirectionDTOs;
+using Service.Abstraction.MovieServiceAbstractions.MovieDTOs;
+using Service.Abstraction.MovieServiceAbstractions.PerformanceDTOs;
+using Service.Abstraction.MovieServiceAbstractions.VoteDTOs;
+using Service.Abstraction.ParticipantServiceAbstractions;
 using Service.Utils.Responses;
 
 namespace Tests.Services;

@@ -18,7 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Repository\Repository.csproj" />
+    <ProjectReference Include="..\Repository.Abstraction\Repository.Abstraction.csproj" />
+    <ProjectReference Include="..\Service.Abstraction\Service.Abstraction.csproj" />
   </ItemGroup>
 
 </Project>

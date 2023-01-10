@@ -1,8 +1,8 @@
-﻿using Domain.DTOs.UserDTOs;
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Service.Services.Abstract;
+using Service.Abstraction.UserServiceAbstractions;
+using Service.Abstraction.UserServiceAbstractions.UserDTOs;
 using System.Security.Claims;
 
 namespace Application.Controllers;

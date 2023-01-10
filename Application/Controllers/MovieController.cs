@@ -1,11 +1,11 @@
-﻿using Domain.DTOs.DirectionDTOs;
-using Domain.DTOs.MovieDTOs;
-using Domain.DTOs.PerformanceDTOs;
-using Domain.DTOs.VoteDTOs;
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Service.Services.Abstract;
+using Service.Abstraction.MovieServiceAbstractions;
+using Service.Abstraction.MovieServiceAbstractions.DirectionDTOs;
+using Service.Abstraction.MovieServiceAbstractions.MovieDTOs;
+using Service.Abstraction.MovieServiceAbstractions.PerformanceDTOs;
+using Service.Abstraction.MovieServiceAbstractions.VoteDTOs;
 using System.Security.Claims;
 
 namespace Application.Controllers;

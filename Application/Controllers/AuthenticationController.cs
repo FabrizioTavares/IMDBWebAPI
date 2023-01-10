@@ -1,7 +1,7 @@
 ﻿using Application.Utils;
-using Domain.DTOs.AuthenticationDTOs;
 using Microsoft.AspNetCore.Mvc;
-using Service.Services.Abstract;
+using Service.Abstraction.AuthenticableEntityAbstractions;
+using Service.Abstraction.AuthenticableEntityAbstractions.AuthenticationDTOs;
 
 namespace Application.Controllers;
 

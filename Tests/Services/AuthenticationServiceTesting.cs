@@ -1,9 +1,9 @@
-﻿using Domain.DTOs.AuthenticationDTOs;
-using Domain.Models;
+﻿using Domain.Models;
 using Domain.Utils.Cryptography;
 using NSubstitute;
-using Repository.Repositories.Abstract;
-using Service.Services;
+using Repository.Abstraction;
+using Service;
+using Service.Abstraction.AuthenticableEntityAbstractions.AuthenticationDTOs;
 using Service.Utils.Responses;
 using System.Text;
 

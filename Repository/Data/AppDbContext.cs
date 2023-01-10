@@ -1,7 +1,14 @@
 ﻿using Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using Repository.Maps;
+using Repository.AdminRepository;
+using Repository.DirectionRepository;
+using Repository.GenreRepository;
+using Repository.MovieRepository;
+using Repository.ParticipantRepository;
+using Repository.PerformanceRepository;
 using Repository.Seeding;
+using Repository.UserRepository;
+using Repository.VoteRepository;
 
 namespace Repository.Data;
 

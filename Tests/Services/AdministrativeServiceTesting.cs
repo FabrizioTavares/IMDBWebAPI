@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using Domain.AutomapperProfiles;
-using Domain.DTOs.AdminDTOs;
 using Domain.Models;
 using Domain.Utils.Cryptography;
 using NSubstitute;
-using Repository.Repositories.Abstract;
-using Service.Services;
+using Repository.Abstraction;
+using Service;
+using Service.Abstraction.AdministrativeServiceAbstractions;
+using Service.Abstraction.AdministrativeServiceAbstractions.AdminDTOs;
 using Service.Utils.Responses;
 using System.Text;
 

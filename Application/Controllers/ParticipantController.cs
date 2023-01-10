@@ -1,9 +1,9 @@
 ﻿using Application.Utils;
-using Domain.DTOs.ParticipantDTOs;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Service.Services.Abstract;
+using Service.Abstraction.ParticipantServiceAbstractions;
+using Service.Abstraction.ParticipantServiceAbstractions.ParticipantDTOs;
 
 namespace Application.Controllers;
 

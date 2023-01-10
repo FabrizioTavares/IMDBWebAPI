@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Domain.AutomapperProfiles;
-using Domain.DTOs.GenreDTOs;
 using Domain.Models;
 using NSubstitute;
-using Repository.Repositories.Abstract;
-using Service.Services;
+using Repository.Abstraction;
+using Service;
+using Service.Abstraction.GenreServiceAbstractions;
+using Service.Abstraction.GenreServiceAbstractions.GenreDTOs;
 using Service.Utils.Responses;
 
 namespace Tests.Services;
