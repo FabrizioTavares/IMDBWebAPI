@@ -99,10 +99,14 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddJwtAuthenticationAndSwagger(this IServiceCollection services)
     {
+
+        var _secret = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Settings.ImdbApiSecret));
+        var _scheme = JwtBearerDefaults.AuthenticationScheme;
+
         services.AddAuthentication(x =>
         {
-            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultAuthenticateScheme = _scheme;
+            x.DefaultChallengeScheme = _scheme;
         }).AddJwtBearer(x =>
         {
             x.RequireHttpsMetadata = false;
@@ -110,7 +114,7 @@ public static class ServiceCollectionExtensions
             x.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Settings.ImdbApiSecret)),
+                IssuerSigningKey = _secret,
                 ValidateIssuer = false,
                 ValidateAudience = false
             };

@@ -1,12 +1,7 @@
 ﻿using AutoMapper;
-using Domain.Models;
 using Domain.Utils.Cryptography;
-using NSubstitute;
-using Repository.Abstraction;
-using Service;
 using Service.Abstraction.UserServiceAbstractions;
 using Service.Abstraction.UserServiceAbstractions.UserDTOs;
-using Service.Utils.Responses;
 using System.Text;
 
 namespace Tests.Services;

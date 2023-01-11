@@ -1,10 +1,5 @@
-﻿using Domain.Models;
-using Domain.Utils.Cryptography;
-using NSubstitute;
-using Repository.Abstraction;
-using Service;
+﻿using Domain.Utils.Cryptography;
 using Service.Abstraction.AuthenticableEntityAbstractions.AuthenticationDTOs;
-using Service.Utils.Responses;
 using System.Text;
 
 namespace Tests.Services;

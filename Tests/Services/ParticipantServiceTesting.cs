@@ -1,8 +1,4 @@
 ﻿using AutoMapper;
-using Domain.Models;
-using NSubstitute;
-using Repository.Abstraction;
-using Service;
 using Service.Abstraction.ParticipantServiceAbstractions;
 using Service.Abstraction.ParticipantServiceAbstractions.ParticipantDTOs;
 using Service.Utils.Responses;

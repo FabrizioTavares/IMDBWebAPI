@@ -1,8 +1,4 @@
 ﻿using AutoMapper;
-using Domain.Models;
-using NSubstitute;
-using Repository.Abstraction;
-using Service;
 using Service.Abstraction.GenreServiceAbstractions;
 using Service.Abstraction.MovieServiceAbstractions;
 using Service.Abstraction.MovieServiceAbstractions.DirectionDTOs;
@@ -10,7 +6,6 @@ using Service.Abstraction.MovieServiceAbstractions.MovieDTOs;
 using Service.Abstraction.MovieServiceAbstractions.PerformanceDTOs;
 using Service.Abstraction.MovieServiceAbstractions.VoteDTOs;
 using Service.Abstraction.ParticipantServiceAbstractions;
-using Service.Utils.Responses;
 
 namespace Tests.Services;
 
